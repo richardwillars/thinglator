@@ -3,10 +3,6 @@ var Schema = mongoose.Schema;
 var SpeakerSchema = require('./speaker');
 
 var DeviceSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
   created: {
     type: Date,
     required: false,
@@ -20,7 +16,7 @@ var DeviceSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  specifics: {
+  specs: {
     type: Object,
     required: true,
     default: {}

@@ -4,6 +4,10 @@ var Schema = mongoose.Schema;
 
 var SpeakerSchema = new mongoose.Schema({
   _id: false,
+  name: {
+    type: String,
+    required: true
+  },
   interface: {
   	type: String,
   	required: true,
