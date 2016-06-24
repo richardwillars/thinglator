@@ -118,7 +118,8 @@ app.get('/discover/:type/:driver', function(req, res) {
         promises.push(updateDevice(toUpdate[i].device, toUpdate[i].specs));
       }
       return Promise.all(promises);
-    }).then(function() {
+    })
+    .then(function() {
       //loop through existingDevices and determine if they don't exist in the discovery list
       var noLongerExists = _.filter(existingDevices, function(obj) {
         return !_.find(foundDevices, function(obj2) {
@@ -135,7 +136,8 @@ app.get('/discover/:type/:driver', function(req, res) {
           $in: noLongerExistsIds
         }
       }).exec();
-    }).then(function() {
+    })
+    .then(function() {
       //loop through foundDevices and determine if they don't exist in the discovery list
       var newDevices = _.filter(foundDevices, function(obj) {
         return !_.find(existingDevices, function(obj2) {
