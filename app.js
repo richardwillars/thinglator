@@ -70,7 +70,10 @@ function updateDevice(device, specs) {
     });
 }
 
-// GET discover/speaker/sonos
+/*
+GET discover/:type/:driver
+-> GET discover/speaker/sonos
+*/
 app.get('/discover/:type/:driver', function(req, res) {
   //check that the driver exists and that it matches the specified type
   var foundDevices = [];
@@ -220,8 +223,8 @@ app.get('/device/:deviceId', function(req, res) {
 });
 
 /*
-POST device/:_id
--> POST device/abc123
+POST device/:_id/:command
+-> POST device/abc123/on
 */
 app.post('/device/:deviceId/:command', function(req, res) {
   var device;
