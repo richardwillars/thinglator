@@ -19,6 +19,7 @@
     "jsonschema": "^1.1.0",
     "md5": "^2.1.0",
     "mongoose": "^4.5.1",
+    "sonos": "^0.12.0",
     "underscore": "^1.8.3"
   }
 }

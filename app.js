@@ -246,7 +246,7 @@ app.post('/device/:deviceId/:command', function(req, res) {
       return driver[fnName](device,req.body);
     })
     .then(function(commandResult) {
-      var jsonSchema = models.speaker.schema.paths['capabilities.getCurrentTrack'].options.returnSchema;
+      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.returnSchema;
       var validated = jsonValidator.validate(commandResult,jsonSchema);
       if(validated.errors.length!==0) {
         throw new Error(validated);

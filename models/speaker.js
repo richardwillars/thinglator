@@ -34,6 +34,9 @@ var SpeakerSchema = new mongoose.Schema({
 			    },
 			    "currentPosition": {
 			      "type": "integer"
+			    },
+			    "artUrl": {
+			    	"type": "string"
 			    }
 			  },
 			  "required": [
@@ -48,7 +51,19 @@ var SpeakerSchema = new mongoose.Schema({
 		},
 		flushQueue: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "queueFlushed": {
+			      "type": "boolean"
+			    }
+			  },
+			  "required": [
+			    "queueFlushed"
+			  ]
+			}
 		},
 		getCurrentState: {
 			type: Boolean,
@@ -64,7 +79,19 @@ var SpeakerSchema = new mongoose.Schema({
 		},
 		getMuted: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "muted": {
+			      "type": "boolean"
+			    }
+			  },
+			  "required": [
+			    "muted"
+			  ]
+			}
 		},
 		getTopology: {
 			type: Boolean,
@@ -84,19 +111,67 @@ var SpeakerSchema = new mongoose.Schema({
 		},
 		next: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "muted": {
+			      "next": "boolean"
+			    }
+			  },
+			  "required": [
+			    "next"
+			  ]
+			}
 		},
 		pause: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "muted": {
+			      "paused": "boolean"
+			    }
+			  },
+			  "required": [
+			    "paused"
+			  ]
+			}
 		},
 		play: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "playing": {
+			      "type": "boolean"
+			    }
+			  },
+			  "required": [
+			    "playing"
+			  ]
+			}
 		},
 		previous: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "previous": {
+			      "type": "boolean"
+			    }
+			  },
+			  "required": [
+			    "previous"
+			  ]
+			}
 		},
 		addToQueueBottom: {
 			type: Boolean,
@@ -132,7 +207,19 @@ var SpeakerSchema = new mongoose.Schema({
 		},
 		stop: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "stopped": {
+			      "type": "boolean"
+			    }
+			  },
+			  "required": [
+			    "stopped"
+			  ]
+			}
 		}
 	}
 });
