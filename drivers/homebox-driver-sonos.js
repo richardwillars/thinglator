@@ -5,9 +5,9 @@ module.exports = {
 		return new Promise(function(resolve,reject) {
 			var devices = [
 				{
-					id: 'abc123',
+					deviceId: 'abc123',
 					name: 'Lounge',
-					address: '192.168.1.21',
+					address: '192.168.1.20',
 					interface: 'wifi',
 					capabilities: {
 					  	getCurrentTrack: true,
@@ -37,9 +37,9 @@ module.exports = {
 					}
 				},
 				{
-					id: 'def456',
+					deviceId: 'def456',
 					name: 'Bedroom',
-					address: '192.168.1.22',
+					address: '192.168.1.21',
 					interface: 'wifi',
 					capabilities: {
 					  	getCurrentTrack: true,

@@ -3,6 +3,11 @@ var Schema = mongoose.Schema;
 var SpeakerSchema = require('./speaker');
 
 var DeviceSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true,
+    unique: true
+  },
   created: {
     type: Date,
     required: false,
@@ -26,6 +31,4 @@ var DeviceSchema = new mongoose.Schema({
 
 var Device = mongoose.model('Device', DeviceSchema);
 
-module.exports = {
-  Device: Device
-}
+module.exports = Device;

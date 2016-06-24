@@ -8,6 +8,10 @@ var SpeakerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  deviceId: {
+    type: String,
+    required: true
+  },
   interface: {
   	type: String,
   	required: true,
@@ -116,6 +120,4 @@ var SpeakerSchema = new mongoose.Schema({
 
 var Speaker = mongoose.model('Speaker', SpeakerSchema);
 
-module.exports = {
-  Speaker: Speaker
-}
+module.exports = Speaker;
