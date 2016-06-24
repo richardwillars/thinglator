@@ -12,15 +12,35 @@ var SpeakerSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	interface: {
-		type: String,
-			required: true,
-			enum: ['wifi']
-	},
 	capabilities: {
 		getCurrentTrack: {
 			type: Boolean,
-			default: false
+			default: false,
+			returnSchema: {
+			  "$schema": "http://json-schema.org/draft-04/schema#",
+			  "type": "object",
+			  "properties": {
+			    "artist": {
+			      "type": "string"
+			    },
+			    "track": {
+			      "type": "string"
+			    },
+			    "album": {
+			      "type": "string"
+			    },
+			    "length": {
+			      "type": "integer"
+			    },
+			    "currentPosition": {
+			      "type": "integer"
+			    }
+			  },
+			  "required": [
+			    "artist",
+			    "track"
+			  ]
+			}
 		},
 		getDeviceDescription: {
 			type: Boolean,

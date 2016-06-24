@@ -5,6 +5,8 @@ mongoose.Promise = global.Promise;
 var md5 = require('md5');
 var _ = require('underscore');
 var fs = require('fs');
+var Validator = require('jsonschema').Validator;
+var jsonValidator = new Validator();
 
 mongoose.connect('mongodb://localhost/homebox');
 
@@ -38,7 +40,6 @@ function loadDriver(driverId) {
 
 function createDevice(type, driver, deviceSpecs) {
   var deviceSpecsObj = new models[type](deviceSpecs);
-  //var deviceSpecsObj = new Speaker(deviceSpecs);
 
   return deviceSpecsObj.validate()
     .then(function(validationFailed) {
@@ -216,6 +217,43 @@ app.get('/device/:deviceId', function(req, res) {
     .then(function(device) {
       res.json(device);
     });
+});
+
+/*
+POST device/:_id
+-> POST device/abc123
+*/
+app.post('/device/:deviceId/:command', function(req, res) {
+  var device;
+  return models['device'].findOne({
+      _id: req.params.deviceId
+    }).exec()
+    .then(function(deviceObj) {
+      device = deviceObj;
+      if(typeof device.specs.capabilities[req.params.command]==="undefined") {
+        throw new Error('capability not found');
+      }
+      if(device.specs.capabilities[req.params.command]===false) {
+        throw new Error('capability not supported');
+      }
+      return loadDriver(device.driver);
+    })
+    .then(function(driver) {
+      var fnName = 'capability_'+req.params.command;
+      return driver[fnName](device,req.body);
+    })
+    .then(function(commandResult) {
+      var jsonSchema = models.speaker.schema.paths['capabilities.getCurrentTrack'].options.returnSchema;
+      var validated = jsonValidator.validate(commandResult,jsonSchema);
+      if(validated.errors.length!==0) {
+        throw new Error(validated);
+      }
+      res.json(commandResult);
+    })
+    .catch(function(e) {
+      console.log('error',e);
+      res.send({});
+    })
 });
 
 /*
