@@ -23,7 +23,7 @@ This should launch a REST API server on localhost:3000
 
 *E.g. GET discover/speaker/sonos*
 
-Tells a particular driver to search for devices on the network (in the above example it will search for Sonos speakers using the 'sonos' speaker driver. Any newly found devices are added to homebox. Any existing ones are updated. Any non-existant ones are removed from homebox.
+Tells a particular driver to search for devices on the network (in the above example it will search for Sonos speakers using the 'sonos' speaker driver). Any newly found devices are added to homebox. Any existing ones are updated. Any non-existant ones are removed from homebox. Once discovery is completed it'll return the list of devices.
 
 
 **GET devices/:type**
