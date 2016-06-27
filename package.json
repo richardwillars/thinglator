@@ -1,0 +1,22 @@
+{
+  "name": "homebox",
+  "license": "MIT",
+  "description": "A translator that provides a uniform interface for interacting with IOT and home automation devices",
+  "version": "0.0.1",
+  "maintainers": [{
+    "name": "Richard Willars",
+    "email": "richard@richardwillars.com"
+  }],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richardwillars/homebox.git"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "jsonschema": "^1.1.0",
+    "md5": "^2.1.0",
+    "mongoose": "^4.5.1",
+    "sonos": "^0.12.0",
+    "underscore": "^1.8.3"
+  }
+}
