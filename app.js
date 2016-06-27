@@ -7,6 +7,8 @@ var _ = require('underscore');
 var fs = require('fs');
 var Validator = require('jsonschema').Validator;
 var jsonValidator = new Validator();
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
 mongoose.connect('mongodb://localhost/homebox');
 
@@ -84,7 +86,9 @@ app.get('/discover/:type/:driver', function(req, res, next) {
     .then(function(foundDriver) {
       //if found, load it
       if (foundDriver === false) {
-        throw new Error(404, 'driver not found');
+        var e = new Error('driver not found');
+        e.type = 'NotFound';
+        throw e;
       }
       return loadDriver(req.params.driver);
     })
@@ -244,7 +248,7 @@ app.get('/device/:deviceId', function(req, res, next) {
 POST device/:_id/:command
 -> POST device/abc123/on
 */
-app.post('/device/:deviceId/:command', function(req, res, next) {
+app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
   var device;
   return models['device'].findOne({
       _id: req.params.deviceId
@@ -252,22 +256,40 @@ app.post('/device/:deviceId/:command', function(req, res, next) {
     .then(function(deviceObj) {
       device = deviceObj;
       if(typeof device.specs.capabilities[req.params.command]==="undefined") {
-        throw new Error('capability not found');
+        var e = new Error('capability not found');
+        e.type = 'BadRequest';
+        throw e;
       }
       if(device.specs.capabilities[req.params.command]===false) {
-        throw new Error('capability not supported');
+        var e = new Error('capability not supported');
+        e.type = 'BadRequest';
+        throw e;
       }
       return loadDriver(device.driver);
     })
     .then(function(driver) {
       var fnName = 'capability_'+req.params.command;
+
+      //if a schema is specified, confirm that the request body matches it
+      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.requestSchema;
+      if(jsonSchema) {
+        var validated = jsonValidator.validate(req.body,jsonSchema);
+        if(validated.errors.length!==0) {
+          var e = new Error(validated);
+          e.type = 'BadRequest';
+          throw e;
+        }
+      }
       return driver[fnName](device,req.body);
     })
     .then(function(commandResult) {
+      //confirm that the action response matches the schema
       var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.responseSchema;
       var validated = jsonValidator.validate(commandResult,jsonSchema);
       if(validated.errors.length!==0) {
-        throw new Error(validated);
+        var e = new Error(validated);
+        e.type = 'Driver';
+        throw e;
       }
       res.json(commandResult);
     })
