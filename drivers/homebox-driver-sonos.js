@@ -11,17 +11,22 @@ module.exports = {
 	},
 	discover: function() {
 
-		return new Promise(function(resolve, reject) {
+		return new Promise(function(resolve) {
 			var search = sonos.search()
 			var devices = [];
+
 			search.on('DeviceAvailable', function (deviceObj, model) {
 			  deviceObj.getZoneAttrs(function (err, attrs) {
 			    if (err) {
-			    	console.log('failed to retrieve zone attributes');
+			    	var e = new Error('Failed to retrieve zone attributes');
+					e.type = 'Driver';
+					throw e;
 			    }
 			    deviceObj.getZoneInfo(function (err, info) {
 			      if (err) {
-			      	console.log('failed to retrieve zone information');
+			      	var e = new Error('Failed to retrieve zone information');
+					e.type = 'Driver';
+					throw e;
 			      }
 			      var device = {
 					deviceId: info.SerialNumber,
@@ -68,9 +73,13 @@ module.exports = {
 		});
 	},
 	capability_getCurrentTrack: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.currentTrack(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 			  	resolve({
 					artist: result.artist,
 					track: result.title,
@@ -83,9 +92,13 @@ module.exports = {
 		});
 	},
 	capability_play: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.play(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 				if(result) {
 			  		resolve({playing: true});
 			  	}
@@ -93,9 +106,13 @@ module.exports = {
 		});
 	},
 	capability_pause: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.pause(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 				if(result) {
 			  		resolve({paused: true});
 			  	}
@@ -103,9 +120,13 @@ module.exports = {
 		});
 	},
 	capability_stop: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.stop(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 				if(result) {
 			  		resolve({stopped: true});
 			  	}
@@ -113,9 +134,13 @@ module.exports = {
 		});
 	},
 	capability_previous: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.previous(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 				if(result) {
 			  		resolve({previous: true});
 			  	}
@@ -123,9 +148,13 @@ module.exports = {
 		});
 	},
 	capability_next: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.next(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 				if(result) {
 			  		resolve({next: true});
 			  	}
@@ -133,16 +162,24 @@ module.exports = {
 		});
 	},
 	capability_getMuted: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
 			sonosDevice.getMuted(function (err, result) {
+				if(err) {
+					err.type = 'Driver';
+					throw err;
+				}
 			  	resolve({muted: result});
 			});
 		});
 	},
 	capability_flushQueue: function(device,props) {
-		return new Promise(function(resolve,reject) {
-			var sonosDevice = new sonosInstance(device.specs.address,1400)
+		return new Promise(function(resolve) {
+			var sonosDevice = new sonosInstance(device.specs.address,1400);
+			if(err) {
+				err.type = 'Driver';
+				throw err;
+			}
 			sonosDevice.flush(function (err, result) {
 			  	resolve({queueFlushed: true});
 			});

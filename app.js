@@ -44,7 +44,8 @@ function createDevice(type, driver, deviceSpecs) {
   return deviceSpecsObj.validate()
     .then(function(validationFailed) {
       if (validationFailed) {
-        throw new Error(validationFailed);
+        var e = new Error(validationFailed);
+        e.type = 'Validation';
       }
 
       var deviceObj = new models['device']({
@@ -74,7 +75,7 @@ function updateDevice(device, specs) {
 GET discover/:type/:driver
 -> GET discover/speaker/sonos
 */
-app.get('/discover/:type/:driver', function(req, res) {
+app.get('/discover/:type/:driver', function(req, res, next) {
   //check that the driver exists and that it matches the specified type
   var foundDevices = [];
   var existingDevices = [];
@@ -166,7 +167,12 @@ app.get('/discover/:type/:driver', function(req, res) {
       res.json(devices);
     })
     .catch(function(e) {
-      console.log(e);
+      if(e.type) {
+        if(e.type==='DriverError') {
+          e.driver = req.params.driver;
+        }
+      }
+      next(e);
     });
 });
 
@@ -175,10 +181,13 @@ app.get('/discover/:type/:driver', function(req, res) {
 GET devices
 -> GET devices
 */
-app.get('/devices/', function(req, res) {
+app.get('/devices/', function(req, res, next) {
   return models['device'].find().exec()
     .then(function(devices) {
       res.json(devices);
+    })
+    .catch(function(err) {
+      next(err);
     });
 });
 
@@ -186,12 +195,15 @@ app.get('/devices/', function(req, res) {
 GET devices/:type
 -> GET devices/speaker
 */
-app.get('/devices/:type', function(req, res) {
+app.get('/devices/:type', function(req, res, next) {
   return models['device'].find({
       type: req.params.type
     }).exec()
     .then(function(devices) {
       res.json(devices);
+    })
+    .catch(function(err) {
+      next(err);
     });
 });
 
@@ -199,13 +211,16 @@ app.get('/devices/:type', function(req, res) {
 GET devices/:type/:driver
 -> GET devices/speaker/sonos
 */
-app.get('/devices/:type/:driver', function(req, res) {
+app.get('/devices/:type/:driver', function(req, res, next) {
   return models['device'].find({
       type: req.params.type,
       driver: req.params.driver
     }).exec()
     .then(function(devices) {
       res.json(devices);
+    })
+    .catch(function(err) {
+      next(err);
     });
 });
 
@@ -213,12 +228,15 @@ app.get('/devices/:type/:driver', function(req, res) {
 GET device/:_id
 -> GET device/abc123
 */
-app.get('/device/:deviceId', function(req, res) {
+app.get('/device/:deviceId', function(req, res, next) {
   return models['device'].findOne({
       _id: req.params.deviceId
     }).exec()
     .then(function(device) {
       res.json(device);
+    })
+    .catch(function(err) {
+      next(err);
     });
 });
 
@@ -226,7 +244,7 @@ app.get('/device/:deviceId', function(req, res) {
 POST device/:_id/:command
 -> POST device/abc123/on
 */
-app.post('/device/:deviceId/:command', function(req, res) {
+app.post('/device/:deviceId/:command', function(req, res, next) {
   var device;
   return models['device'].findOne({
       _id: req.params.deviceId
@@ -253,16 +271,15 @@ app.post('/device/:deviceId/:command', function(req, res) {
       }
       res.json(commandResult);
     })
-    .catch(function(e) {
-      console.log('error',e);
-      res.send({});
-    })
+    .catch(function(err) {
+      next(err);
+    });
 });
 
 /*
 GET drivers
 */
-app.get('/drivers', function(req, res) {
+app.get('/drivers', function(req, res, next) {
   var devicesGroupedByDrivers = [];
   models['device'].aggregate([{
       $group: {
@@ -302,7 +319,59 @@ app.get('/drivers', function(req, res) {
         return obj;
       });
       res.json(driversWithStats);
+    })
+    .catch(function(err) {
+      next(err);
     });
+});
+
+app.use(function(err, req, res, next) {
+  switch(err.type) {
+    case 'Driver':
+      console.log(err);
+      res.status(500);
+      res.json({
+          code: 500,
+          type: err.type,
+          driver: err.driver,
+          message: err.message
+      });
+    break;
+    case 'BadRequest':
+      res.status(400);
+      return res.json({code:400,
+        type: err.type,
+        message: err.message
+      });
+    break;
+    case 'NotFound':
+      res.status(404);
+      return res.json({
+        code:404,
+        type: err.type,
+        message: err.message
+      });
+    break;
+    case 'Validation':
+      res.status(400);
+      return res.json({
+        code:400,
+        type: err.type,
+        message: err.message,
+        errors: err.errors
+      });
+    break;
+    default:
+      console.log(err);
+      console.log(err.stack);
+      res.status(500);
+      res.json({
+        type: 'Internal',
+        code: 500,
+        stack: err.stack
+      });
+  }
+    
 });
 
 app.listen(3000, function() {
