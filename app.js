@@ -84,7 +84,9 @@ app.get('/discover/:type/:driver', function(req, res, next) {
     .then(function(foundDriver) {
       //if found, load it
       if (foundDriver === false) {
-        throw new Error(404, 'driver not found');
+        var e = new Error('driver not found');
+        e.type = 'NotFound';
+        throw e;
       }
       return loadDriver(req.params.driver);
     })
@@ -252,10 +254,14 @@ app.post('/device/:deviceId/:command', function(req, res, next) {
     .then(function(deviceObj) {
       device = deviceObj;
       if(typeof device.specs.capabilities[req.params.command]==="undefined") {
-        throw new Error('capability not found');
+        var e = new Error('capability not found');
+        e.type = 'BadRequest';
+        throw e;
       }
       if(device.specs.capabilities[req.params.command]===false) {
-        throw new Error('capability not supported');
+        var e = new Error('capability not supported');
+        e.type = 'BadRequest';
+        throw e;
       }
       return loadDriver(device.driver);
     })
