@@ -7,6 +7,8 @@ var _ = require('underscore');
 var fs = require('fs');
 var Validator = require('jsonschema').Validator;
 var jsonValidator = new Validator();
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
 mongoose.connect('mongodb://localhost/homebox');
 
@@ -246,7 +248,7 @@ app.get('/device/:deviceId', function(req, res, next) {
 POST device/:_id/:command
 -> POST device/abc123/on
 */
-app.post('/device/:deviceId/:command', function(req, res, next) {
+app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
   var device;
   return models['device'].findOne({
       _id: req.params.deviceId
@@ -267,13 +269,27 @@ app.post('/device/:deviceId/:command', function(req, res, next) {
     })
     .then(function(driver) {
       var fnName = 'capability_'+req.params.command;
+
+      //if a schema is specified, confirm that the request body matches it
+      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.requestSchema;
+      if(jsonSchema) {
+        var validated = jsonValidator.validate(req.body,jsonSchema);
+        if(validated.errors.length!==0) {
+          var e = new Error(validated);
+          e.type = 'BadRequest';
+          throw e;
+        }
+      }
       return driver[fnName](device,req.body);
     })
     .then(function(commandResult) {
+      //confirm that the action response matches the schema
       var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.responseSchema;
       var validated = jsonValidator.validate(commandResult,jsonSchema);
       if(validated.errors.length!==0) {
-        throw new Error(validated);
+        var e = new Error(validated);
+        e.type = 'Driver';
+        throw e;
       }
       res.json(commandResult);
     })
