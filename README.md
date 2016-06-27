@@ -18,6 +18,8 @@ The homebox ecosystem is entirely open source and based around npm. Developers a
 This should launch a REST API server on localhost:3000
 
 ##Getting started
-Start by making calls to the APIs documented at https://github.com/richardwillars/homebox/wiki/devices - these APIs are used to discover devices on your network and find out information each device. 
+Out of the box Homebox has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Homebox to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/homebox/wiki/Drivers to learn how to search for and add drivers.
 
-If drivers are already written for the devices you want to interact with then you're good to go.. you just need to call the APIs to control each device which are documented in the Wiki
+Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/homebox/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
+
+If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/homebox/wiki/Drivers
