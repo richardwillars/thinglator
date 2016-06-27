@@ -71,8 +71,21 @@ var SpeakerSchema = new mongoose.Schema({
 		},
 		getLEDState: {
 			type: Boolean,
-			default: false
+			default: false,
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"on": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"on"
+				]
+			}
 		},
+
 		getMusicLibrary: {
 			type: Boolean,
 			default: false
@@ -220,12 +233,36 @@ var SpeakerSchema = new mongoose.Schema({
 				"required": [
 					"on"
 				]
+			},
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"on": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"on"
+				]
 			}
 		},
 		setMuted: {
 			type: Boolean,
 			default: false,
 			requestSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"muted": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"muted"
+				]
+			},
+			responseSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
@@ -252,7 +289,20 @@ var SpeakerSchema = new mongoose.Schema({
 				"required": [
 					"name"
 				]
+			},
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				]
 			}
+
 		},
 		setPlayMode: {
 			type: Boolean,
@@ -277,6 +327,20 @@ var SpeakerSchema = new mongoose.Schema({
 			type: Boolean,
 			default: false,
 			requestSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"volume": {
+						"type": "integer",
+						"minimum": 0,
+						"maximum": 100
+					}
+				},
+				"required": [
+					"volume"
+				]
+			},
+			responseSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {

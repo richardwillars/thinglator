@@ -7,6 +7,8 @@ var _ = require('underscore');
 var fs = require('fs');
 var Validator = require('jsonschema').Validator;
 var jsonValidator = new Validator();
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
 mongoose.connect('mongodb://localhost/homebox');
 
@@ -246,7 +248,7 @@ app.get('/device/:deviceId', function(req, res, next) {
 POST device/:_id/:command
 -> POST device/abc123/on
 */
-app.post('/device/:deviceId/:command', function(req, res, next) {
+app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
   var device;
   return models['device'].findOne({
       _id: req.params.deviceId
@@ -278,7 +280,6 @@ app.post('/device/:deviceId/:command', function(req, res, next) {
           throw e;
         }
       }
-
       return driver[fnName](device,req.body);
     })
     .then(function(commandResult) {
