@@ -16,38 +16,3 @@ The homebox ecosystem is entirely open source and based around npm. Developers a
 > node app.js
 
 This should launch a REST API server on localhost:3000
-
-## Available REST APIs
-
-**GET discover/:type/:driver**
-
-*E.g. GET discover/speaker/sonos*
-
-Tells a particular driver to search for devices on the network (in the above example it will search for Sonos speakers using the 'sonos' speaker driver). Any newly found devices are added to homebox. Any existing ones are updated. Any non-existant ones are removed from homebox. Once discovery is completed it'll return the list of devices.
-
-
-**GET devices/:type**
-
-*E.g. GET devices/speaker*
-
-Returns a list of all devices of a certain type added to Homebox. In the example above it is returning a list of all speakers added to Homebox.
-
-
-**GET devices/:type/:driver**
-
-*E.g. GET devices/speaker/sonos*
-
-Returns a list of all devices of a certain type and using a certain driver that have been added to Homebox. In the example above it is returning a list of all speakers using the 'sonos' driver.
-
-**GET device/:_id**
-
-*E.g. GET device/abc123*
-
-Returns information about a particular device and all it's capabilities.
-
-
-**POST device/:_id/:command**
-
-*E.g. POST device/abc123/on*
-
-Sends a command to a particular device. In the above example we are issuing the 'on' command to the device with id 'abc123'. The list of commands/capabilities available for a particular device can be obtained by called GET device/:_id.
