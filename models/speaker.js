@@ -16,7 +16,7 @@ var SpeakerSchema = new mongoose.Schema({
 		getCurrentTrack: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -52,7 +52,7 @@ var SpeakerSchema = new mongoose.Schema({
 		flushQueue: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -80,7 +80,7 @@ var SpeakerSchema = new mongoose.Schema({
 		getMuted: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -112,7 +112,7 @@ var SpeakerSchema = new mongoose.Schema({
 		next: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -128,7 +128,7 @@ var SpeakerSchema = new mongoose.Schema({
 		pause: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -144,7 +144,7 @@ var SpeakerSchema = new mongoose.Schema({
 		play: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -160,7 +160,7 @@ var SpeakerSchema = new mongoose.Schema({
 		previous: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {
@@ -175,40 +175,64 @@ var SpeakerSchema = new mongoose.Schema({
 		},
 		addToQueueBottom: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		addToQueueNext: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		seek: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		setLEDState: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		setMuted: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		setName: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		setPlayMode: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		setVolume: {
 			type: Boolean,
-			default: false
+			default: false,
+			requestSchema: {
+
+			}
 		},
 		stop: {
 			type: Boolean,
 			default: false,
-			returnSchema: {
+			responseSchema: {
 			  "$schema": "http://json-schema.org/draft-04/schema#",
 			  "type": "object",
 			  "properties": {

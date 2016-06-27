@@ -23,7 +23,6 @@ module.exports = {
 			      if (err) {
 			      	console.log('failed to retrieve zone information');
 			      }
-			      console.log(info);
 			      var device = {
 					deviceId: info.SerialNumber,
 					name: attrs.CurrentZoneName,

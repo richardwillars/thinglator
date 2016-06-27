@@ -246,7 +246,7 @@ app.post('/device/:deviceId/:command', function(req, res) {
       return driver[fnName](device,req.body);
     })
     .then(function(commandResult) {
-      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.returnSchema;
+      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.responseSchema;
       var validated = jsonValidator.validate(commandResult,jsonSchema);
       if(validated.errors.length!==0) {
         throw new Error(validated);
@@ -306,5 +306,5 @@ app.get('/drivers', function(req, res) {
 });
 
 app.listen(3000, function() {
-  console.log('homebox listening on port 3000!');
+  console.log('Homebox listening on port 3000!');
 });
