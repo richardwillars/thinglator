@@ -16,7 +16,7 @@ var models = require('./models');
 function doesDriverExist(driverId, type) {
   return new Promise(function(resolve, reject) {
     try {
-      var driver = require('./drivers/homebox-driver-' + driverId);
+      var driver = require('homebox-driver-' + driverId);
       if (driver.type !== type) {
         return resolve(false);
       }
@@ -30,7 +30,7 @@ function doesDriverExist(driverId, type) {
 function loadDriver(driverId) {
   return new Promise(function(resolve, reject) {
     try {
-      var driver = require('./drivers/homebox-driver-' + driverId);
+      var driver = require('homebox-driver-' + driverId);
       resolve(driver);
     } catch (ex) {
       resolve(null);
@@ -296,9 +296,9 @@ app.get('/drivers', function(req, res, next) {
       devicesGroupedByDrivers = results;
 
       var promises = [];
-      fs.readdirSync(__dirname + '/drivers').forEach(function(file) {
-        if (file.match(/\.js$/) !== null && file !== 'index.js') {
-          var name = file.replace('.js', '').replace('homebox-driver-', '');
+      fs.readdirSync(__dirname + '/node_modules').forEach(function(file) {
+        if (file.match(/homebox-driver-/) !== null) {
+          var name = file.replace('homebox-driver-', '');
           promises.push(loadDriver(name));
         }
       });
