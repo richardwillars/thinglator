@@ -74,13 +74,42 @@ var LightSchema = new mongoose.Schema({
 
 		},
 		breatheEffect: {
+			type: Boolean,
+			default: false,
+			requestSchema: {
 
+			},
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"processed": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"processed"
+				]
+			}
 		},
 		pulseEffect: {
+			type: Boolean,
+			default: false,
+			requestSchema: {
 
-		},
-		cycleEffect: {
-
+			},
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"processed": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"processed"
+				]
+			}
 		}
 	}
 });
