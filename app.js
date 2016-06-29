@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
@@ -13,31 +15,66 @@ var jsonParser = bodyParser.json();
 mongoose.connect('mongodb://localhost/homebox');
 
 var models = require('./models');
-
+var drivers = [];
 
 function doesDriverExist(driverId, type) {
   return new Promise(function(resolve, reject) {
-    try {
-      var driver = require('homebox-driver-' + driverId);
-      if (driver.type !== type) {
-        return resolve(false);
-      }
-      resolve(true);
-    } catch (ex) {
-      resolve(false);
+    if (!drivers[driverId]) {
+      return resolve(false);
     }
+    if (drivers[driverId].getType() !== type) {
+      return resolve(false);
+    }
+    resolve(true);
   });
 }
 
-function loadDriver(driverId) {
-  return new Promise(function(resolve, reject) {
-    try {
-      var driver = require('homebox-driver-' + driverId);
-      resolve(driver);
-    } catch (ex) {
-      resolve(null);
+class DriverSettings {
+  constructor(driverId) {
+    this.driverId = driverId;
+  }
+
+  get() {
+    var self = this;
+    return new Promise(function(resolve, reject) {
+      models['driver'].findOne({
+        _id: self.driverId
+      }).exec().then(function(result) {
+        resolve(result.settings);
+      }).catch(function(e) {
+        reject(e);
+      });
+    })
+
+  }
+
+  set(settings) {
+    return models['driver'].update({
+      _id: this.driverId
+    }, {
+      settings: settings
+    }, {
+      upsert: true,
+      setDefaultsOnInsert: true
+    }).exec();
+  }
+}
+
+function loadDrivers() {
+  var driversArr = [];
+  fs.readdirSync(__dirname + '/node_modules').forEach(function(file) {
+    if (file.match(/homebox-driver-/) !== null) {
+      var name = file.replace('homebox-driver-', '');
+      var Driver = require('homebox-driver-' + name);
+
+
+      var interfaces = {
+        http: {}
+      };
+      driversArr[name] = new Driver(new DriverSettings(name), interfaces);
     }
   });
+  return driversArr;
 }
 
 function createDevice(type, driver, deviceSpecs) {
@@ -73,6 +110,101 @@ function updateDevice(device, specs) {
     });
 }
 
+var drivers = loadDrivers();
+
+app.get('/authenticate/:type/:driver', function(req, res, next) {
+  doesDriverExist(req.params.driver, req.params.type)
+    .then(function(foundDriver) {
+      //if found, load it
+      if (foundDriver === false) {
+        var e = new Error('driver not found');
+        e.type = 'NotFound';
+        throw e;
+      }
+      return drivers[req.params.driver];
+    })
+    .then(function(driver) {
+      //call the getAuthenticationProcess method on the driver
+      return driver.getAuthenticationProcess();
+    })
+    .then(function(authenticationProcess) {
+      for (var i in authenticationProcess) {
+        //validate the json
+        var jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
+        if (!jsonSchema) {
+          var e = new Error('validation schema not found');
+          e.type = 'Driver';
+          throw e;
+        }
+        var validated = jsonValidator.validate(authenticationProcess[i], jsonSchema);
+        if (validated.errors.length !== 0) {
+          var e = new Error(validated);
+          e.type = 'Driver';
+          throw e;
+        }
+      }
+      res.json(authenticationProcess);
+    })
+    .catch(function(e) {
+      if (e.type) {
+        if (e.type === 'Driver') {
+          e.driver = req.params.driver;
+        }
+      }
+      next(e);
+    });
+});
+
+app.post('/authenticate/:type/:driver/:stepId', jsonParser, function(req, res, next) {
+  var driver;
+  doesDriverExist(req.params.driver, req.params.type)
+    .then(function(foundDriver) {
+      //if found, load it
+      if (foundDriver === false) {
+        var e = new Error('driver not found');
+        e.type = 'NotFound';
+        throw e;
+      }
+      return drivers[req.params.driver];
+    })
+    .then(function(driverObj) {
+      driver = driverObj;
+      //call the getAuthenticationProcess method on the driver
+      return driver.getAuthenticationProcess();
+    })
+    .then(function(authenticationProcess) {
+      var stepId = parseInt(req.params.stepId);
+      var step = authenticationProcess[stepId];
+      if (!step) {
+        var e = new Error('authentication step not found');
+        e.type = 'NotFound';
+        throw e;
+      }
+
+      //validate the json that's been sent by comparing it against the schema
+      var jsonSchema = models.authenticationSchemas.returned[step.type];
+      var validated = jsonValidator.validate(req.body, jsonSchema);
+      if (validated.errors.length !== 0) {
+        var e = new Error(validated);
+        e.type = 'BadRequest';
+        throw e;
+      }
+      //all good - call the correct authentication step method on the driver
+      return driver['setAuthenticationStep' + stepId](req.body);
+    })
+    .then(function() {
+      res.json({});
+    })
+    .catch(function(e) {
+      if (e.type) {
+        if (e.type === 'Driver') {
+          e.driver = req.params.driver;
+        }
+      }
+      next(e);
+    });
+});
+
 /*
 GET discover/:type/:driver
 -> GET discover/speaker/sonos
@@ -90,7 +222,7 @@ app.get('/discover/:type/:driver', function(req, res, next) {
         e.type = 'NotFound';
         throw e;
       }
-      return loadDriver(req.params.driver);
+      return drivers[req.params.driver];
     })
     .then(function(driver) {
       //call the discover method on the driver and wait for it to return devices
@@ -171,8 +303,8 @@ app.get('/discover/:type/:driver', function(req, res, next) {
       res.json(devices);
     })
     .catch(function(e) {
-      if(e.type) {
-        if(e.type==='DriverError') {
+      if (e.type) {
+        if (e.type === 'Driver') {
           e.driver = req.params.driver;
         }
       }
@@ -255,38 +387,38 @@ app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
     }).exec()
     .then(function(deviceObj) {
       device = deviceObj;
-      if(typeof device.specs.capabilities[req.params.command]==="undefined") {
+      if (typeof device.specs.capabilities[req.params.command] === "undefined") {
         var e = new Error('capability not found');
         e.type = 'BadRequest';
         throw e;
       }
-      if(device.specs.capabilities[req.params.command]===false) {
+      if (device.specs.capabilities[req.params.command] === false) {
         var e = new Error('capability not supported');
         e.type = 'BadRequest';
         throw e;
       }
-      return loadDriver(device.driver);
+      return drivers[deviceObj.driver];
     })
     .then(function(driver) {
-      var fnName = 'capability_'+req.params.command;
+      var fnName = 'capability_' + req.params.command;
 
       //if a schema is specified, confirm that the request body matches it
-      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.requestSchema;
-      if(jsonSchema) {
-        var validated = jsonValidator.validate(req.body,jsonSchema);
-        if(validated.errors.length!==0) {
+      var jsonSchema = models[device.type].schema.paths['capabilities.' + req.params.command].options.requestSchema;
+      if (jsonSchema) {
+        var validated = jsonValidator.validate(req.body, jsonSchema);
+        if (validated.errors.length !== 0) {
           var e = new Error(validated);
           e.type = 'BadRequest';
           throw e;
         }
       }
-      return driver[fnName](device,req.body);
+      return driver[fnName](device, req.body);
     })
     .then(function(commandResult) {
       //confirm that the action response matches the schema
-      var jsonSchema = models.speaker.schema.paths['capabilities.'+req.params.command].options.responseSchema;
-      var validated = jsonValidator.validate(commandResult,jsonSchema);
-      if(validated.errors.length!==0) {
+      var jsonSchema = models[device.type].schema.paths['capabilities.' + req.params.command].options.responseSchema;
+      var validated = jsonValidator.validate(commandResult, jsonSchema);
+      if (validated.errors.length !== 0) {
         var e = new Error(validated);
         e.type = 'Driver';
         throw e;
@@ -316,30 +448,21 @@ app.get('/drivers', function(req, res, next) {
     }]).exec()
     .then(function(results) {
       devicesGroupedByDrivers = results;
-
-      var promises = [];
-      fs.readdirSync(__dirname + '/node_modules').forEach(function(file) {
-        if (file.match(/homebox-driver-/) !== null) {
-          var name = file.replace('homebox-driver-', '');
-          promises.push(loadDriver(name));
-        }
-      });
-      return Promise.all(promises);
-    }).then(function(drivers) {
-      var driversWithStats = _.map(drivers, function(driver) {
+      var driversWithStats = [];
+      for (var i in drivers) {
         var obj = {
-          _id: driver.name,
-          type: driver.type,
+          _id: drivers[i].getName(),
+          type: drivers[i].getType(),
           deviceCount: 0
         };
         var foundStats = _.findWhere(devicesGroupedByDrivers, {
-          _id: driver.name
+          _id: drivers[i].getName()
         });
         if (foundStats) {
           obj.deviceCount = foundStats.deviceCount;
         }
-        return obj;
-      });
+        driversWithStats.push(obj);
+      }
       res.json(driversWithStats);
     })
     .catch(function(err) {
@@ -348,41 +471,58 @@ app.get('/drivers', function(req, res, next) {
 });
 
 app.use(function(err, req, res, next) {
-  switch(err.type) {
+  switch (err.type) {
     case 'Driver':
       console.log(err);
       res.status(500);
       res.json({
-          code: 500,
-          type: err.type,
-          driver: err.driver,
-          message: err.message
+        code: 500,
+        type: err.type,
+        driver: err.driver,
+        message: err.message
       });
-    break;
+      break;
     case 'BadRequest':
       res.status(400);
-      return res.json({code:400,
+      return res.json({
+        code: 400,
         type: err.type,
         message: err.message
       });
-    break;
+      break;
     case 'NotFound':
       res.status(404);
       return res.json({
-        code:404,
+        code: 404,
         type: err.type,
         message: err.message
       });
-    break;
+      break;
     case 'Validation':
       res.status(400);
       return res.json({
-        code:400,
+        code: 400,
         type: err.type,
         message: err.message,
         errors: err.errors
       });
-    break;
+      break;
+    case 'Connection':
+      res.status(503);
+      return res.json({
+        code: 503,
+        type: err.type,
+        message: err.message
+      });
+      break;
+    case 'Authentication':
+      res.status(401);
+      return res.json({
+        code: 401,
+        type: err.type,
+        message: err.message
+      });
+      break;
     default:
       console.log(err);
       console.log(err.stack);
@@ -393,7 +533,7 @@ app.use(function(err, req, res, next) {
         stack: err.stack
       });
   }
-    
+
 });
 
 app.listen(3000, function() {
