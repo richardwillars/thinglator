@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//colour must be specifed in the following format: "hue:120 saturation:1.0 brightness:0.5"
 var LightSchema = new mongoose.Schema({
 	_id: false,
 	name: {
@@ -41,11 +42,6 @@ var LightSchema = new mongoose.Schema({
 					"colour": {
 						"type": "string"
 					},
-					"brightness": {
-						"type": "integer",
-						"minimum": 0,
-						"maximum": 100
-					},
 					"duration": {
 						"duration": "integer",
 						"minimum": 0,
@@ -55,7 +51,6 @@ var LightSchema = new mongoose.Schema({
 				"required": [
 					"colour",
 					"duration",
-					"brightness",
 					"on"
 				]
 			},
@@ -77,6 +72,41 @@ var LightSchema = new mongoose.Schema({
 			type: Boolean,
 			default: false,
 			requestSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"colour": {
+						"type": "string"
+					},
+					"fromColour": {
+						"type": "string"
+					},
+					"period": {
+						"type": "double",
+						"minimum": 0.01,
+						"maximum": 100
+					},
+					"cycles": {
+						"duration": "double",
+						"minimum": 0.01,
+						"maxiumum": 99999
+					},
+					"persist": {
+						"type": "boolean"
+					},
+					"peak": {
+						"type": "double",
+						"minimum": 0,
+						"maximum": 1
+					}
+				},
+				"required": [
+					"colour",
+					"period",
+					"cycles",
+					"persist",
+					"peak"
+				]
 
 			},
 			responseSchema: {
