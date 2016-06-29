@@ -126,6 +126,35 @@ var LightSchema = new mongoose.Schema({
 			type: Boolean,
 			default: false,
 			requestSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"colour": {
+						"type": "string"
+					},
+					"fromColour": {
+						"type": "string"
+					},
+					"period": {
+						"type": "double",
+						"minimum": 0.01,
+						"maximum": 100
+					},
+					"cycles": {
+						"duration": "double",
+						"minimum": 0.01,
+						"maxiumum": 99999
+					},
+					"persist": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"colour",
+					"period",
+					"cycles",
+					"persist"
+				]
 
 			},
 			responseSchema: {
