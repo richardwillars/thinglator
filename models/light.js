@@ -19,12 +19,12 @@ var LightSchema = new mongoose.Schema({
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"on": {
+					"toggled": {
 						"type": "boolean"
 					}
 				},
 				"required": [
-					"on"
+					"toggled"
 				]
 			}
 		},
