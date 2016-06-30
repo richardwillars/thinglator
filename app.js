@@ -192,8 +192,34 @@ app.post('/authenticate/:type/:driver/:stepId', jsonParser, function(req, res, n
       //all good - call the correct authentication step method on the driver
       return driver['setAuthenticationStep' + stepId](req.body);
     })
-    .then(function() {
-      res.json({});
+    .then(function(result) {
+      var resultSchema = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "success"
+        ]
+      };
+
+      if(result.success===false) {
+        resultSchema.required.push("message");
+      }
+      var validated = jsonValidator.validate(result, resultSchema);
+      if (validated.errors.length !== 0) {
+        var e = new Error(validated);
+        e.type = 'BadRequest';
+        throw e;
+      }
+
+      res.json(result);
     })
     .catch(function(e) {
       if (e.type) {

@@ -40,8 +40,31 @@ var LightSchema = new mongoose.Schema({
 						"type": "boolean"
 					},
 					"colour": {
-						"type": "string"
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						},
+						"required": [
+							"hue",
+							"saturation",
+							"brightness"
+						]
 					},
+
 					"duration": {
 						"duration": "integer",
 						"minimum": 0,
@@ -76,10 +99,54 @@ var LightSchema = new mongoose.Schema({
 				"type": "object",
 				"properties": {
 					"colour": {
-						"type": "string"
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						},
+						"required": [
+							"hue",
+							"saturation",
+							"brightness"
+						]
 					},
 					"fromColour": {
-						"type": "string"
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						},
+						"required": [
+							"hue",
+							"saturation",
+							"brightness"
+						]
 					},
 					"period": {
 						"type": "double",
@@ -130,10 +197,54 @@ var LightSchema = new mongoose.Schema({
 				"type": "object",
 				"properties": {
 					"colour": {
-						"type": "string"
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						},
+						"required": [
+							"hue",
+							"saturation",
+							"brightness"
+						]
 					},
 					"fromColour": {
-						"type": "string"
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						},
+						"required": [
+							"hue",
+							"saturation",
+							"brightness"
+						]
 					},
 					"period": {
 						"type": "double",
