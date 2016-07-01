@@ -12,6 +12,7 @@ var jsonValidator = new Validator();
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
+
 mongoose.connect('mongodb://localhost/homebox');
 
 var models = require('./models');
@@ -37,7 +38,7 @@ class DriverSettings {
   get() {
     var self = this;
     return new Promise(function(resolve, reject) {
-      models['driver'].findOne({
+      models['driver'].Model.findOne({
         _id: self.driverId
       }).exec().then(function(result) {
         resolve(result.settings);
@@ -49,7 +50,7 @@ class DriverSettings {
   }
 
   set(settings) {
-    return models['driver'].update({
+    return models['driver'].Model.update({
       _id: this.driverId
     }, {
       settings: settings
@@ -67,18 +68,19 @@ function loadDrivers() {
       var name = file.replace('homebox-driver-', '');
       var Driver = require('homebox-driver-' + name);
 
-
       var interfaces = {
         http: {}
       };
+
       driversArr[name] = new Driver(new DriverSettings(name), interfaces);
+      driversArr[name].setEventEmitter(models[driversArr[name].getType()].DeviceEventEmitter);
     }
   });
   return driversArr;
 }
 
 function createDevice(type, driver, deviceSpecs) {
-  var deviceSpecsObj = new models[type](deviceSpecs);
+  var deviceSpecsObj = new models[type].Model(deviceSpecs);
 
   return deviceSpecsObj.validate()
     .then(function(validationFailed) {
@@ -87,7 +89,7 @@ function createDevice(type, driver, deviceSpecs) {
         e.type = 'Validation';
       }
 
-      var deviceObj = new models['device']({
+      var deviceObj = new models['device'].Model({
         _id: md5(type + driver + deviceSpecsObj.deviceId),
         type: type,
         driver: driver,
@@ -98,7 +100,7 @@ function createDevice(type, driver, deviceSpecs) {
 }
 
 function updateDevice(device, specs) {
-  var deviceSpecsObj = new models[device.type](specs);
+  var deviceSpecsObj = new models[device.type].Model(specs);
 
   return deviceSpecsObj.validate()
     .then(function(validationFailed) {
@@ -110,7 +112,10 @@ function updateDevice(device, specs) {
     });
 }
 
+
 var drivers = loadDrivers();
+
+
 
 app.get('/authenticate/:type/:driver', function(req, res, next) {
   doesDriverExist(req.params.driver, req.params.type)
@@ -257,7 +262,7 @@ app.get('/discover/:type/:driver', function(req, res, next) {
     .then(function(devices) {
       foundDevices = devices;
       //get a list of existing devices from the db
-      return models['device'].find({
+      return models['device'].Model.find({
         type: req.params.type,
         driver: req.params.driver
       }).exec();
@@ -298,7 +303,7 @@ app.get('/discover/:type/:driver', function(req, res, next) {
         return;
       }
       var noLongerExistsIds = _.pluck(noLongerExists, '_id');
-      return models['device'].remove({
+      return models['device'].Model.remove({
         _id: {
           $in: noLongerExistsIds
         }
@@ -320,7 +325,7 @@ app.get('/discover/:type/:driver', function(req, res, next) {
     })
     .then(function() {
       //get the entire list of devices from the db
-      return models['device'].find({
+      return models['device'].Model.find({
         type: req.params.type,
         driver: req.params.driver
       }).exec();
@@ -344,7 +349,7 @@ GET devices
 -> GET devices
 */
 app.get('/devices/', function(req, res, next) {
-  return models['device'].find().exec()
+  return models['device'].Model.find().exec()
     .then(function(devices) {
       res.json(devices);
     })
@@ -358,7 +363,7 @@ GET devices/:type
 -> GET devices/speaker
 */
 app.get('/devices/:type', function(req, res, next) {
-  return models['device'].find({
+  return models['device'].Model.find({
       type: req.params.type
     }).exec()
     .then(function(devices) {
@@ -374,7 +379,7 @@ GET devices/:type/:driver
 -> GET devices/speaker/sonos
 */
 app.get('/devices/:type/:driver', function(req, res, next) {
-  return models['device'].find({
+  return models['device'].Model.find({
       type: req.params.type,
       driver: req.params.driver
     }).exec()
@@ -391,7 +396,7 @@ GET device/:_id
 -> GET device/abc123
 */
 app.get('/device/:deviceId', function(req, res, next) {
-  return models['device'].findOne({
+  return models['device'].Model.findOne({
       _id: req.params.deviceId
     }).exec()
     .then(function(device) {
@@ -408,7 +413,7 @@ POST device/:_id/:command
 */
 app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
   var device;
-  return models['device'].findOne({
+  return models['device'].Model.findOne({
       _id: req.params.deviceId
     }).exec()
     .then(function(deviceObj) {
@@ -429,7 +434,7 @@ app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
       var fnName = 'capability_' + req.params.command;
 
       //if a schema is specified, confirm that the request body matches it
-      var jsonSchema = models[device.type].schema.paths['capabilities.' + req.params.command].options.requestSchema;
+      var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + req.params.command].options.requestSchema;
       if (jsonSchema) {
         var validated = jsonValidator.validate(req.body, jsonSchema);
         if (validated.errors.length !== 0) {
@@ -442,7 +447,7 @@ app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
     })
     .then(function(commandResult) {
       //confirm that the action response matches the schema
-      var jsonSchema = models[device.type].schema.paths['capabilities.' + req.params.command].options.responseSchema;
+      var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + req.params.command].options.responseSchema;
       var validated = jsonValidator.validate(commandResult, jsonSchema);
       if (validated.errors.length !== 0) {
         var e = new Error(validated);
@@ -461,7 +466,8 @@ GET drivers
 */
 app.get('/drivers', function(req, res, next) {
   var devicesGroupedByDrivers = [];
-  models['device'].aggregate([{
+  console.log(models);
+  models['device'].Model.aggregate([{
       $group: {
         _id: '$driver',
         type: {
@@ -490,6 +496,22 @@ app.get('/drivers', function(req, res, next) {
         driversWithStats.push(obj);
       }
       res.json(driversWithStats);
+    })
+    .catch(function(err) {
+      next(err);
+    });
+});
+
+/*
+GET event/:eventType
+-> GET event/device
+*/
+app.get('/event/:eventType', function(req, res, next) {
+  return models['event'].Model.find({
+      eventType: req.params.eventType
+    }).sort({ when: 1 }).exec()
+    .then(function(events) {
+      res.json(events);
     })
     .catch(function(err) {
       next(err);

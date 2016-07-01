@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var EventEmitter2 = require('eventemitter2').EventEmitter2;
+var EventModel = require('./event').Model;
 
 //colour must be specifed in the following format: "hue:120 saturation:1.0 brightness:0.5"
 var LightSchema = new mongoose.Schema({
@@ -286,5 +288,27 @@ var LightSchema = new mongoose.Schema({
 
 
 var Light = mongoose.model('Light', LightSchema);
+var deviceEventEmitter = new EventEmitter2();
 
-module.exports = Light;
+deviceEventEmitter.on('on', function(driverId, deviceId) {
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'light',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'on',
+		value: {}
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..',eventObj,err);
+	});
+});
+
+deviceEventEmitter.on('off', function(driverId, deviceId) {
+	console.log('light turned off', driverId, deviceId);
+});
+
+module.exports = {
+	Model: Light,
+	DeviceEventEmitter: deviceEventEmitter
+};

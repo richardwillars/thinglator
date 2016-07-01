@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 var SpeakerSchema = new mongoose.Schema({
 	_id: false,
@@ -313,9 +313,9 @@ var SpeakerSchema = new mongoose.Schema({
 				"properties": {
 					"playMode": {
 						"type": "string",
-			            "enum": [
-			              "normal","repeat_all","shuffle","shuffle_norepeat"
-			            ]
+						"enum": [
+							"normal", "repeat_all", "shuffle", "shuffle_norepeat"
+						]
 					}
 				},
 				"required": [
@@ -376,5 +376,21 @@ var SpeakerSchema = new mongoose.Schema({
 
 
 var Speaker = mongoose.model('Speaker', SpeakerSchema);
+var deviceEventEmitter = new EventEmitter2();
 
-module.exports = Speaker;
+deviceEventEmitter.on('playing', function(driverId, deviceId, trackId) {
+	console.log('speaker started to play', driverId, deviceId, trackId);
+});
+
+deviceEventEmitter.on('paused', function(driverId, deviceId, trackId) {
+	console.log('speaker paused', driverId, deviceId, trackId);
+});
+
+deviceEventEmitter.on('stopped', function(driverId, deviceId) {
+	console.log('speaker stopped', driverId, deviceId);
+});
+
+module.exports = {
+	Model: Speaker,
+	DeviceEventEmitter: deviceEventEmitter
+};
