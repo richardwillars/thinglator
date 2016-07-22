@@ -17,4 +17,4 @@ var DriverSchema = new mongoose.Schema({
 
 var Driver = mongoose.model('Driver', DriverSchema);
 
-module.exports = Driver;
+module.exports.Model = Driver;
