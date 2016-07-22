@@ -508,7 +508,7 @@ GET event/:eventType
 */
 app.get('/event/:eventType', function(req, res, next) {
   if(req.query.from) {
-    return models['event'].Model.findOne({_id: req.query.from}).exec()
+    return models['event'].Model.findOne({_id: req.query.from}).lean().exec()
     .then(function(fromEvent) {
       return models['event'].Model.find({
         when: {
@@ -530,7 +530,7 @@ app.get('/event/:eventType', function(req, res, next) {
   else {
     return models['event'].Model.find({
         eventType: req.params.eventType
-      }).sort('when').limit(100).exec()
+      }).sort('when').limit(100).lean().exec()
       .then(function(events) {
         res.json(events);
       })

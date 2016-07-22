@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var EventEmitter2 = require('eventemitter2').EventEmitter2;
+var EventModel = require('./event').Model;
 
 var SpeakerSchema = new mongoose.Schema({
 	_id: false,
@@ -380,14 +381,45 @@ var deviceEventEmitter = new EventEmitter2();
 
 deviceEventEmitter.on('playing', function(driverId, deviceId, trackId) {
 	console.log('speaker started to play', driverId, deviceId, trackId);
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'playing',
+		value: trackId
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..',eventObj,err);
+	});
 });
 
 deviceEventEmitter.on('paused', function(driverId, deviceId, trackId) {
-	console.log('speaker paused', driverId, deviceId, trackId);
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'paused',
+		value: trackId
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..',eventObj,err);
+	});
 });
 
 deviceEventEmitter.on('stopped', function(driverId, deviceId) {
-	console.log('speaker stopped', driverId, deviceId);
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'stopped',
+		value: {}
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..',eventObj,err);
+	});
 });
 
 module.exports = {

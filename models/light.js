@@ -305,7 +305,17 @@ deviceEventEmitter.on('on', function(driverId, deviceId) {
 });
 
 deviceEventEmitter.on('off', function(driverId, deviceId) {
-	console.log('light turned off', driverId, deviceId);
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'light',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'off',
+		value: {}
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..',eventObj,err);
+	});
 });
 
 module.exports = {
