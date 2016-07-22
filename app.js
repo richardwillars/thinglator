@@ -507,15 +507,37 @@ GET event/:eventType
 -> GET event/device
 */
 app.get('/event/:eventType', function(req, res, next) {
-  return models['event'].Model.find({
-      eventType: req.params.eventType
-    }).sort({ when: 1 }).exec()
+  if(req.query.from) {
+    return models['event'].Model.findOne({_id: req.query.from}).exec()
+    .then(function(fromEvent) {
+      return models['event'].Model.find({
+        when: {
+          $gte: fromEvent.when
+        },
+        eventType: req.params.eventType,
+        _id: {
+          $ne: fromEvent._id
+        }
+      }).sort('when').limit(100).exec();
+    })
     .then(function(events) {
       res.json(events);
     })
     .catch(function(err) {
       next(err);
     });
+  }
+  else {
+    return models['event'].Model.find({
+        eventType: req.params.eventType
+      }).sort('when').limit(100).exec()
+      .then(function(events) {
+        res.json(events);
+      })
+      .catch(function(err) {
+        next(err);
+      });
+  }
 });
 
 app.use(function(err, req, res, next) {
