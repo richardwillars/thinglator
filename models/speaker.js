@@ -45,10 +45,12 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+		
 		getDeviceDescription: {
 			type: Boolean,
 			default: false
 		},
+
 		flushQueue: {
 			type: Boolean,
 			default: false,
@@ -65,10 +67,12 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		getCurrentState: {
 			type: Boolean,
 			default: false
 		},
+
 		getLEDState: {
 			type: Boolean,
 			default: false,
@@ -90,6 +94,7 @@ var SpeakerSchema = new mongoose.Schema({
 			type: Boolean,
 			default: false
 		},
+
 		getMuted: {
 			type: Boolean,
 			default: false,
@@ -106,10 +111,12 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		getTopology: {
 			type: Boolean,
 			default: false
 		},
+
 		getVolume: {
 			type: Boolean,
 			default: false,
@@ -126,14 +133,17 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		getZoneAttrs: {
 			type: Boolean,
 			default: false
 		},
+
 		getZoneInfo: {
 			type: Boolean,
 			default: false
 		},
+
 		next: {
 			type: Boolean,
 			default: false,
@@ -150,6 +160,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		pause: {
 			type: Boolean,
 			default: false,
@@ -166,6 +177,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		play: {
 			type: Boolean,
 			default: false,
@@ -182,6 +194,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		previous: {
 			type: Boolean,
 			default: false,
@@ -198,6 +211,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		addToQueueBottom: {
 			type: Boolean,
 			default: false,
@@ -205,20 +219,67 @@ var SpeakerSchema = new mongoose.Schema({
 
 			}
 		},
+
 		addToQueueNext: {
 			type: Boolean,
 			default: false,
 			requestSchema: {
-
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"uri": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uri"
+				]
+			},
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"queued": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"queued"
+				]
 			}
 		},
+
 		seek: {
 			type: Boolean,
 			default: false,
 			requestSchema: {
-
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"position": {
+						"type": "integer",
+						"minimum": 0
+					}
+				},
+				"required": [
+					"position"
+				]
+			},
+			responseSchema: {
+				"$schema": "http://json-schema.org/draft-04/schema#",
+				"type": "object",
+				"properties": {
+					"position": {
+						"type": "integer",
+						"minimum": 0
+					}
+				},
+				"required": [
+					"position"
+				]
 			}
 		},
+
 		setLEDState: {
 			type: Boolean,
 			default: false,
@@ -247,6 +308,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		setMuted: {
 			type: Boolean,
 			default: false,
@@ -275,6 +337,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		setName: {
 			type: Boolean,
 			default: false,
@@ -302,8 +365,8 @@ var SpeakerSchema = new mongoose.Schema({
 					"name"
 				]
 			}
-
 		},
+
 		setPlayMode: {
 			type: Boolean,
 			default: false,
@@ -323,6 +386,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		setVolume: {
 			type: Boolean,
 			default: false,
@@ -355,6 +419,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
+
 		stop: {
 			type: Boolean,
 			default: false,
