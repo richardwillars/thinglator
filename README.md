@@ -55,6 +55,8 @@ Once you have some drivers installed you can make calls to the APIs documented a
 
 If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/homebox/wiki/Drivers
 
+You can keep your home automation user interface up to date using the events API. More information on this can be found at https://github.com/richardwillars/homebox/wiki/events
+
 ## Todo
 Important features to build..
 - documentation
