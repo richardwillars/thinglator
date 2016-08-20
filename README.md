@@ -1,9 +1,40 @@
 # Homebox
-Homebox provides a uniform interface for interacting with IOT and home automation devices. Most IOT devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build and maintain support for each and every device individually). Homebox acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
+Homebox makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Most home automation devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build, maintain and support each and every device individually). Homebox acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
 
 The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Homebox and they'll have support for potentially unlimited devices!
 
-The Homebox ecosystem is entirely open source and based around npm. Developers and manufacturers can add support for a particular device by creating a driver (this is an npm package that tells homebox how to communicate with the device in question). Homebox will then expose the device using REST APIs and websockets.
+The really cool thing is that the Homebox ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Homebox how to communicate with the device in question). Homebox will then expose the device using REST APIs and websockets.
+
+So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
+
+    POST http://localhost:3000/devices/:deviceId/setState
+    {
+      "colour": {
+        "hue": 230,
+        "saturation": 1,
+        "brightness": 0.5
+      },
+      "duration": 2,
+      "on": true
+    }
+    
+.. and to make a Hue lightbulb turn on over 2 seconds and go blue..
+
+    POST http://localhost:3000/devices/:deviceId/setState
+    {
+      "colour": {
+        "hue": 230,
+        "saturation": 1,
+        "brightness": 0.5
+      },
+      "duration": 2,
+      "on": true
+    }
+    
+    
+(no it's not a mistake - both requests are identical (apart from the device ID)!)
+Homebox takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform REST API.
+
 
 ## Requirements
 - mongodb
