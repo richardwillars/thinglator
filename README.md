@@ -18,7 +18,7 @@ So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
       "on": true
     }
     
-.. and to make a Hue lightbulb turn on over 2 seconds and go blue..
+.. and to make a Philips Hue lightbulb turn on over 2 seconds and go blue..
 
     POST http://localhost:3000/devices/:deviceId/setState
     {
