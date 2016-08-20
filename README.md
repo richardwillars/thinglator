@@ -1,9 +1,9 @@
 # Homebox
 Homebox provides a uniform interface for interacting with IOT and home automation devices. Most IOT devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build and maintain support for each and every device individually). Homebox acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
 
-Home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with homebox and they'll have support for potentially unlimited devices.
+The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Homebox and they'll have support for potentially unlimited devices!
 
-The homebox ecosystem is entirely open source and based around npm. Developers and manufacturers can add support for devices by creating a driver (an npm package that tells homebox how to communicate with the device in question). Homebox will then expose the device using REST APIs and websockets.
+The Homebox ecosystem is entirely open source and based around npm. Developers and manufacturers can add support for a particular device by creating a driver (this is an npm package that tells homebox how to communicate with the device in question). Homebox will then expose the device using REST APIs and websockets.
 
 ## Requirements
 - mongodb
@@ -31,4 +31,4 @@ Important features to build..
 - zwave adapter
 - openzwave interface
 - zigbee adapter
-- socket capability (so Homebox can be accessed using websockets as well as HTTP)
+- websocket capability (so Homebox can be accessed using websockets as well as HTTP)
