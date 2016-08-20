@@ -14,6 +14,11 @@ var LightSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	additionalInfo: {
+		type: Object,
+		required: false,
+		default: {}
+	},
 	capabilities: {
 		toggle: {
 			type: Boolean,
@@ -312,6 +317,20 @@ deviceEventEmitter.on('off', function(driverId, deviceId) {
 		deviceId: deviceId,
 		event: 'off',
 		value: {}
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..',eventObj,err);
+	});
+});
+
+deviceEventEmitter.on('state', function(driverId, deviceId, state) {
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'light',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'state',
+		value: state
 	});
 	eventObj.save().catch(function(err) {
 		console.log('Unable to save event..',eventObj,err);

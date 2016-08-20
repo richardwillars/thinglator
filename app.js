@@ -74,6 +74,17 @@ function loadDrivers() {
 
       driversArr[name] = new Driver(new DriverSettings(name), interfaces);
       driversArr[name].setEventEmitter(models[driversArr[name].getType()].DeviceEventEmitter);
+
+      //get a list of devices for this particular driver
+      models['device'].Model.find({
+        type: driversArr[name].getType(),
+        driver: name
+      }).exec(function(err,devices) {
+        if(err) {
+          throw new Error(err);
+        }
+        driversArr[name].initDevices(devices);
+      });
     }
   });
   return driversArr;
@@ -88,7 +99,6 @@ function createDevice(type, driver, deviceSpecs) {
         var e = new Error(validationFailed);
         e.type = 'Validation';
       }
-
       var deviceObj = new models['device'].Model({
         _id: md5(type + driver + deviceSpecsObj.deviceId),
         type: type,
@@ -244,6 +254,7 @@ app.get('/discover/:type/:driver', function(req, res, next) {
   //check that the driver exists and that it matches the specified type
   var foundDevices = [];
   var existingDevices = [];
+  var finalDevices = [];
 
   doesDriverExist(req.params.driver, req.params.type)
     .then(function(foundDriver) {
@@ -331,7 +342,10 @@ app.get('/discover/:type/:driver', function(req, res, next) {
       }).exec();
     })
     .then(function(devices) {
-      res.json(devices);
+      finalDevices = devices;
+      drivers[req.params.driver].initDevices(finalDevices);
+    }).then(function() {
+      res.json(finalDevices);
     })
     .catch(function(e) {
       if (e.type) {
@@ -501,6 +515,7 @@ app.get('/drivers', function(req, res, next) {
       next(err);
     });
 });
+
 
 /*
 GET event/:eventType

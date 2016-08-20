@@ -13,6 +13,11 @@ var SpeakerSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	additionalInfo: {
+		type: Object,
+		required: false,
+		default: {}
+	},
 	capabilities: {
 		getCurrentTrack: {
 			type: Boolean,

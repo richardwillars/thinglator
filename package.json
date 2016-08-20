@@ -1,25 +1,25 @@
 {
-  "name": "homebox",
-  "license": "MIT",
-  "description": "A translator that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "0.0.2",
-  "maintainers": [
-    {
-      "name": "Richard Willars",
-      "email": "richard@richardwillars.com"
+    "name": "homebox",
+    "license": "MIT",
+    "description": "A translator that provides a uniform interface for interacting with IOT and home automation devices",
+    "version": "0.0.2",
+    "maintainers": [{
+        "name": "Richard Willars",
+        "email": "richard@richardwillars.com"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/richardwillars/homebox.git"
+    },
+    "dependencies": {
+        "body-parser": "^1.15.2",
+        "eventemitter2": "^1.0.5",
+        "express": "^4.14.0",
+        "homebox-driver-lifx": "0.0.5",
+        "homebox-driver-sonos": "0.0.5",
+        "jsonschema": "^1.1.0",
+        "md5": "^2.1.0",
+        "mongoose": "^4.5.1",
+        "underscore": "^1.8.3"
     }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/richardwillars/homebox.git"
-  },
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "eventemitter2": "^1.0.5",
-    "express": "^4.14.0",
-    "jsonschema": "^1.1.0",
-    "md5": "^2.1.0",
-    "mongoose": "^4.5.1",
-    "underscore": "^1.8.3"
-  }
 }
