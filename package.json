@@ -1,8 +1,8 @@
 {
     "name": "homebox",
     "license": "MIT",
-    "description": "A translator that provides a uniform interface for interacting with IOT and home automation devices",
-    "version": "0.0.2",
+    "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
+    "version": "0.1.0",
     "maintainers": [{
         "name": "Richard Willars",
         "email": "richard@richardwillars.com"
@@ -15,8 +15,6 @@
         "body-parser": "^1.15.2",
         "eventemitter2": "^1.0.5",
         "express": "^4.14.0",
-        "homebox-driver-lifx": "0.0.5",
-        "homebox-driver-sonos": "0.0.5",
         "jsonschema": "^1.1.0",
         "md5": "^2.1.0",
         "mongoose": "^4.5.1",
