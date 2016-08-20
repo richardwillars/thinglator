@@ -26,6 +26,7 @@ If a driver doesn't exist for the device you want to talk to then you need to cr
 
 ## Todo
 Important features to build..
+- documentation
 - zwave adapter
 - openzwave interface
 - zigbee adapter
