@@ -23,3 +23,10 @@ Out of the box Homebox has no knowledge of any devices on your network or how to
 Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/homebox/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
 
 If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/homebox/wiki/Drivers
+
+## Todo
+Important features to build..
+- zwave adapter
+- openzwave interface
+- zigbee adapter
+- socket capability (so Homebox can be accessed using websockets as well as HTTP)
