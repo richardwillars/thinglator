@@ -6,7 +6,7 @@ var deviceCtrl = require('./controllers/device');
 var eventCtrl = require('./controllers/event');
 var driverCtrl = require('./controllers/driver');
 
-module.exports = function(app) {
+module.exports = function(app, drivers) {
 
   app.get('/authenticate/:type/:driver', function(req, res, next) {
     authenticateCtrl.getAuthenticationProcess(req.params.driver, req.params.type, drivers).then(function(result) {

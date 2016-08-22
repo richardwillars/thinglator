@@ -5,6 +5,7 @@ var app = express();
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+
 var driverUtils = require('./utils/driver');
 
 mongoose.connect('mongodb://localhost/homebox');
@@ -12,9 +13,7 @@ mongoose.connect('mongodb://localhost/homebox');
 var drivers = driverUtils.loadDrivers();
 
 //setup the HTTP API
-var httpApi = require('./httpApi')(app);
-var socketApi = require('./socketApi')(app);
-
+var httpApi = require('./httpApi')(app, drivers);
 
 //Error handling middleware
 app.use(function(err, req, res, next) {
@@ -83,6 +82,9 @@ app.use(function(err, req, res, next) {
 
 });
 
-app.listen(3000, function() {
+var httpServer = app.listen(3000, function() {
   console.log('Homebox listening on port 3000!');
 });
+
+//setup the websocket API
+var socketApi = require('./socketApi')(httpServer, drivers);
