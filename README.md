@@ -46,7 +46,7 @@ Homebox takes away knowledge of different types of devices and how their differe
 ## Run
 > node app.js
 
-This should launch a REST API server on localhost:3000
+This should launch a REST API and websocket server on http://localhost:3000
 
 ##Getting started
 Out of the box Homebox has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Homebox to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/homebox/wiki/Drivers to learn how to search for and add drivers.
@@ -64,4 +64,3 @@ Important features to build..
 - zwave adapter
 - openzwave interface
 - zigbee adapter
-- websocket capability (so Homebox can be accessed using websockets as well as HTTP)

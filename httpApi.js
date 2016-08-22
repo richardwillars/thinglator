@@ -8,6 +8,12 @@ var driverCtrl = require('./controllers/driver');
 
 module.exports = function(app, drivers) {
 
+  app.get('/', function(req, res, next) {
+    res.json({
+      'Homebox': 'Oh, hi!'
+    });
+  });
+
   app.get('/authenticate/:type/:driver', function(req, res, next) {
     authenticateCtrl.getAuthenticationProcess(req.params.driver, req.params.type, drivers).then(function(result) {
       res.json(result);

@@ -6,7 +6,6 @@ var driverCtrl = require('./controllers/driver');
 module.exports = function(httpServer, drivers) {
 	var io = require('socket.io')(httpServer);
 	io.on('connection', function(socket) {
-
 		socket.on('getAuthenticationProcess', function(type, driver) {
 			authenticateCtrl.getAuthenticationProcess(driver, type, drivers).then(function(result) {
 				socket.emit('authenticationProcess', result);
