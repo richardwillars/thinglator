@@ -51,7 +51,7 @@ var SpeakerSchema = new mongoose.Schema({
 				]
 			}
 		},
-		
+
 		getDeviceDescription: {
 			type: Boolean,
 			default: false
@@ -460,7 +460,7 @@ deviceEventEmitter.on('playing', function(driverId, deviceId, trackId) {
 		value: trackId
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
@@ -474,7 +474,7 @@ deviceEventEmitter.on('paused', function(driverId, deviceId, trackId) {
 		value: trackId
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
@@ -488,9 +488,66 @@ deviceEventEmitter.on('stopped', function(driverId, deviceId) {
 		value: {}
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
+
+deviceEventEmitter.on('changedTrack', function(driverId, deviceId, trackId) {
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'changedTrack',
+		value: trackId
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..', eventObj, err);
+	});
+});
+
+deviceEventEmitter.on('volume', function(driverId, deviceId, volume) {
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'volume',
+		value: volume
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..', eventObj, err);
+	});
+});
+
+deviceEventEmitter.on('muted', function(driverId, deviceId, state) {
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'muted',
+		value: state
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..', eventObj, err);
+	});
+});
+
+deviceEventEmitter.on('seek', function(driverId, deviceId, seekPosition) {
+	var eventObj = EventModel({
+		eventType: 'device',
+		driverType: 'speaker',
+		driverId: driverId,
+		deviceId: deviceId,
+		event: 'seek',
+		value: seekPosition
+	});
+	eventObj.save().catch(function(err) {
+		console.log('Unable to save event..', eventObj, err);
+	});
+});
+
 
 module.exports = {
 	Model: Speaker,
