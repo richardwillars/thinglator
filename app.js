@@ -4,12 +4,9 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-
-
-var driverUtils = require('./utils/driver');
-
 mongoose.connect('mongodb://localhost/homebox');
 
+var driverUtils = require('./utils/driver');
 var drivers = driverUtils.loadDrivers();
 
 //setup the HTTP API
