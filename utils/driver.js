@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var models = require('../models');
 
 class DriverSettings {
 	constructor(driverId) {

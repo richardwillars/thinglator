@@ -1,4 +1,5 @@
 var md5 = require('md5');
+var models = require('../models');
 
 var utils = {
   createDevice: function(type, driver, deviceSpecs) {
