@@ -114,7 +114,7 @@ module.exports = function(app, drivers) {
   GET devices
   -> GET devices
   */
-  app.get('/devices/', function(req, res, next) {
+  app.get('/devices', function(req, res, next) {
     deviceCtrl.getAllDevices().then(function(results) {
       res.json(results);
     }).catch(function(err) {

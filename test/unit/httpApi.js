@@ -165,14 +165,72 @@ describe('httpApi', () => {
 					return Promise.resolve({
 						"foo": "bar"
 					});
+				},
+				authenticationStep: function(driver, type, drivers, stepId, body) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				}
+			};
+			driverCtrlMock = {
+				discover: function(driver, type, drivers) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				},
+				getDriversWithStats: function(drivers) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				}
+			};
+			deviceCtrlMock = {
+				getAllDevices: function() {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				},
+				getDevicesByType: function(type) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				},
+				getDevicesByTypeAndDriver: function(type, driverId) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				},
+				getDeviceById: function(deviceId) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				},
+				runCommand: function(deviceId, command, body, drivers) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				}
+			};
+			eventCtrlMock = {
+				getEventsByType: function(type, from) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
 				}
 			};
 			mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
+			mockery.registerMock('./controllers/driver', driverCtrlMock);
+			mockery.registerMock('./controllers/device', deviceCtrlMock);
+			mockery.registerMock('./controllers/event', eventCtrlMock);
 
 			done();
 		});
+
 		afterEach(function(done) {
 			mockery.deregisterMock('./controllers/authenticate');
+			mockery.deregisterMock('./controllers/driver');
+			mockery.deregisterMock('./controllers/device');
+			mockery.deregisterMock('./controllers/event');
 			mockery.disable();
 			done();
 		});
@@ -251,12 +309,53 @@ describe('httpApi', () => {
 		});
 
 		describe('POST /authenticate/:type/:driver/:stepId', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getAuthenticationProcessSpy;
+			beforeEach(function(done) {
+				//capture the post handler function..
+				app.post = function(path, jsonParser, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				authenticationStepSpy = sinon.spy(authenticateCtrlMock, 'authenticationStep');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/authenticate/:type/:driver/:stepId']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar',
+						stepId: 0
+					},
+					body: {
+						"body": "here"
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/authenticate/:type/:driver/:stepId'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(authenticationStepSpy).to.have.been.calledWith(req.params.driver, req.params.type, {}, req.params.stepId, req.body);
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -265,12 +364,49 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /discover/:type/:driver', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getAuthenticationProcessSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				discoverSpy = sinon.spy(driverCtrlMock, 'discover');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/discover/:type/:driver']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar'
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/discover/:type/:driver'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(discoverSpy).to.have.been.calledWith(req.params.driver, req.params.type, {});
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -279,12 +415,44 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /devices', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getAllDevicesSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getAllDevicesSpy = sinon.spy(deviceCtrlMock, 'getAllDevices');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/devices']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/devices'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getAllDevicesSpy).to.have.been.calledOnce;
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -293,12 +461,48 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /devices/:type', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getDevicesByTypeSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getDevicesByTypeSpy = sinon.spy(deviceCtrlMock, 'getDevicesByType');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/devices/:type']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						type: 'foo'
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/devices/:type'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getDevicesByTypeSpy).to.have.been.calledWith(req.params.type);
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -307,12 +511,49 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /devices/:type/:driver', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getDevicesByTypeAndDriverSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getDevicesByTypeAndDriverSpy = sinon.spy(deviceCtrlMock, 'getDevicesByTypeAndDriver');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/devices/:type/:driver']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar'
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/devices/:type/:driver'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getDevicesByTypeAndDriverSpy).to.have.been.calledWith(req.params.type, req.params.driver);
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -321,12 +562,48 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /device/:deviceId', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getDeviceByIdSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getDeviceByIdSpy = sinon.spy(deviceCtrlMock, 'getDeviceById');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/device/:deviceId']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						deviceId: 'foo'
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/device/:deviceId'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getDeviceByIdSpy).to.have.been.calledWith(req.params.deviceId);
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -335,12 +612,52 @@ describe('httpApi', () => {
 		});
 
 		describe('POST /device/:deviceId/:command', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var runCommandSpy;
+			beforeEach(function(done) {
+				//capture the post handler function..
+				app.post = function(path, jsonParser, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				runCommandSpy = sinon.spy(deviceCtrlMock, 'runCommand');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/device/:deviceId/:command']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						deviceId: 'foo',
+						command: 'bar'
+					},
+					body: {
+						"foo": "bar"
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/device/:deviceId/:command'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(runCommandSpy).to.have.been.calledWith(req.params.deviceId, req.params.command, req.body, {});
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -349,12 +666,44 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /drivers', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getDriversWithStatsSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getDriversWithStatsSpy = sinon.spy(driverCtrlMock, 'getDriversWithStats');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/drivers']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/drivers'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getDriversWithStatsSpy).to.have.been.calledWith({});
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
@@ -363,12 +712,51 @@ describe('httpApi', () => {
 		});
 
 		describe('GET /event/:eventType', () => {
-			xit('it should setup a route', () => {
+			var paths = {};
+			var getEventsByTypeSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getEventsByTypeSpy = sinon.spy(eventCtrlMock, 'getEventsByType');
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/event/:eventType']).to.equal('function');
 			});
 
-			xit('it should call the correct controller method when called', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						type: 'foo'
+					},
+					query: {
+						from: 'bar'
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
+				paths['/event/:eventType'](req, res, next);
+
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getEventsByTypeSpy).to.have.been.calledWith(req.params.eventType, req.query.from);
+
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
+
+					done();
+				}, 0);
 			});
 
 			xit('it should handle errors accordingly', () => {
