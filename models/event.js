@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
+var eventUtils = require('../utils/event');
+
 var Schema = mongoose.Schema;
 
 var EventSchema = new mongoose.Schema({
 	eventType: {
 		type: String,
 		required: true,
-		enum: ['request','device']
+		enum: ['request', 'device']
 	},
 	driverType: {
 		type: String,
@@ -33,6 +35,14 @@ var EventSchema = new mongoose.Schema({
 		required: false,
 		default: Date.now
 	}
+});
+
+//if the event is being created, send it to the eventUtils eventEmitter
+EventSchema.pre('save', function(done) {
+	if (this.isNew) {
+		eventUtils.newEventCreated(this);
+	}
+	return done();
 });
 
 var Event = mongoose.model('Event', EventSchema);
