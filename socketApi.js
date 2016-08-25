@@ -54,8 +54,8 @@ module.exports = function(httpServer, drivers) {
 			});
 		});
 
-		socket.on('getDeviceById', function() {
-			deviceCtrl.getDeviceById(req.params.deviceId).then(function(result) {
+		socket.on('getDeviceById', function(deviceId) {
+			deviceCtrl.getDeviceById(deviceId).then(function(result) {
 				socket.emit('deviceById', result);
 			}).catch(function(err) {
 				next(err);
