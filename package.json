@@ -21,6 +21,7 @@
     "jsonschema": "^1.1.0",
     "md5": "^2.1.0",
     "mocha": "^3.0.2",
+    "mockery": "^1.7.0",
     "mongoose": "^4.5.1",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",

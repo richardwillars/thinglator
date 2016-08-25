@@ -3,6 +3,7 @@ var expect = chai.expect;
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
+var mockery = require('mockery');
 
 describe('httpApi', () => {
 	var moduleToBeTested, app, drivers;
@@ -144,157 +145,235 @@ describe('httpApi', () => {
 		});
 	});
 
-	describe('GET /', () => {
-		xit('it should setup a route', () => {
+	describe('API calls', () => {
+		var paths = {};
+		var authenticateCtrlMock;
 
+		beforeEach(function(done) {
+			//capture the get handler function..
+			app.get = function(path, fn) {
+				paths[path] = fn;
+			};
+
+			mockery.enable({
+				useCleanCache: true,
+				warnOnUnregistered: false
+			});
+
+			authenticateCtrlMock = {
+				getAuthenticationProcess: function(driver, type, drivers) {
+					return Promise.resolve({
+						"foo": "bar"
+					});
+				}
+			};
+			mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
+
+			done();
+		});
+		afterEach(function(done) {
+			mockery.deregisterMock('./controllers/authenticate');
+			mockery.disable();
+			done();
 		});
 
-		xit('it should call the correct controller method when called', () => {
+		describe('GET /', () => {
 
+			it('it should setup a route', () => {
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/']).to.equal('function');
+			});
+
+			it('it should call the correct controller method when called', () => {
+				var req = {};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
+
+				paths['/'](req, res, next);
+
+				expect(res.json).to.have.been.calledWith({
+					'Homebox': 'Oh, hi!'
+				});
+			});
 		});
 
-		xit('it should handle errors accordingly', () => {
+		describe('GET /authenticate/:type/:driver', () => {
+			var paths = {};
+			var getAuthenticationProcessSpy;
+			beforeEach(function(done) {
+				//capture the get handler function..
+				app.get = function(path, fn) {
+					paths[path] = fn;
+				};
+				done();
+			});
+			it('it should setup a route', () => {
+				getAuthenticationProcessSpy = sinon.spy(authenticateCtrlMock, 'getAuthenticationProcess');
 
-		});
-	});
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+				expect(typeof paths['/authenticate/:type/:driver']).to.equal('function');
+			});
 
-	describe('GET /authenticate/:type/:driver', () => {
-		xit('it should setup a route', () => {
+			it('it should call the correct controller method when called', (done) => {
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar'
+					}
+				};
+				var res = {
+					json: sinon.spy()
+				};
+				var next = function() {};
 
-		});
+				paths['/authenticate/:type/:driver'](req, res, next);
 
-		xit('it should call the correct controller method when called', () => {
 
-		});
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that the controller method is called
+					expect(getAuthenticationProcessSpy).to.have.been.calledWith(req.params.driver, req.params.type, {});
 
-		xit('it should handle errors accordingly', () => {
+					//check that res.json is called with the response.
+					expect(res.json).to.have.been.calledWith({
+						"foo": "bar"
+					});
 
-		});
-	});
+					done();
+				}, 0);
+			});
 
-	describe('POST /authenticate/:type/:driver/:stepId', () => {
-		xit('it should setup a route', () => {
+			xit('it should handle errors accordingly', () => {
 
-		});
-
-		xit('it should call the correct controller method when called', () => {
-
-		});
-
-		xit('it should handle errors accordingly', () => {
-
-		});
-	});
-
-	describe('GET /discover/:type/:driver', () => {
-		xit('it should setup a route', () => {
-
-		});
-
-		xit('it should call the correct controller method when called', () => {
-
-		});
-
-		xit('it should handle errors accordingly', () => {
-
-		});
-	});
-
-	describe('GET /devices', () => {
-		xit('it should setup a route', () => {
-
-		});
-
-		xit('it should call the correct controller method when called', () => {
-
+			});
 		});
 
-		xit('it should handle errors accordingly', () => {
+		describe('POST /authenticate/:type/:driver/:stepId', () => {
+			xit('it should setup a route', () => {
 
-		});
-	});
+			});
 
-	describe('GET /devices/:type', () => {
-		xit('it should setup a route', () => {
+			xit('it should call the correct controller method when called', () => {
 
-		});
+			});
 
-		xit('it should call the correct controller method when called', () => {
+			xit('it should handle errors accordingly', () => {
 
-		});
-
-		xit('it should handle errors accordingly', () => {
-
-		});
-	});
-
-	describe('GET /devices/:type/:driver', () => {
-		xit('it should setup a route', () => {
-
+			});
 		});
 
-		xit('it should call the correct controller method when called', () => {
+		describe('GET /discover/:type/:driver', () => {
+			xit('it should setup a route', () => {
 
+			});
+
+			xit('it should call the correct controller method when called', () => {
+
+			});
+
+			xit('it should handle errors accordingly', () => {
+
+			});
 		});
 
-		xit('it should handle errors accordingly', () => {
+		describe('GET /devices', () => {
+			xit('it should setup a route', () => {
 
-		});
-	});
+			});
 
-	describe('GET /device/:deviceId', () => {
-		xit('it should setup a route', () => {
+			xit('it should call the correct controller method when called', () => {
 
-		});
+			});
 
-		xit('it should call the correct controller method when called', () => {
+			xit('it should handle errors accordingly', () => {
 
-		});
-
-		xit('it should handle errors accordingly', () => {
-
-		});
-	});
-
-	describe('POST /device/:deviceId/:command', () => {
-		xit('it should setup a route', () => {
-
+			});
 		});
 
-		xit('it should call the correct controller method when called', () => {
+		describe('GET /devices/:type', () => {
+			xit('it should setup a route', () => {
 
+			});
+
+			xit('it should call the correct controller method when called', () => {
+
+			});
+
+			xit('it should handle errors accordingly', () => {
+
+			});
 		});
 
-		xit('it should handle errors accordingly', () => {
+		describe('GET /devices/:type/:driver', () => {
+			xit('it should setup a route', () => {
 
-		});
-	});
+			});
 
-	describe('GET /drivers', () => {
-		xit('it should setup a route', () => {
+			xit('it should call the correct controller method when called', () => {
 
-		});
+			});
 
-		xit('it should call the correct controller method when called', () => {
+			xit('it should handle errors accordingly', () => {
 
-		});
-
-		xit('it should handle errors accordingly', () => {
-
-		});
-	});
-
-	describe('GET /event/:eventType', () => {
-		xit('it should setup a route', () => {
-
+			});
 		});
 
-		xit('it should call the correct controller method when called', () => {
+		describe('GET /device/:deviceId', () => {
+			xit('it should setup a route', () => {
 
+			});
+
+			xit('it should call the correct controller method when called', () => {
+
+			});
+
+			xit('it should handle errors accordingly', () => {
+
+			});
 		});
 
-		xit('it should handle errors accordingly', () => {
+		describe('POST /device/:deviceId/:command', () => {
+			xit('it should setup a route', () => {
 
+			});
+
+			xit('it should call the correct controller method when called', () => {
+
+			});
+
+			xit('it should handle errors accordingly', () => {
+
+			});
+		});
+
+		describe('GET /drivers', () => {
+			xit('it should setup a route', () => {
+
+			});
+
+			xit('it should call the correct controller method when called', () => {
+
+			});
+
+			xit('it should handle errors accordingly', () => {
+
+			});
+		});
+
+		describe('GET /event/:eventType', () => {
+			xit('it should setup a route', () => {
+
+			});
+
+			xit('it should call the correct controller method when called', () => {
+
+			});
+
+			xit('it should handle errors accordingly', () => {
+
+			});
 		});
 	});
 });
