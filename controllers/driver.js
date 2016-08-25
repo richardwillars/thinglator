@@ -44,7 +44,7 @@ var controller = {
 		var existingDevices = [];
 		var finalDevices = [];
 
-		driverUtils.doesDriverExist(driverId, type)
+		return driverUtils.doesDriverExist(driverId, type, drivers)
 			.then(function(foundDriver) {
 				//if found, load it
 				if (foundDriver === false) {
