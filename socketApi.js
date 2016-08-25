@@ -2,6 +2,7 @@ var authenticateCtrl = require('./controllers/authenticate');
 var deviceCtrl = require('./controllers/device');
 var eventCtrl = require('./controllers/event');
 var driverCtrl = require('./controllers/driver');
+var eventUtils = require('./utils/event');
 
 
 var handleError = function(err, cb) {
@@ -64,6 +65,10 @@ var handleError = function(err, cb) {
 
 module.exports = function(httpServer, drivers) {
 	var io = require('socket.io')(httpServer);
+
+	eventUtils.getEventEmitter().on('newEvent', function(event) {
+		io.emit('newEvent', event);
+	});
 
 	io.on('connection', function(socket) {
 		socket.on('getAuthenticationProcess', function(type, driver, cb) {

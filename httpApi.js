@@ -8,6 +8,73 @@ var driverCtrl = require('./controllers/driver');
 
 module.exports = function(app, drivers) {
 
+  //Error handling middleware
+  app.use(function(err, req, res, next) {
+    switch (err.type) {
+      case 'Driver':
+        console.log('Driver Error', err);
+        res.status(500);
+        res.json({
+          code: 500,
+          type: err.type,
+          driver: err.driver,
+          message: err.message
+        });
+        break;
+      case 'BadRequest':
+        res.status(400);
+        return res.json({
+          code: 400,
+          type: err.type,
+          message: err.message
+        });
+        break;
+      case 'NotFound':
+        res.status(404);
+        return res.json({
+          code: 404,
+          type: err.type,
+          message: err.message
+        });
+        break;
+      case 'Validation':
+        res.status(400);
+        return res.json({
+          code: 400,
+          type: err.type,
+          message: err.message,
+          errors: err.errors
+        });
+        break;
+      case 'Connection':
+        res.status(503);
+        return res.json({
+          code: 503,
+          type: err.type,
+          message: err.message
+        });
+        break;
+      case 'Authentication':
+        res.status(401);
+        return res.json({
+          code: 401,
+          type: err.type,
+          message: err.message
+        });
+        break;
+      default:
+        console.log(err);
+        console.log(err.stack);
+        res.status(500);
+        res.json({
+          type: 'Internal',
+          code: 500,
+          stack: err.stack
+        });
+    }
+
+  });
+
   app.get('/', function(req, res, next) {
     res.json({
       'Homebox': 'Oh, hi!'
@@ -17,16 +84,16 @@ module.exports = function(app, drivers) {
   app.get('/authenticate/:type/:driver', function(req, res, next) {
     authenticateCtrl.getAuthenticationProcess(req.params.driver, req.params.type, drivers).then(function(result) {
       res.json(result);
-    }).catch(function(e) {
-      next(e);
+    }).catch(function(err) {
+      next(err);
     });
   });
 
   app.post('/authenticate/:type/:driver/:stepId', jsonParser, function(req, res, next) {
     authenticateCtrl.authenticationStep(req.params.driver, req.params.type, drivers, req.params.stepId, req.body).then(function(result) {
       res.json(result);
-    }).catch(function(e) {
-      next(e);
+    }).catch(function(err) {
+      next(err);
     });
   });
 
@@ -126,4 +193,6 @@ module.exports = function(app, drivers) {
       next(err);
     });
   });
+
+  return app;
 }
