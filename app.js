@@ -16,7 +16,7 @@ var httpApi = require('./httpApi')(app, drivers);
 app.use(function(err, req, res, next) {
   switch (err.type) {
     case 'Driver':
-      console.log(err);
+      console.log('Driver Error', err);
       res.status(500);
       res.json({
         code: 500,

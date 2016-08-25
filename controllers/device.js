@@ -31,10 +31,15 @@ var controller = {
 				_id: deviceId
 			}).exec()
 			.then(function(device) {
+				if (!device) {
+					var e = new Error('device not found');
+					e.type = 'NotFound';
+					throw e;
+				}
 				return device;
 			});
 	},
-	runCommand: function(deviceId, command, drivers) {
+	runCommand: function(deviceId, command, body, drivers) {
 		var device;
 		return models['device'].Model.findOne({
 				_id: deviceId

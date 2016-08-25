@@ -13,7 +13,7 @@ var controller = {
           e.type = 'NotFound';
           throw e;
         }
-        return drivers[driver];
+        return drivers[driverId];
       })
       .then(function(driver) {
         //call the getAuthenticationProcess method on the driver
@@ -49,8 +49,9 @@ var controller = {
 
 
   authenticationStep: function(driverId, type, drivers, stepId, body) {
+    var steppy = stepId; //for some reason access stepId further down the promises sets it to undefined.
     var driver;
-    driverUtils.doesDriverExist(driverId, type, drivers)
+    return driverUtils.doesDriverExist(driverId, type, drivers)
       .then(function(foundDriver) {
         //if found, load it
         if (foundDriver === false) {
@@ -66,8 +67,8 @@ var controller = {
         return driver.getAuthenticationProcess();
       })
       .then(function(authenticationProcess) {
-        var stepId = parseInt(stepId);
-        var step = authenticationProcess[stepId];
+        var stepId = parseInt(steppy);
+        var step = authenticationProcess[steppy];
         if (!step) {
           var e = new Error('authentication step not found');
           e.type = 'NotFound';
