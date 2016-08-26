@@ -9,7 +9,7 @@ describe('httpApi', () => {
 	var moduleToBeTested, app, drivers;
 
 	beforeEach(function(done) {
-		//mock out authenticateCtrl, deviceCtrl, eventCtrl, driverCtrl
+
 
 		//mock out app
 		app = {
@@ -160,6 +160,7 @@ describe('httpApi', () => {
 				warnOnUnregistered: false
 			});
 
+			//mock out authenticateCtrl, deviceCtrl, eventCtrl, driverCtrl
 			authenticateCtrlMock = {
 				getAuthenticationProcess: function(driver, type, drivers) {
 					return Promise.resolve({
