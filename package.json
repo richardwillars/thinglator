@@ -28,9 +28,8 @@
     "underscore": "^1.8.3"
   },
   "scripts": {
-    "test": "mocha -- test/**/*.js",
-    "test:travis": "istanbul cover node_modules/.bin/_mocha -- test/**/*.js",
-    "test:watch": "npm run test -- --watch"
+    "test": "istanbul cover node_modules/.bin/_mocha -- test/**/*.js",
+    "test:debug": "mocha -- test/**/*.js",
   },
   "main": "app.js"
 }
