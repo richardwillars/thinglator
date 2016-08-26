@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-describe('modelLoader', () => {
+describe('utils/event', () => {
 	var moduleToBeTested;
 
 	it('getEventEmitter should return an event emitter', () => {

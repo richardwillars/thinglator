@@ -23,7 +23,6 @@ var utils = {
 
   updateDevice: function(device, specs) {
     var deviceSpecsObj = new models[device.type].Model(specs);
-
     return deviceSpecsObj.validate()
       .then(function(validationFailed) {
         if (validationFailed) {
