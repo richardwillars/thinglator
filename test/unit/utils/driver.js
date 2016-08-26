@@ -202,6 +202,9 @@ describe('utils/driver', () => {
 
 		afterEach(function(done) {
 			mockery.deregisterMock('fs');
+			mockery.deregisterMock('homebox-driver-bla');
+			mockery.deregisterMock('homebox-driver-foo');
+			mockery.deregisterMock('../models');
 			mockery.disable();
 			done();
 		});
@@ -219,12 +222,103 @@ describe('utils/driver', () => {
 
 			expect(loadedDrivers.bla).to.be.an.object;
 			expect(loadedDrivers.bla.getType()).to.equal('light');
-
 		});
 	});
 
 	describe('DriverSettings class', () => {
 
-	});
+		afterEach(function(done) {
+			mockery.deregisterMock('../models');
+			mockery.disable();
+			done();
+		});
 
+
+		it('should get the DriverSettings class', () => {
+			moduleToBeTested = require('../../../utils/driver');
+			expect(moduleToBeTested.getDriverSettingsClass).to.be.a.function;
+			var classObj = moduleToBeTested.getDriverSettingsClass();
+			expect(classObj).to.be.a.function;
+		});
+
+		it('should create a new instance of the DriverSettings class', () => {
+			moduleToBeTested = require('../../../utils/driver');
+			var classObj = moduleToBeTested.getDriverSettingsClass();
+			var instance = new classObj('foo');
+			expect(instance).to.be.an.object;
+		});
+
+		it('the get method should return the settings for the driver', (done) => {
+			var modelsMock = {
+				driver: {
+					Model: {
+						findOne: function(query) {
+							return {
+								exec: function() {
+									return Promise.resolve({
+										settings: {
+											foo: 'bar',
+											boo: 'zoo'
+										}
+									});
+								}
+							}
+						}
+					}
+				}
+			};
+
+			mockery.enable({
+				useCleanCache: true,
+				warnOnUnregistered: false
+			});
+
+			mockery.registerMock('../models', modelsMock);
+
+			moduleToBeTested = require('../../../utils/driver');
+			var classObj = moduleToBeTested.getDriverSettingsClass();
+			var instance = new classObj('foo');
+			var promise = instance.get();
+			expect(promise).to.be.an.object;
+			promise.then(function(settings) {
+				expect(settings.foo).to.equal('bar');
+				expect(settings.boo).to.equal('zoo');
+				done();
+			});
+		});
+
+		it('the get method should broadcast errors appropriately', (done) => {
+			var modelsMock = {
+				driver: {
+					Model: {
+						findOne: function(query) {
+							return {
+								exec: function() {
+									throw new Error('example error thrown by the db');
+								}
+							}
+						}
+					}
+				}
+			};
+
+			mockery.enable({
+				useCleanCache: true,
+				warnOnUnregistered: false
+			});
+
+			mockery.registerMock('../models', modelsMock);
+
+			moduleToBeTested = require('../../../utils/driver');
+			var classObj = moduleToBeTested.getDriverSettingsClass();
+			var instance = new classObj('foo');
+			var promise = instance.get();
+			expect(promise).to.be.an.object;
+			promise.catch(function(err) {
+				expect(err.message).to.equal('example error thrown by the db');
+				done();
+			});
+		});
+
+	});
 });
