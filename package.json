@@ -29,7 +29,7 @@
   },
   "scripts": {
     "test": "istanbul cover node_modules/.bin/_mocha -- test/**/*.js",
-    "test:debug": "mocha -- test/**/*.js",
+    "test:debug": "mocha -- test/**/*.js"
   },
   "main": "app.js"
 }
