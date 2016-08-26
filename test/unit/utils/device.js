@@ -76,7 +76,7 @@ describe('utils/device', () => {
 				light: {
 					Model: function(deviceSpecs) {
 						deviceSpecs.validate = function() {
-							return Promise.reject('errrrooorrr');
+							return Promise.resolve('errrrooorrr');
 						};
 						return deviceSpecs;
 					}
@@ -114,7 +114,8 @@ describe('utils/device', () => {
 			expect(promise).to.be.an.object;
 
 			promise.catch(function(err) {
-				expect(err).to.equal('errrrooorrr');
+				expect(err.message).to.equal('errrrooorrr');
+				expect(err.type).to.equal('Validation');
 				done();
 			});
 		});
@@ -188,7 +189,7 @@ describe('utils/device', () => {
 				light: {
 					Model: function(deviceSpecs) {
 						deviceSpecs.validate = function() {
-							return Promise.reject('errrrooorrr');
+							return Promise.resolve('errrrooorrr');
 						};
 						return deviceSpecs;
 					}
@@ -236,7 +237,8 @@ describe('utils/device', () => {
 			expect(promise).to.be.an.object;
 
 			promise.catch(function(err) {
-				expect(err).to.equal('errrrooorrr');
+				expect(err.message).to.equal('errrrooorrr');
+				expect(err.type).to.equal('Validation');
 				done();
 			});
 		});
