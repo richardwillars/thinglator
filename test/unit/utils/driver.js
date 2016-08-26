@@ -320,5 +320,40 @@ describe('utils/driver', () => {
 			});
 		});
 
+		it('the set method should save the settings for the driver', (done) => {
+			var modelsMock = {
+				driver: {
+					Model: {
+						update: function(query, obj, updateSettings) {
+							return {
+								exec: function() {
+									return Promise.resolve();
+								}
+							}
+						}
+					}
+				}
+			};
+
+			mockery.enable({
+				useCleanCache: true,
+				warnOnUnregistered: false
+			});
+
+			mockery.registerMock('../models', modelsMock);
+
+			moduleToBeTested = require('../../../utils/driver');
+			var classObj = moduleToBeTested.getDriverSettingsClass();
+			var instance = new classObj('foo');
+			var promise = instance.set({
+				foo: 'bar',
+				boo: 'zoo'
+			});
+			expect(promise).to.be.an.object;
+			promise.then(function() {
+				done();
+			});
+		});
+
 	});
 });
