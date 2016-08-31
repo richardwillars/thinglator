@@ -35,6 +35,10 @@ class DriverSettings {
 };
 
 var utils = {
+	getDriverSettingsClass: function() {
+		return DriverSettings;
+	},
+
 	doesDriverExist: function(driverId, type, drivers) {
 		return new Promise(function(resolve, reject) {
 			if (!drivers[driverId]) {
