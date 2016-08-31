@@ -65,12 +65,11 @@ var handleError = function(err, cb) {
 
 module.exports = function(httpServer, drivers) {
 	var io = require('socket.io')(httpServer);
-
 	eventUtils.getEventEmitter().on('newEvent', function(event) {
 		io.emit('newEvent', event);
 	});
-
 	io.on('connection', function(socket) {
+
 		socket.on('getAuthenticationProcess', function(type, driver, cb) {
 			authenticateCtrl.getAuthenticationProcess(driver, type, drivers).then(function(result) {
 				cb(result);
@@ -151,6 +150,5 @@ module.exports = function(httpServer, drivers) {
 			});
 		});
 	});
-
 	return io;
 };

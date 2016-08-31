@@ -10,6 +10,7 @@ var utils = {
         if (validationFailed) {
           var e = new Error(validationFailed);
           e.type = 'Validation';
+          throw e;
         }
         var deviceObj = new models['device'].Model({
           _id: md5(type + driver + deviceSpecsObj.deviceId),
@@ -23,11 +24,12 @@ var utils = {
 
   updateDevice: function(device, specs) {
     var deviceSpecsObj = new models[device.type].Model(specs);
-
     return deviceSpecsObj.validate()
       .then(function(validationFailed) {
         if (validationFailed) {
-          throw new Error(validationFailed);
+          var e = new Error(validationFailed);
+          e.type = 'Validation';
+          throw e;
         }
         device.specs = specs;
         return device.save();

@@ -3,24 +3,33 @@
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
   "version": "0.1.1",
-  "maintainers": [
-    {
-      "name": "Richard Willars",
-      "email": "richard@richardwillars.com"
-    }
-  ],
+  "maintainers": [{
+    "name": "Richard Willars",
+    "email": "richard@richardwillars.com"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/richardwillars/homebox.git"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
     "eventemitter2": "^1.0.5",
     "express": "^4.14.0",
+    "istanbul": "^0.4.5",
     "jsonschema": "^1.1.0",
     "md5": "^2.1.0",
+    "mocha": "^3.0.2",
+    "mockery": "^1.7.0",
     "mongoose": "^4.5.1",
+    "sinon": "^1.17.5",
+    "sinon-chai": "^2.8.0",
     "socket.io": "^1.4.8",
     "underscore": "^1.8.3"
-  }
+  },
+  "scripts": {
+    "test": "istanbul cover node_modules/.bin/_mocha -- test --recursive",
+    "test:debug": "mocha -- test --recursive"
+  },
+  "main": "app.js"
 }
