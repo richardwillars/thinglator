@@ -34,7 +34,7 @@ var controller = {
 				return device;
 			});
 	},
-	runCommand: function(deviceId, command, drivers) {
+	runCommand: function(deviceId, command, body, drivers) {
 		var device;
 		return models['device'].Model.findOne({
 				_id: deviceId

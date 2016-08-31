@@ -7,7 +7,7 @@ var deviceUtils = require('../utils/device');
 var controller = {
 	getDriversWithStats: function(drivers) {
 		var devicesGroupedByDrivers = [];
-		models['device'].Model.aggregate([{
+		return models['device'].Model.aggregate([{
 				$group: {
 					_id: '$driver',
 					type: {
