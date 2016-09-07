@@ -19,7 +19,7 @@ var SwitchSchema = new mongoose.Schema({
 		default: {}
 	},
 	capabilities: {
-		
+
 		on: {
 			type: Boolean,
 			default: false,
@@ -68,10 +68,10 @@ deviceEventEmitter.on('on', function(driverId, deviceId) {
 		driverId: driverId,
 		deviceId: deviceId,
 		event: 'on',
-		value: true
+		value: {}
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
@@ -83,10 +83,10 @@ deviceEventEmitter.on('off', function(driverId, deviceId) {
 		driverId: driverId,
 		deviceId: deviceId,
 		event: 'off',
-		value: true
+		value: {}
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
