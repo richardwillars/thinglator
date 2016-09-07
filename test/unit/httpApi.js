@@ -304,8 +304,34 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/authenticate');
+				var err = new Error('something went wrong 1');
+				authenticateCtrlMock = {
+					getAuthenticationProcess: function(driver, type, drivers) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
+				moduleToBeTested = require('../../httpApi')(app, drivers);
 
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar'
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/authenticate/:type/:driver'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -359,8 +385,38 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/authenticate');
+				var err = new Error('something went wrong 2');
+				authenticateCtrlMock = {
+					authenticationStep: function(driverId, type, drivers, stepId, body) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
+				moduleToBeTested = require('../../httpApi')(app, drivers);
 
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar',
+						stepId: 0
+					},
+					body: {
+						"body": "here"
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/authenticate/:type/:driver/:stepId'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -410,8 +466,35 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/driver');
+				var err = new Error('something went wrong 3');
+				driverCtrlMock = {
+					discover: function(drivers) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/driver', driverCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar'
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/discover/:type/:driver'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -456,8 +539,30 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 4');
+				deviceCtrlMock = {
+					getAllDevices: function() {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/devices'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -506,8 +611,34 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 5');
+				deviceCtrlMock = {
+					getDevicesByType: function(type) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {
+					params: {
+						type: 'foo'
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/devices/:type'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -557,8 +688,35 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 6');
+				deviceCtrlMock = {
+					getDevicesByTypeAndDriver: function(type, driverId) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {
+					params: {
+						type: 'foo',
+						driver: 'bar'
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/devices/:type/:driver'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -607,8 +765,34 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 7');
+				deviceCtrlMock = {
+					getDeviceById: function(driverId) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {
+					params: {
+						deviceId: 'foo'
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/device/:deviceId'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -661,8 +845,38 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 8');
+				deviceCtrlMock = {
+					runCommand: function(deviceId, command, body, drivers) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {
+					params: {
+						deviceId: 'foo',
+						command: 'bar'
+					},
+					body: {
+						"foo": "bar"
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/device/:deviceId/:command'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -707,8 +921,30 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/driver');
+				var err = new Error('something went wrong 9');
+				driverCtrlMock = {
+					getDriversWithStats: function(deviceId, command, body, drivers) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/driver', driverCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/drivers'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 
@@ -760,8 +996,37 @@ describe('httpApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/event');
+				var err = new Error('something went wrong 10');
+				eventCtrlMock = {
+					getEventsByType: function(eventType, from) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/event', eventCtrlMock);
 
+				moduleToBeTested = require('../../httpApi')(app, drivers);
+
+				var req = {
+					params: {
+						type: 'foo'
+					},
+					query: {
+						from: 'bar'
+					}
+				};
+				var res = {};
+				var next = sinon.spy();
+
+				paths['/event/:eventType'](req, res, next);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that next is called with the error
+					expect(next).to.have.been.calledWith(err);
+					done();
+				}, 0);
 			});
 		});
 	});
