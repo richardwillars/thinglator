@@ -5,65 +5,59 @@ var driverCtrl = require('./controllers/driver');
 var eventUtils = require('./utils/event');
 
 
-var handleError = function(err, cb) {
+var errorHandler = function(err) {
 	switch (err.type) {
 		case 'Driver':
 			console.log('Driver Error', err);
-			cb({
+			return {
 				code: 500,
 				type: err.type,
 				driver: err.driver,
 				message: err.message
-			});
-			break;
+			};
 		case 'BadRequest':
-			cb({
+			return {
 				code: 400,
 				type: err.type,
 				message: err.message
-			});
-			break;
+			};
 		case 'NotFound':
-			cb({
+			return {
 				code: 404,
 				type: err.type,
 				message: err.message
-			});
-			break;
+			};
 		case 'Validation':
-			cb({
+			return {
 				code: 400,
 				type: err.type,
 				message: err.message,
 				errors: err.errors
-			});
-			break;
+			};
 		case 'Connection':
-			cb({
+			return {
 				code: 503,
 				type: err.type,
 				message: err.message
-			});
-			break;
+			};
 		case 'Authentication':
-			cb({
+			return {
 				code: 401,
 				type: err.type,
 				message: err.message
-			});
-			break;
+			};
 		default:
 			console.log('Internal Error', err);
 			console.log(err.stack);
-			cb({
+			return {
 				type: 'Internal',
 				code: 500,
 				stack: err.stack
-			});
+			};
 	}
 };
 
-module.exports = function(httpServer, drivers) {
+var socketApi = function(httpServer, drivers) {
 	var io = require('socket.io')(httpServer);
 	eventUtils.getEventEmitter().on('newEvent', function(event) {
 		io.emit('newEvent', event);
@@ -74,7 +68,7 @@ module.exports = function(httpServer, drivers) {
 			authenticateCtrl.getAuthenticationProcess(driver, type, drivers).then(function(result) {
 				cb(result);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -82,7 +76,7 @@ module.exports = function(httpServer, drivers) {
 			authenticateCtrl.authenticationStep(driver, type, drivers, stepId, body).then(function(result) {
 				cb(result);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -90,7 +84,7 @@ module.exports = function(httpServer, drivers) {
 			driverCtrl.discover(driver, type, drivers).then(function(results) {
 				cb(results);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			})
 		});
 
@@ -98,7 +92,7 @@ module.exports = function(httpServer, drivers) {
 			deviceCtrl.getAllDevices().then(function(results) {
 				cb(results);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -106,7 +100,7 @@ module.exports = function(httpServer, drivers) {
 			deviceCtrl.getDevicesByType(type).then(function(results) {
 				cb(results);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -114,7 +108,7 @@ module.exports = function(httpServer, drivers) {
 			deviceCtrl.getDevicesByTypeAndDriver(type, driver).then(function(results) {
 				cb(results);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -122,7 +116,7 @@ module.exports = function(httpServer, drivers) {
 			deviceCtrl.getDeviceById(deviceId).then(function(result) {
 				cb(result);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -130,7 +124,7 @@ module.exports = function(httpServer, drivers) {
 			deviceCtrl.runCommand(deviceId, command, body, drivers).then(function(result) {
 				cb(result);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -138,7 +132,7 @@ module.exports = function(httpServer, drivers) {
 			driverCtrl.getDriversWithStats(drivers).then(function(results) {
 				cb(results);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 
@@ -146,9 +140,14 @@ module.exports = function(httpServer, drivers) {
 			eventCtrl.getEventsByType(eventType, from).then(function(results) {
 				cb(results);
 			}).catch(function(err) {
-				handleError(err, cb);
+				cb(errorHandler(err));
 			});
 		});
 	});
 	return io;
 };
+
+module.exports = {
+	socketApi: socketApi,
+	errorHandler: errorHandler
+}

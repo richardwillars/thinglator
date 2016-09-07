@@ -450,7 +450,6 @@ var Speaker = mongoose.model('Speaker', SpeakerSchema);
 var deviceEventEmitter = new EventEmitter2();
 
 deviceEventEmitter.on('playing', function(driverId, deviceId, trackId) {
-	console.log('speaker started to play', driverId, deviceId, trackId);
 	var eventObj = EventModel({
 		eventType: 'device',
 		driverType: 'speaker',
