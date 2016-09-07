@@ -9,7 +9,7 @@ describe('socketApi', () => {
 	var moduleToBeTested, httpServer, drivers;
 	var paths = {};
 	var authenticateCtrlMock, deviceCtrlMock, driverCtrlMock, eventCtrlMock;
-
+	var eventUtilsOnSpy, ioEmitSpy;
 	beforeEach(function(done) {
 
 		//mock out httpServer
@@ -18,18 +18,30 @@ describe('socketApi', () => {
 		//mock out drivers
 		drivers = {};
 
+		eventUtilsOnSpy = sinon.spy();
+		var eventUtilsMock = {
+			getEventEmitter: function() {
+				return {
+					on: eventUtilsOnSpy
+				};
+			}
+		};
+
 		//mock out authenticateCtrl, deviceCtrl, eventCtrl, driverCtrl
 		var socketMock = {
 			on: function(eventName, fn) {
 				paths[eventName] = fn;
 			}
-		}
+		};
+
+		ioEmitSpy = sinon.spy();
 		var ioMock = function() {
 			return {
 				//capture the on handler function
 				on: function(eventName, cb) {
 					cb(socketMock);
-				}
+				},
+				emit: ioEmitSpy
 			};
 		};
 
@@ -100,6 +112,7 @@ describe('socketApi', () => {
 			warnOnUnregistered: false
 		});
 		mockery.registerMock('socket.io', ioMock);
+		mockery.registerMock('./utils/event', eventUtilsMock);
 		mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
 		mockery.registerMock('./controllers/driver', driverCtrlMock);
 		mockery.registerMock('./controllers/device', deviceCtrlMock);
@@ -110,6 +123,7 @@ describe('socketApi', () => {
 
 	afterEach(function(done) {
 		mockery.deregisterMock('socket.io');
+		mockery.deregisterMock('./utils/event');
 		mockery.deregisterMock('./controllers/authenticate');
 		mockery.deregisterMock('./controllers/driver');
 		mockery.deregisterMock('./controllers/device');
@@ -118,6 +132,24 @@ describe('socketApi', () => {
 		done();
 	});
 
+	describe('newEvent', () => {
+		it('should take new events from the eventUtils event emitter and emit them on the socket', () => {
+			moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+			expect(eventUtilsOnSpy).to.have.been.calledOnce;
+			expect(eventUtilsOnSpy.firstCall.args[0]).to.equal('newEvent');
+			var callback = eventUtilsOnSpy.firstCall.args[1];
+
+			callback({
+				foo: 'bar'
+			});
+
+			expect(ioEmitSpy).to.have.been.calledOnce;
+			expect(ioEmitSpy).to.have.been.calledWith('newEvent', {
+				foo: 'bar'
+			});
+		});
+	});
 
 	describe('errorHandler', () => {
 		it('should setup an error handler', () => {
