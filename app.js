@@ -21,4 +21,4 @@ var httpServer = app.listen(3000, function() {
 });
 
 //setup the websocket API
-var socketApi = require('./socketApi')(httpServer, drivers);
+var socketApi = require('./socketApi').socketApi(httpServer, drivers);
