@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var SpeakerSchema = require('./speaker');
 
 var DeviceSchema = new mongoose.Schema({
   _id: {
