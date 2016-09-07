@@ -1,21 +1,3 @@
-// getAuthenticationProcess: function() {
-// 	return [{
-// 		type: 'ManualAction',
-// 		message: 'Please press the sync button on your Hue Hub',
-// 		next: '/authentication/speaker/sonos/0'
-// 	}, {
-// 		type: 'RequestData',
-// 		message: 'In order to use LIFX bulbs you must provide an access token. This can be obtained in your LIFX account settings',
-// 		button: {
-// 			url: 'https://cloud.lifx.com/settings',
-// 			label: 'Get access token'
-// 		},
-// 		dataLabel: 'Access token',
-// 		next: '/authentication/speaker/sonos/1'
-// 	}];
-// },
-
-
 var AuthenticationSchemas = {
 	requested: {
 		RequestData: {
