@@ -305,7 +305,7 @@ deviceEventEmitter.on('on', function(driverId, deviceId) {
 		value: {}
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
@@ -319,7 +319,7 @@ deviceEventEmitter.on('off', function(driverId, deviceId) {
 		value: {}
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
@@ -333,7 +333,7 @@ deviceEventEmitter.on('state', function(driverId, deviceId, state) {
 		value: state
 	});
 	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..',eventObj,err);
+		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
