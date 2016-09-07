@@ -14,13 +14,12 @@ module.exports = function(app, drivers) {
       case 'Driver':
         console.log('Driver Error', err);
         res.status(500);
-        res.json({
+        return res.json({
           code: 500,
           type: err.type,
           driver: err.driver,
           message: err.message
         });
-        break;
       case 'BadRequest':
         res.status(400);
         return res.json({
@@ -28,7 +27,6 @@ module.exports = function(app, drivers) {
           type: err.type,
           message: err.message
         });
-        break;
       case 'NotFound':
         res.status(404);
         return res.json({
@@ -36,7 +34,6 @@ module.exports = function(app, drivers) {
           type: err.type,
           message: err.message
         });
-        break;
       case 'Validation':
         res.status(400);
         return res.json({
@@ -45,7 +42,6 @@ module.exports = function(app, drivers) {
           message: err.message,
           errors: err.errors
         });
-        break;
       case 'Connection':
         res.status(503);
         return res.json({
@@ -53,7 +49,6 @@ module.exports = function(app, drivers) {
           type: err.type,
           message: err.message
         });
-        break;
       case 'Authentication':
         res.status(401);
         return res.json({
@@ -61,12 +56,11 @@ module.exports = function(app, drivers) {
           type: err.type,
           message: err.message
         });
-        break;
       default:
         console.log(err);
         console.log(err.stack);
         res.status(500);
-        res.json({
+        return res.json({
           type: 'Internal',
           code: 500,
           stack: err.stack
