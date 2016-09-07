@@ -241,8 +241,34 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/authenticate');
+				var err = new Error('something went wrong 1');
+				authenticateCtrlMock = {
+					getAuthenticationProcess: function(driver, type, drivers) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
 
+				var type = 'foo';
+				var driver = 'bar';
+				var callback = sinon.spy();
+
+				paths['getAuthenticationProcess'](type, driver, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						type: 'Internal',
+						code: 500,
+						stack: err.stack
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -280,8 +306,39 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/authenticate');
+				var err = new Error('something went wrong 2');
+				err.type = 'BadRequest';
+				authenticateCtrlMock = {
+					authenticationStep: function(driver, type, drivers, stepId, body) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
 
+				var type = 'foo';
+				var driver = 'bar';
+				var stepId = 0;
+				var body = {
+					"body": "here"
+				};
+				var callback = sinon.spy();
+
+				paths['authenticationStep'](type, driver, stepId, body, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 2'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -316,8 +373,35 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/driver');
+				var err = new Error('something went wrong 3');
+				err.type = 'BadRequest';
+				driverCtrlMock = {
+					discover: function(driver, type, drivers) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/driver', driverCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
 
+				var type = 'foo';
+				var driver = 'bar';
+				var callback = sinon.spy();
+
+				paths['discoverDevices'](type, driver, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 3'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -350,8 +434,33 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 4');
+				err.type = 'BadRequest';
+				deviceCtrlMock = {
+					getAllDevices: function() {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
 
+				var callback = sinon.spy();
+
+				paths['getDevices'](callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 4'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -385,8 +494,37 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 5');
+				err.type = 'BadRequest';
 
+
+
+				deviceCtrlMock = {
+					getDevicesByType: function(type) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+				var type = 'foo';
+				var callback = sinon.spy();
+
+				paths['getDevicesByType'](type, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 5'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -423,8 +561,38 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 6');
+				err.type = 'BadRequest';
 
+
+
+				deviceCtrlMock = {
+					getDevicesByTypeAndDriver: function(type, driver) {
+						return Promise.reject(err);
+					}
+				};
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+				var type = 'foo';
+				var driver = 'bar';
+				var callback = sinon.spy();
+
+				paths['getDevicesByTypeAndDriver'](type, driver, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 6'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -457,8 +625,37 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
 
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 7');
+				err.type = 'BadRequest';
+
+				deviceCtrlMock = {
+					getDeviceById: function(deviceId) {
+						return Promise.reject(err);
+					}
+				};
+
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+				var deviceId = 'foo';
+				var callback = sinon.spy();
+
+				paths['getDeviceById'](deviceId, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 7'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -496,8 +693,40 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/device');
+				var err = new Error('something went wrong 8');
+				err.type = 'BadRequest';
 
+				deviceCtrlMock = {
+					runCommand: function(deviceId, command, body) {
+						return Promise.reject(err);
+					}
+				};
+
+				mockery.registerMock('./controllers/device', deviceCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+				var deviceId = 'foo';
+				var command = 'bar';
+				var body = {
+					"foo": "bar"
+				};
+				var callback = sinon.spy();
+
+				paths['runCommand'](deviceId, command, body, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 8'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -530,8 +759,35 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/driver');
+				var err = new Error('something went wrong 9');
+				err.type = 'BadRequest';
 
+				driverCtrlMock = {
+					getDriversWithStats: function(drivers) {
+						return Promise.reject(err);
+					}
+				};
+
+				mockery.registerMock('./controllers/driver', driverCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+				var callback = sinon.spy();
+
+				paths['getDrivers'](callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 9'
+					}));
+					done();
+				}, 0);
 			});
 		});
 
@@ -567,8 +823,38 @@ describe('socketApi', () => {
 				}, 0);
 			});
 
-			xit('it should handle errors accordingly', () => {
+			it('it should handle errors accordingly', (done) => {
+				mockery.deregisterMock('./controllers/event');
+				var err = new Error('something went wrong 10');
+				err.type = 'BadRequest';
 
+				eventCtrlMock = {
+					getEventsByType: function(type, from) {
+						return Promise.reject(err);
+					}
+				};
+
+				mockery.registerMock('./controllers/event', eventCtrlMock);
+				moduleToBeTested = require('../../socketApi').socketApi(httpServer, drivers);
+
+				var eventType = 'foo';
+				var from = 'bar';
+
+				var callback = sinon.spy();
+
+				paths['getEventsByType'](eventType, from, callback);
+
+				//We put it in a timeout to ensure the promise executes first
+				setTimeout(function() {
+					//check that callback is called with the error as a javscript object
+					expect(callback).to.have.been.calledOnce;
+					expect(JSON.stringify(callback.firstCall.args[0])).to.equal(JSON.stringify({
+						code: 400,
+						type: 'BadRequest',
+						message: 'something went wrong 10'
+					}));
+					done();
+				}, 0);
 			});
 		});
 	});
