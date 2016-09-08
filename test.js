@@ -1,0 +1,9 @@
+var util = require('util');
+var Validator = require('jsonschema').Validator;
+
+var v = new Validator();
+var instance = 4;
+var schema = {
+	"type": "string"
+};
+console.log(v.validate(instance, schema));

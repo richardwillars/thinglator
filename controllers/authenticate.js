@@ -30,8 +30,9 @@ var controller = {
           }
           var validated = jsonValidator.validate(authenticationProcess[i], jsonSchema);
           if (validated.errors.length !== 0) {
-            var e = new Error(validated);
-            e.type = 'Driver';
+            var e = new Error('the driver produced invalid json');
+            e.type = 'Validation';
+            e.errors = validated.errors;
             throw e;
           }
         }
