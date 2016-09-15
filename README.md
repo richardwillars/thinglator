@@ -65,9 +65,6 @@ If a driver doesn't exist for the device you want to talk to then you need to cr
 
 You can keep your home automation user interface up to date using the events API. More information on this can be found at https://github.com/richardwillars/homebox/wiki/events
 
-## Video
-You can see an introduction to Homebox and how to use the various APIs at https://www.youtube.com/watch?v=qeveomS1i5k
-
 ## Todo
 Important features to build..
 - documentation
