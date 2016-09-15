@@ -15,7 +15,7 @@ var controller = {
 						_id: {
 							$ne: fromEvent._id
 						}
-					}).sort('when').limit(100).exec();
+					}).sort('when').limit(100).lean().exec();
 				})
 				.then(function(events) {
 					return events;
@@ -23,7 +23,8 @@ var controller = {
 		} else {
 			return models['event'].Model.find({
 					eventType: eventType
-				}).sort('when').limit(100).lean().exec()
+				})
+				.sort('when').limit(100).lean().exec()
 				.then(function(events) {
 					return events;
 				});
