@@ -46,12 +46,15 @@ Homebox takes away knowledge of different types of devices and how their differe
 ## Run
 > node app.js
 
+This should launch a REST API and websocket server on http://localhost:3000
+
 ## Test
 > npm run test
 
+100% code coverage is aimed for on this project. We're almost there!
 [![codecov](https://codecov.io/gh/richardwillars/homebox/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/homebox)
+[![codecoverage](https://codecov.io/gh/richardwillars/homebox/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/richardwillars/homebox)
 
-This should launch a REST API and websocket server on http://localhost:3000
 
 ##Getting started
 Out of the box Homebox has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Homebox to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/homebox/wiki/Drivers to learn how to search for and add drivers.
