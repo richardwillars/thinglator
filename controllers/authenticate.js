@@ -22,16 +22,18 @@ var controller = {
       .then(function(authenticationProcess) {
         for (var i in authenticationProcess) {
           //validate the json
-          var jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
-          if (!jsonSchema) {
+          if(typeof models.authenticationSchemas.requested[authenticationProcess[i].type] === "undefined") {
             var e = new Error('validation schema not found');
             e.type = 'Driver';
             throw e;
           }
+          var jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
+
           var validated = jsonValidator.validate(authenticationProcess[i], jsonSchema);
           if (validated.errors.length !== 0) {
-            var e = new Error(validated);
-            e.type = 'Driver';
+            var e = new Error('the driver produced invalid json');
+            e.type = 'Validation';
+            e.errors = validated.errors;
             throw e;
           }
         }
@@ -79,9 +81,9 @@ var controller = {
         var jsonSchema = models.authenticationSchemas.returned[step.type];
         var validated = jsonValidator.validate(body, jsonSchema);
         if (validated.errors.length !== 0) {
-          var e = new Error(validated);
-          e.type = 'BadRequest';
-          throw e;
+          var e = new Error('the body is invalid');
+          e.type = 'Validation';
+          e.errors = validated.errors;
         }
         //all good - call the correct authentication step method on the driver
         return driver['setAuthenticationStep' + stepId](body);
@@ -108,9 +110,9 @@ var controller = {
         }
         var validated = jsonValidator.validate(result, resultSchema);
         if (validated.errors.length !== 0) {
-          var e = new Error(validated);
-          e.type = 'BadRequest';
-          throw e;
+          var e = new Error('the driver produced invalid json');
+          e.type = 'Driver';
+          e.errors = validated.errors;
         }
 
         return result;

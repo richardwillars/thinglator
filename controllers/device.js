@@ -4,7 +4,7 @@ var jsonValidator = new Validator();
 
 var controller = {
 	getAllDevices: function() {
-		return models['device'].Model.find().exec()
+		return models['device'].Model.find().lean().exec()
 			.then(function(devices) {
 				return devices;
 			});
@@ -12,7 +12,7 @@ var controller = {
 	getDevicesByType: function(type) {
 		return models['device'].Model.find({
 				type: type
-			}).exec()
+			}).lean().exec()
 			.then(function(devices) {
 				return devices;
 			});
@@ -21,7 +21,7 @@ var controller = {
 		return models['device'].Model.find({
 				type: type,
 				driver: driverId
-			}).exec()
+			}).lean().exec()
 			.then(function(devices) {
 				return devices;
 			});
@@ -29,7 +29,7 @@ var controller = {
 	getDeviceById: function(deviceId) {
 		return models['device'].Model.findOne({
 				_id: deviceId
-			}).exec()
+			}).lean().exec()
 			.then(function(device) {
 				if (!device) {
 					var e = new Error('device not found');
@@ -43,7 +43,7 @@ var controller = {
 		var device;
 		return models['device'].Model.findOne({
 				_id: deviceId
-			}).exec()
+			}).lean().exec()
 			.then(function(deviceObj) {
 				device = deviceObj;
 				if (typeof device.specs.capabilities[command] === "undefined") {
@@ -65,9 +65,12 @@ var controller = {
 				var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + command].options.requestSchema;
 				if (jsonSchema) {
 					var validated = jsonValidator.validate(body, jsonSchema);
+					console.log(validated);
+					console.log(typeof validated);
 					if (validated.errors.length !== 0) {
-						var e = new Error(validated);
-						e.type = 'BadRequest';
+						var e = new Error('the supplied json is invalid');
+						e.type = 'Validation';
+						e.errors = validated.errors;
 						throw e;
 					}
 				}
@@ -78,8 +81,9 @@ var controller = {
 				var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + command].options.responseSchema;
 				var validated = jsonValidator.validate(commandResult, jsonSchema);
 				if (validated.errors.length !== 0) {
-					var e = new Error(validated);
-					e.type = 'Driver';
+					var e = new Error('the driver produced invalid json');
+					e.type = 'Validation';
+					e.errors = validated.errors;
 					throw e;
 				}
 				return commandResult;
