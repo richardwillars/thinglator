@@ -2,7 +2,7 @@
   "name": "homebox",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "maintainers": [{
     "name": "Richard Willars",
     "email": "richard@richardwillars.com"
