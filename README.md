@@ -46,6 +46,11 @@ Homebox takes away knowledge of different types of devices and how their differe
 ## Run
 > node app.js
 
+## Test
+> npm run test
+
+[![codecov](https://codecov.io/gh/richardwillars/homebox/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/homebox)
+
 This should launch a REST API and websocket server on http://localhost:3000
 
 ##Getting started

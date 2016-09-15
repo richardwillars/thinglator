@@ -12,6 +12,8 @@ mongoose.connect('mongodb://localhost/homebox');
 var driverUtils = require('./utils/driver');
 var drivers = driverUtils.loadDrivers();
 
+
+
 //setup the HTTP API
 var httpApi = require('./httpApi')(app, drivers);
 
