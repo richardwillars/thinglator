@@ -81,9 +81,9 @@ var controller = {
         var jsonSchema = models.authenticationSchemas.returned[step.type];
         var validated = jsonValidator.validate(body, jsonSchema);
         if (validated.errors.length !== 0) {
-          var e = new Error(validated);
-          e.type = 'BadRequest';
-          throw e;
+          var e = new Error('the body is invalid');
+          e.type = 'Validation';
+          e.errors = validated.errors;
         }
         //all good - call the correct authentication step method on the driver
         return driver['setAuthenticationStep' + stepId](body);
@@ -110,9 +110,9 @@ var controller = {
         }
         var validated = jsonValidator.validate(result, resultSchema);
         if (validated.errors.length !== 0) {
-          var e = new Error(validated);
-          e.type = 'BadRequest';
-          throw e;
+          var e = new Error('the driver produced invalid json');
+          e.type = 'Driver';
+          e.errors = validated.errors;
         }
 
         return result;
