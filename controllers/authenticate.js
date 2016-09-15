@@ -22,12 +22,13 @@ var controller = {
       .then(function(authenticationProcess) {
         for (var i in authenticationProcess) {
           //validate the json
-          var jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
-          if (!jsonSchema) {
+          if(typeof models.authenticationSchemas.requested[authenticationProcess[i].type] === "undefined") {
             var e = new Error('validation schema not found');
             e.type = 'Driver';
             throw e;
           }
+          var jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
+
           var validated = jsonValidator.validate(authenticationProcess[i], jsonSchema);
           if (validated.errors.length !== 0) {
             var e = new Error('the driver produced invalid json');
