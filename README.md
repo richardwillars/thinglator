@@ -71,7 +71,6 @@ You can see an introduction to Homebox and how to use the various APIs at https:
 ## Todo
 Important features to build..
 - documentation
-- example driver with tests
 - zwave adapter
 - openzwave interface
 - bluetooth adapter
