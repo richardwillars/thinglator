@@ -1,9 +1,9 @@
-# Devling
-Devling makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Most home automation devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build, maintain and support each and every device individually). Devling acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
+# Devlator
+Devlator (device translator) makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Most home automation devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build, maintain and support each and every device individually). Devlator acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
 
-The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Homebox and they'll have support for potentially unlimited devices!
+The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Devlator and they'll have support for potentially unlimited devices!
 
-The really cool thing is that the Homebox ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Homebox how to communicate with the device in question). Homebox will then expose the device using REST APIs and websockets.
+The really cool thing is that the Devlator ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Homebox how to communicate with the device in question). Devlator will then expose the device using REST APIs and websockets.
 
 So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
 
@@ -41,7 +41,7 @@ Devling takes away knowledge of different types of devices and how their differe
 - node.js
 
 ## Installation
-> npm install devling
+> npm install devlator
 
 ## Run
 > node app.js
@@ -52,18 +52,18 @@ This should launch a REST API and websocket server on http://localhost:3000
 > npm run test
 
 100% code coverage is aimed for on this project. We're almost there!
-[![codecov](https://codecov.io/gh/richardwillars/devling/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/devling)
-[![codecoverage](https://codecov.io/gh/richardwillars/devling/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/richardwillars/devling)
+[![codecov](https://codecov.io/gh/richardwillars/devlator/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/devlator)
+[![codecoverage](https://codecov.io/gh/richardwillars/devlator/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/richardwillars/devlator)
 
 
 ##Getting started
-Out of the box Devling has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Devling to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/devling/wiki/Drivers to learn how to search for and add drivers.
+Out of the box Devlator has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Devling to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/devlator/wiki/Drivers to learn how to search for and add drivers.
 
-Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/devling/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
+Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/devlator/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
 
-If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/devling/wiki/Drivers
+If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/devlator/wiki/Drivers
 
-You can keep your home automation user interface up to date using the events API. More information on this can be found at https://github.com/richardwillars/devling/wiki/events
+You can keep your home automation user interface up to date using the events API. More information on this can be found at https://github.com/richardwillars/devlator/wiki/events
 
 ## Todo
 Important features to build..
