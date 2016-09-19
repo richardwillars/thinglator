@@ -1,5 +1,5 @@
-# Homebox
-Homebox makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Most home automation devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build, maintain and support each and every device individually). Homebox acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
+# Devling
+Devling makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Most home automation devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build, maintain and support each and every device individually). Devling acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
 
 The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Homebox and they'll have support for potentially unlimited devices!
 
@@ -33,7 +33,7 @@ So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
     
     
 (no it's not a mistake - both requests are identical (apart from the device ID)!)
-Homebox takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform REST API.
+Devling takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform REST API.
 
 
 ## Requirements
@@ -41,7 +41,7 @@ Homebox takes away knowledge of different types of devices and how their differe
 - node.js
 
 ## Installation
-> npm install homebox
+> npm install devling
 
 ## Run
 > node app.js
@@ -52,18 +52,18 @@ This should launch a REST API and websocket server on http://localhost:3000
 > npm run test
 
 100% code coverage is aimed for on this project. We're almost there!
-[![codecov](https://codecov.io/gh/richardwillars/homebox/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/homebox)
-[![codecoverage](https://codecov.io/gh/richardwillars/homebox/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/richardwillars/homebox)
+[![codecov](https://codecov.io/gh/richardwillars/devling/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/devling)
+[![codecoverage](https://codecov.io/gh/richardwillars/devling/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/richardwillars/devling)
 
 
 ##Getting started
-Out of the box Homebox has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Homebox to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/homebox/wiki/Drivers to learn how to search for and add drivers.
+Out of the box Devling has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Devling to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/devling/wiki/Drivers to learn how to search for and add drivers.
 
-Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/homebox/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
+Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/devling/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
 
-If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/homebox/wiki/Drivers
+If a driver doesn't exist for the device you want to talk to then you need to create a driver. More information on this can be found at https://github.com/richardwillars/devling/wiki/Drivers
 
-You can keep your home automation user interface up to date using the events API. More information on this can be found at https://github.com/richardwillars/homebox/wiki/events
+You can keep your home automation user interface up to date using the events API. More information on this can be found at https://github.com/richardwillars/devling/wiki/events
 
 ## Todo
 Important features to build..
