@@ -33,7 +33,7 @@ So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
     
     
 (no it's not a mistake - both requests are identical (apart from the device ID)!)
-Devling takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform REST API.
+Devlator takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform REST API.
 
 
 ## Requirements
@@ -57,7 +57,7 @@ This should launch a REST API and websocket server on http://localhost:3000
 
 
 ##Getting started
-Out of the box Devlator has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Devling to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/devlator/wiki/Drivers to learn how to search for and add drivers.
+Out of the box Devlator has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Devlator to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/devlator/wiki/Drivers to learn how to search for and add drivers.
 
 Once you have some drivers installed you can make calls to the APIs documented at https://github.com/richardwillars/devlator/wiki/devices. These APIs are used to discover devices on your network (using the drivers you just installed) and find out information each device.
 
