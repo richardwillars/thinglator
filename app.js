@@ -6,7 +6,7 @@ var app = express();
 //connect to the database
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/devlator');
+mongoose.connect('mongodb://localhost/thinglator');
 
 //Get the drivers and initialise them
 var driverUtils = require('./utils/driver');
@@ -19,7 +19,7 @@ var httpApi = require('./httpApi')(app, drivers);
 
 //Initialise the webserver
 var httpServer = app.listen(3000, function() {
-	console.log('devlator listening on port 3000!');
+	console.log('thinglator listening on port 3000!');
 });
 
 //setup the websocket API

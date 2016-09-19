@@ -126,7 +126,7 @@ describe('utils/driver', () => {
 			//mock out fs
 			var fsMock = {
 				readdirSync: function(dirName) {
-					return ['devlator-driver-foo', 'devlator-zoo-boo', 'something-else', 'bla.js', 'devlator-driver-bla'];
+					return ['thinglator-driver-foo', 'thinglator-zoo-boo', 'something-else', 'bla.js', 'thinglator-driver-bla'];
 				}
 			};
 
@@ -195,15 +195,16 @@ describe('utils/driver', () => {
 
 			mockery.registerMock('../models', modelsMock);
 			mockery.registerMock('fs', fsMock);
-			mockery.registerMock('devlator-driver-foo', driverFooMock);
-			mockery.registerMock('devlator-driver-bla', driverBlaMock);
+
+			mockery.registerMock('thinglator-driver-foo', driverFooMock);
+			mockery.registerMock('thinglator-driver-bla', driverBlaMock);
 			done();
 		});
 
 		afterEach(function(done) {
 			mockery.deregisterMock('fs');
-			mockery.deregisterMock('devlator-driver-bla');
-			mockery.deregisterMock('devlator-driver-foo');
+			mockery.deregisterMock('thinglator-driver-bla');
+			mockery.deregisterMock('thinglator-driver-foo');
 			mockery.deregisterMock('../models');
 			mockery.disable();
 			done();

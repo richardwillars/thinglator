@@ -10,7 +10,7 @@ module.exports = function(app, drivers) {
 
   app.get('/', function(req, res, next) {
     res.json({
-      'Devlator': 'Oh, hi!'
+      'Thinglator': 'Oh, hi!'
     });
   });
 
