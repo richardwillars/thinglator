@@ -253,7 +253,7 @@ describe('httpApi', () => {
 				paths['/'](req, res, next);
 
 				expect(res.json).to.have.been.calledWith({
-					'Homebox': 'Oh, hi!'
+					'Devlator': 'Oh, hi!'
 				});
 			});
 		});
