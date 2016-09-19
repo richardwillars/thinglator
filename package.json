@@ -1,5 +1,5 @@
 {
-  "name": "homebox",
+  "name": "devling",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
   "version": "0.1.2",
@@ -9,7 +9,7 @@
   }],
   "repository": {
     "type": "git",
-    "url": "https://github.com/richardwillars/homebox.git"
+    "url": "https://github.com/richardwillars/devling.git"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
