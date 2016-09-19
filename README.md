@@ -3,7 +3,7 @@ Devlator (device translator) makes home automation simple and flexible. It provi
 
 The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Devlator and they'll have support for potentially unlimited devices!
 
-The really cool thing is that the Devlator ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Homebox how to communicate with the device in question). Devlator will then expose the device using REST APIs and websockets.
+The really cool thing is that the Devlator ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Devlator how to communicate with the device in question). Devlator will then expose the device using REST APIs and websockets.
 
 So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
 
