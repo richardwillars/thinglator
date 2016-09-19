@@ -53,9 +53,9 @@ var utils = {
 	loadDrivers: function() {
 		var driversArr = [];
 		fs.readdirSync('./node_modules').forEach(function(file) {
-			if (file.match(/homebox-driver-/) !== null) {
-				var name = file.replace('homebox-driver-', '');
-				var Driver = require('homebox-driver-' + name);
+			if (file.match(/devlator-driver-/) !== null) {
+				var name = file.replace('devlator-driver-', '');
+				var Driver = require('devlator-driver-' + name);
 
 				var interfaces = {
 					http: {}
