@@ -46,6 +46,11 @@ var controller = {
 			}).lean().exec()
 			.then(function(deviceObj) {
 				device = deviceObj;
+				if (!deviceObj) {
+					var e = new Error('device not found');
+					e.type = 'NotFound';
+					throw e;
+				}
 				if (typeof device.specs.capabilities[command] === "undefined") {
 					var e = new Error('capability not found');
 					e.type = 'BadRequest';

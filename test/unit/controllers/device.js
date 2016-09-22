@@ -684,6 +684,53 @@ describe('controllers/device', () => {
 				});
 		});
 
+
+		it('should throw an error if the specified device doesn\'t exist', () => {
+			var deviceModel = {
+				findOne: function() {},
+				lean: function() {},
+				exec: function() {}
+			};
+
+			var findOneStub = sinon.stub(deviceModel, 'findOne', function() {
+				return deviceModel;
+			});
+
+			var leanStub = sinon.stub(deviceModel, 'lean', function() {
+				return deviceModel;
+			});
+
+			var execStub = sinon.stub(deviceModel, 'exec', function() {
+				return Promise.resolve(null);
+			});
+
+			modelsMock = {
+				device: {
+					Model: deviceModel
+				}
+			};
+
+
+			mockery.enable({
+				useCleanCache: true,
+				warnOnUnregistered: false
+			});
+			mockery.registerMock('../models', modelsMock);
+
+			var drivers = {};
+
+
+			moduleToBeTested = require('../../../controllers/device');
+
+			expect(moduleToBeTested.runCommand).to.be.a.function;
+			return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
+				.catch(function(error) {
+					expect(error.message).to.equal('device not found');
+					expect(error.type).to.equal('NotFound');
+				});
+
+		});
+
 		it('should throw an error if the specified capability doesn\'t exist', () => {
 			var deviceModel = {
 				findOne: function() {},
