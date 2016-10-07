@@ -23,6 +23,7 @@ var SwitchSchema = new mongoose.Schema({
 		on: {
 			type: Boolean,
 			default: false,
+			eventName: 'on',
 			responseSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -40,16 +41,17 @@ var SwitchSchema = new mongoose.Schema({
 		off: {
 			type: Boolean,
 			default: false,
+			eventName: 'on',
 			responseSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"off": {
+					"on": {
 						"type": "boolean"
 					}
 				},
 				"required": [
-					"off"
+					"on"
 				]
 			}
 		}
@@ -60,35 +62,21 @@ var SwitchSchema = new mongoose.Schema({
 var Switch = mongoose.model('Switch', SwitchSchema);
 var deviceEventEmitter = new EventEmitter2();
 
-deviceEventEmitter.on('on', function(driverId, deviceId) {
-	console.log('switch turned on', driverId, deviceId);
+deviceEventEmitter.on('on', function(driverId, deviceId, value) {
+	console.log('switch turned', driverId, deviceId);
 	var eventObj = EventModel({
 		eventType: 'device',
 		driverType: 'switch',
 		driverId: driverId,
 		deviceId: deviceId,
 		event: 'on',
-		value: {}
+		value: value.on
 	});
 	eventObj.save().catch(function(err) {
 		console.log('Unable to save event..', eventObj, err);
 	});
 });
 
-deviceEventEmitter.on('off', function(driverId, deviceId) {
-	console.log('switch turned off', driverId, deviceId);
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'switch',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'off',
-		value: {}
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
-});
 
 module.exports = {
 	Model: Switch,

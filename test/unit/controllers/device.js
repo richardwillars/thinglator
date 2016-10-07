@@ -479,6 +479,7 @@ describe('controllers/device', () => {
 
 			var execStub = sinon.stub(deviceModel, 'exec', function() {
 				return Promise.resolve({
+					_id: 'fee',
 					type: 'deviceType',
 					driver: 'foo',
 					specs: {
@@ -505,7 +506,8 @@ describe('controllers/device', () => {
 										},
 										responseSchema: {
 											bar: 'foo'
-										}
+										},
+										eventName: 'on'
 									}
 								}
 							}
@@ -536,13 +538,24 @@ describe('controllers/device', () => {
 
 			var drivers = {
 				foo: {
-					capability_commandTruthy: function() {}
+					capability_commandTruthy: function() {},
+					getEventEmitter: function() {},
+					getName: function() {
+						return 'foo';
+					}
 				}
 			};
 
 			var driverActionStub = sinon.stub(drivers.foo, 'capability_commandTruthy', function() {
 				return {
-					processed: true
+					on: true
+				};
+			});
+
+			var eventEmitterEmitStub = sinon.stub();
+			var getEventEmitterActionStub = sinon.stub(drivers.foo, 'getEventEmitter', function() {
+				return {
+					emit: eventEmitterEmitStub
 				};
 			});
 
@@ -551,10 +564,6 @@ describe('controllers/device', () => {
 			expect(moduleToBeTested.runCommand).to.be.a.function;
 			return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
 				.then(function(result) {
-					expect(JSON.stringify(result)).to.equal(JSON.stringify({
-						processed: true
-					}));
-
 					expect(findOneStub).to.have.been.calledOnce;
 					expect(findOneStub).to.have.been.calledWith({
 						_id: 'foo'
@@ -571,6 +580,7 @@ describe('controllers/device', () => {
 
 					expect(driverActionStub).to.have.been.calledOnce;
 					expect(driverActionStub).to.have.been.calledWith({
+						_id: 'fee',
 						type: 'deviceType',
 						driver: 'foo',
 						specs: {
@@ -582,11 +592,15 @@ describe('controllers/device', () => {
 					}, 'fee');
 
 					expect(jsonValidatorStub.secondCall).to.have.been.calledWith({
-						'processed': true
+						'on': true
 					}, {
 						"bar": "foo"
 					});
-					// 		
+
+					expect(getEventEmitterActionStub).to.have.been.calledOnce;
+					expect(eventEmitterEmitStub).to.have.been.calledWith('on', 'foo', 'fee', {
+						on: true
+					})
 				});
 
 
@@ -609,6 +623,7 @@ describe('controllers/device', () => {
 
 			var execStub = sinon.stub(deviceModel, 'exec', function() {
 				return Promise.resolve({
+					_id: 'fee',
 					type: 'deviceType',
 					driver: 'foo',
 					specs: {
@@ -632,7 +647,8 @@ describe('controllers/device', () => {
 									options: {
 										responseSchema: {
 											bar: 'foo'
-										}
+										},
+										eventName: 'on'
 									}
 								}
 							}
@@ -661,15 +677,25 @@ describe('controllers/device', () => {
 			mockery.registerMock('../models', modelsMock);
 			mockery.registerMock('jsonschema', jsonValidatorMock);
 
+			var eventEmitterEmitStub = sinon.stub();
+
 			var drivers = {
 				foo: {
-					capability_commandTruthy: function() {}
+					capability_commandTruthy: function() {},
+					getEventEmitter: function() {
+						return {
+							emit: eventEmitterEmitStub
+						};
+					},
+					getName: function() {
+						return 'foo';
+					}
 				}
 			};
 
 			var driverActionStub = sinon.stub(drivers.foo, 'capability_commandTruthy', function() {
 				return {
-					processed: true
+					on: true
 				};
 			});
 
@@ -677,10 +703,11 @@ describe('controllers/device', () => {
 
 			expect(moduleToBeTested.runCommand).to.be.a.function;
 			return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
-				.then(function(result) {
-					expect(JSON.stringify(result)).to.equal(JSON.stringify({
-						processed: true
-					}));
+				.then(function() {
+					expect(eventEmitterEmitStub).to.have.been.calledOnce;
+					expect(eventEmitterEmitStub).to.have.been.calledWith('on', 'foo', 'fee', {
+						on: true
+					});
 				});
 		});
 
