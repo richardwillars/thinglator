@@ -36,7 +36,7 @@ var LightSchema = new mongoose.Schema({
 				]
 			}
 		},
-		setHSBState: {
+		setState: {
 			type: Boolean,
 			default: false,
 			requestSchema: {
@@ -81,85 +81,6 @@ var LightSchema = new mongoose.Schema({
 				"required": [
 					"colour",
 					"duration",
-					"on"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"processed": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"processed"
-				]
-			}
-
-		},
-		setBrightnessState: {
-			type: Boolean,
-			default: false,
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					},
-					"colour": {
-						"type": "object",
-						"properties": {
-							"brightness": {
-								"type": "double",
-								"minimum": 0,
-								"maximum": 1
-							}
-						},
-						"required": [
-							"brightness"
-						]
-					},
-
-					"duration": {
-						"duration": "integer",
-						"minimum": 0,
-						"maxiumum": 99999
-					}
-				},
-				"required": [
-					"colour",
-					"duration",
-					"on"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"processed": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"processed"
-				]
-			}
-
-		},
-		setBooleanState: {
-			type: Boolean,
-			default: false,
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					}
-				},
-				"required": [
 					"on"
 				]
 			},
