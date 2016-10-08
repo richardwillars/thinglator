@@ -23,6 +23,7 @@ var LightSchema = new mongoose.Schema({
 		toggle: {
 			type: Boolean,
 			default: false,
+			eventName: 'state',
 			responseSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -39,6 +40,7 @@ var LightSchema = new mongoose.Schema({
 		setHSBState: {
 			type: Boolean,
 			default: false,
+			eventName: 'state',
 			requestSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -101,6 +103,7 @@ var LightSchema = new mongoose.Schema({
 		setBrightnessState: {
 			type: Boolean,
 			default: false,
+			eventName: 'state',
 			requestSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -151,6 +154,7 @@ var LightSchema = new mongoose.Schema({
 		setBooleanState: {
 			type: Boolean,
 			default: false,
+			eventName: 'state',
 			requestSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -180,6 +184,7 @@ var LightSchema = new mongoose.Schema({
 		breatheEffect: {
 			type: Boolean,
 			default: false,
+			eventName: 'breatheEffect',
 			requestSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -278,6 +283,7 @@ var LightSchema = new mongoose.Schema({
 		pulseEffect: {
 			type: Boolean,
 			default: false,
+			eventName: 'pulseEffect',
 			requestSchema: {
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
@@ -373,34 +379,6 @@ var LightSchema = new mongoose.Schema({
 
 var Light = mongoose.model('Light', LightSchema);
 var deviceEventEmitter = new EventEmitter2();
-
-deviceEventEmitter.on('on', function(driverId, deviceId) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'light',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'on',
-		value: {}
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
-});
-
-deviceEventEmitter.on('off', function(driverId, deviceId) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'light',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'off',
-		value: {}
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
-});
 
 deviceEventEmitter.on('state', function(driverId, deviceId, state) {
 	var eventObj = EventModel({

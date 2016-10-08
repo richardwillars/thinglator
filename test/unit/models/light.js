@@ -104,6 +104,7 @@ describe('models/light', () => {
 				toggle: {
 					type: Boolean,
 					default: false,
+					eventName: 'state',
 					responseSchema: {
 						"$schema": "http://json-schema.org/draft-04/schema#",
 						"type": "object",
@@ -117,9 +118,10 @@ describe('models/light', () => {
 						]
 					}
 				},
-				setState: {
+				setHSBState: {
 					type: Boolean,
 					default: false,
+					eventName: 'state',
 					requestSchema: {
 						"$schema": "http://json-schema.org/draft-04/schema#",
 						"type": "object",
@@ -179,9 +181,91 @@ describe('models/light', () => {
 					}
 
 				},
+				setBrightnessState: {
+					type: Boolean,
+					default: false,
+					eventName: 'state',
+					requestSchema: {
+						"$schema": "http://json-schema.org/draft-04/schema#",
+						"type": "object",
+						"properties": {
+							"on": {
+								"type": "boolean"
+							},
+							"colour": {
+								"type": "object",
+								"properties": {
+									"brightness": {
+										"type": "double",
+										"minimum": 0,
+										"maximum": 1
+									}
+								},
+								"required": [
+									"brightness"
+								]
+							},
+
+							"duration": {
+								"duration": "integer",
+								"minimum": 0,
+								"maxiumum": 99999
+							}
+						},
+						"required": [
+							"colour",
+							"duration",
+							"on"
+						]
+					},
+					responseSchema: {
+						"$schema": "http://json-schema.org/draft-04/schema#",
+						"type": "object",
+						"properties": {
+							"processed": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"processed"
+						]
+					}
+
+				},
+				setBooleanState: {
+					type: Boolean,
+					default: false,
+					eventName: 'state',
+					requestSchema: {
+						"$schema": "http://json-schema.org/draft-04/schema#",
+						"type": "object",
+						"properties": {
+							"on": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"on"
+						]
+					},
+					responseSchema: {
+						"$schema": "http://json-schema.org/draft-04/schema#",
+						"type": "object",
+						"properties": {
+							"processed": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"processed"
+						]
+					}
+
+				},
 				breatheEffect: {
 					type: Boolean,
 					default: false,
+					eventName: 'breatheEffect',
 					requestSchema: {
 						"$schema": "http://json-schema.org/draft-04/schema#",
 						"type": "object",
@@ -280,6 +364,7 @@ describe('models/light', () => {
 				pulseEffect: {
 					type: Boolean,
 					default: false,
+					eventName: 'pulseEffect',
 					requestSchema: {
 						"$schema": "http://json-schema.org/draft-04/schema#",
 						"type": "object",
@@ -388,92 +473,20 @@ describe('models/light', () => {
 			expect(moduleToBeTested.DeviceEventEmitter).to.be.an.object;
 		});
 
-		it('should have created 3 event listeners', () => {
+		it('should have created 1 event listener', () => {
 			moduleToBeTested = require('../../../models/light');
-			expect(eventEmitterOnSpy).to.have.been.calledThrice;
-		});
-
-		describe('\'on\' event', () => {
-			it('should register the event listener', () => {
-				moduleToBeTested = require('../../../models/light');
-				expect(eventEmitterOnSpy.firstCall).to.have.been.calledWith('on');
-			});
-
-			it('should create a new event', () => {
-				moduleToBeTested = require('../../../models/light');
-				var eventCallback = eventEmitterOnSpy.firstCall.args[1];
-				//call the function
-				eventCallback('abc123', 'def456');
-				expect(eventCreateSpy).to.have.been.calledOnce;
-				expect(eventCreateSpy).to.have.been.calledWith({
-					eventType: 'device',
-					driverType: 'light',
-					driverId: 'abc123',
-					deviceId: 'def456',
-					event: 'on',
-					value: {}
-				});
-			});
-
-			it('should save the event to the database', () => {
-				moduleToBeTested = require('../../../models/light');
-				var eventCallback = eventEmitterOnSpy.firstCall.args[1];
-				//call the function
-				eventCallback('abc123', 'def456');
-				//check that the save function has been called
-				expect(eventSaveSpy).to.have.been.calledOnce;
-			});
-
-			xit('should handle a failed save accordingly', () => {
-
-			});
-		});
-
-		describe('\'off\' event', () => {
-			it('should register the event listener', () => {
-				moduleToBeTested = require('../../../models/light');
-				expect(eventEmitterOnSpy.secondCall).to.have.been.calledWith('off');
-			});
-
-			it('should create a new event', () => {
-				moduleToBeTested = require('../../../models/light');
-				var eventCallback = eventEmitterOnSpy.secondCall.args[1];
-				//call the function
-				eventCallback('abc123', 'def456');
-				expect(eventCreateSpy).to.have.been.calledOnce;
-				expect(eventCreateSpy).to.have.been.calledWith({
-					eventType: 'device',
-					driverType: 'light',
-					driverId: 'abc123',
-					deviceId: 'def456',
-					event: 'off',
-					value: {}
-				});
-			});
-
-			it('should save the event to the database', () => {
-				moduleToBeTested = require('../../../models/light');
-				var eventCallback = eventEmitterOnSpy.secondCall.args[1];
-				//call the function
-				eventCallback('abc123', 'def456');
-				//check that the save function has been called
-				expect(eventSaveSpy).to.have.been.calledOnce;
-			});
-
-			xit('should handle a failed save accordingly', () => {
-
-			});
+			expect(eventEmitterOnSpy).to.have.been.calledOnce;
 		});
 
 		describe('\'state\' event', () => {
 			it('should register the event listener', () => {
 				moduleToBeTested = require('../../../models/light');
-				expect(eventEmitterOnSpy.thirdCall).to.have.been.calledWith('state');
+				expect(eventEmitterOnSpy.firstCall).to.have.been.calledWith('state');
 			});
 
 			it('should create a new event', () => {
 				moduleToBeTested = require('../../../models/light');
-				var eventCallback = eventEmitterOnSpy.thirdCall.args[1];
+				var eventCallback = eventEmitterOnSpy.firstCall.args[1];
 				//call the function
 				eventCallback('abc123', 'def456', 'foo');
 				expect(eventCreateSpy).to.have.been.calledOnce;
@@ -489,7 +502,7 @@ describe('models/light', () => {
 
 			it('should save the event to the database', () => {
 				moduleToBeTested = require('../../../models/light');
-				var eventCallback = eventEmitterOnSpy.thirdCall.args[1];
+				var eventCallback = eventEmitterOnSpy.firstCall.args[1];
 				//call the function
 				eventCallback('abc123', 'def456', 'foo');
 				//check that the save function has been called
