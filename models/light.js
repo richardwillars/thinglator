@@ -90,12 +90,33 @@ var LightSchema = new mongoose.Schema({
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"processed": {
+					"on": {
 						"type": "boolean"
+					},
+					"colour": {
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						}
 					}
 				},
 				"required": [
-					"processed"
+					"colour",
+					"on"
 				]
 			}
 
@@ -141,15 +162,35 @@ var LightSchema = new mongoose.Schema({
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"processed": {
+					"on": {
 						"type": "boolean"
+					},
+					"colour": {
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						}
 					}
 				},
 				"required": [
-					"processed"
+					"colour",
+					"on"
 				]
 			}
-
 		},
 		setBooleanState: {
 			type: Boolean,
@@ -171,12 +212,33 @@ var LightSchema = new mongoose.Schema({
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"processed": {
+					"on": {
 						"type": "boolean"
+					},
+					"colour": {
+						"type": "object",
+						"properties": {
+							"hue": {
+								"type": "integer",
+								"minimum": 0,
+								"maxiumum": 360
+							},
+							"saturation": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							},
+							"brightness": {
+								"type": "double",
+								"minimum": 0,
+								"maximum": 1
+							}
+						}
 					}
 				},
 				"required": [
-					"processed"
+					"colour",
+					"on"
 				]
 			}
 
@@ -271,12 +333,12 @@ var LightSchema = new mongoose.Schema({
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"processed": {
+					"breatheEffect": {
 						"type": "boolean"
 					}
 				},
 				"required": [
-					"processed"
+					"breatheEffect"
 				]
 			}
 		},
@@ -364,12 +426,12 @@ var LightSchema = new mongoose.Schema({
 				"$schema": "http://json-schema.org/draft-04/schema#",
 				"type": "object",
 				"properties": {
-					"processed": {
+					"pulseEffect": {
 						"type": "boolean"
 					}
 				},
 				"required": [
-					"processed"
+					"pulseEffect"
 				]
 			}
 		}
