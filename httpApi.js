@@ -97,7 +97,7 @@ module.exports = function(app, drivers) {
   */
   app.post('/device/:deviceId/:command', jsonParser, function(req, res, next) {
     deviceCtrl.runCommand(req.params.deviceId, req.params.command, req.body, drivers).then(function(result) {
-      res.json(result);
+      res.send();
     }).catch(function(err) {
       next(err);
     });

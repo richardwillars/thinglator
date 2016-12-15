@@ -105,6 +105,7 @@ describe('models/switch', () => {
 				on: {
 					type: Boolean,
 					default: false,
+					eventName: 'on',
 					responseSchema: {
 						"$schema": "http://json-schema.org/draft-04/schema#",
 						"type": "object",
@@ -122,16 +123,17 @@ describe('models/switch', () => {
 				off: {
 					type: Boolean,
 					default: false,
+					eventName: 'on',
 					responseSchema: {
 						"$schema": "http://json-schema.org/draft-04/schema#",
 						"type": "object",
 						"properties": {
-							"off": {
+							"on": {
 								"type": "boolean"
 							}
 						},
 						"required": [
-							"off"
+							"on"
 						]
 					}
 				}
@@ -154,9 +156,9 @@ describe('models/switch', () => {
 			expect(moduleToBeTested.DeviceEventEmitter).to.be.an.object;
 		});
 
-		it('should have created 2 event listeners', () => {
+		it('should have created 1 event listener', () => {
 			moduleToBeTested = require('../../../models/switch');
-			expect(eventEmitterOnSpy).to.have.been.callCount(2);
+			expect(eventEmitterOnSpy).to.have.been.callCount(1);
 		});
 
 		describe('\'on\' event', () => {
@@ -169,7 +171,9 @@ describe('models/switch', () => {
 				moduleToBeTested = require('../../../models/switch');
 				var eventCallback = eventEmitterOnSpy.args[0][1];
 				//call the function
-				eventCallback('abc123', 'def456');
+				eventCallback('abc123', 'def456', {
+					on: true
+				});
 				expect(eventCreateSpy).to.have.been.calledOnce;
 				expect(eventCreateSpy).to.have.been.calledWith({
 					eventType: 'device',
@@ -177,51 +181,18 @@ describe('models/switch', () => {
 					driverId: 'abc123',
 					deviceId: 'def456',
 					event: 'on',
-					value: {}
+					value: true
 				});
 			});
 
 			it('should save the event to the database', () => {
 				moduleToBeTested = require('../../../models/switch');
 				var eventCallback = eventEmitterOnSpy.args[0][1];
+
 				//call the function
-				eventCallback('abc123', 'def456');
-				//check that the save function has been called
-				expect(eventSaveSpy).to.have.been.calledOnce;
-			});
-
-			xit('should handle a failed save accordingly', () => {
-
-			});
-		});
-
-		describe('\'off\' event', () => {
-			it('should register the event listener', () => {
-				moduleToBeTested = require('../../../models/switch');
-				expect(eventEmitterOnSpy.args[1][0]).to.equal('off');
-			});
-
-			it('should create a new event', () => {
-				moduleToBeTested = require('../../../models/switch');
-				var eventCallback = eventEmitterOnSpy.args[1][1];
-				//call the function
-				eventCallback('abc123', 'def456');
-				expect(eventCreateSpy).to.have.been.calledOnce;
-				expect(eventCreateSpy).to.have.been.calledWith({
-					eventType: 'device',
-					driverType: 'switch',
-					driverId: 'abc123',
-					deviceId: 'def456',
-					event: 'off',
-					value: {}
+				eventCallback('abc123', 'def456', {
+					on: true
 				});
-			});
-
-			it('should save the event to the database', () => {
-				moduleToBeTested = require('../../../models/switch');
-				var eventCallback = eventEmitterOnSpy.args[1][1];
-				//call the function
-				eventCallback('abc123', 'def456');
 				//check that the save function has been called
 				expect(eventSaveSpy).to.have.been.calledOnce;
 			});

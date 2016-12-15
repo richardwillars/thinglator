@@ -41,11 +41,17 @@ var controller = {
 	},
 	runCommand: function(deviceId, command, body, drivers) {
 		var device;
+		var driverObj;
 		return models['device'].Model.findOne({
 				_id: deviceId
 			}).lean().exec()
 			.then(function(deviceObj) {
 				device = deviceObj;
+				if (!deviceObj) {
+					var e = new Error('device not found');
+					e.type = 'NotFound';
+					throw e;
+				}
 				if (typeof device.specs.capabilities[command] === "undefined") {
 					var e = new Error('capability not found');
 					e.type = 'BadRequest';
@@ -56,17 +62,15 @@ var controller = {
 					e.type = 'BadRequest';
 					throw e;
 				}
-				return drivers[deviceObj.driver];
+				driverObj = drivers[deviceObj.driver];
 			})
-			.then(function(driver) {
+			.then(function() {
 				var fnName = 'capability_' + command;
 
 				//if a schema is specified, confirm that the request body matches it
 				var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + command].options.requestSchema;
 				if (jsonSchema) {
 					var validated = jsonValidator.validate(body, jsonSchema);
-					console.log(validated);
-					console.log(typeof validated);
 					if (validated.errors.length !== 0) {
 						var e = new Error('the supplied json is invalid');
 						e.type = 'Validation';
@@ -74,7 +78,7 @@ var controller = {
 						throw e;
 					}
 				}
-				return driver[fnName](device, body);
+				return driverObj[fnName](device, body);
 			})
 			.then(function(commandResult) {
 				//confirm that the action response matches the schema
@@ -86,7 +90,12 @@ var controller = {
 					e.errors = validated.errors;
 					throw e;
 				}
-				return commandResult;
+
+				var ee = driverObj.getEventEmitter();
+				var eventName = models[device.type].Model.schema.paths['capabilities.' + command].options.eventName;
+				ee.emit(eventName, driverObj.getName(), device._id, commandResult);
+
+				return;
 			});
 	}
 };
