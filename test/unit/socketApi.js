@@ -716,10 +716,8 @@ describe('socketApi', () => {
 					//check that the controller method is called
 					expect(runCommandSpy).to.have.been.calledWith(deviceId, command, body, {});
 
-					//check that res.json is called with the response.
-					expect(callback).to.have.been.calledWith({
-						"foo": "bar"
-					});
+					//check that res.send is called
+					expect(callback).to.have.been.calledOnce;
 
 					done();
 				}, 0);

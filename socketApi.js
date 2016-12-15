@@ -121,8 +121,8 @@ var socketApi = function(httpServer, drivers) {
 		});
 
 		socket.on('runCommand', function(deviceId, command, body, cb) {
-			deviceCtrl.runCommand(deviceId, command, body, drivers).then(function(result) {
-				cb(result);
+			deviceCtrl.runCommand(deviceId, command, body, drivers).then(function() {
+				cb();
 			}).catch(function(err) {
 				cb(errorHandler(err));
 			});

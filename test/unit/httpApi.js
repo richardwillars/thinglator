@@ -824,7 +824,7 @@ describe('httpApi', () => {
 					}
 				};
 				var res = {
-					json: sinon.spy()
+					send: sinon.spy()
 				};
 				var next = function() {};
 
@@ -836,10 +836,8 @@ describe('httpApi', () => {
 					//check that the controller method is called
 					expect(runCommandSpy).to.have.been.calledWith(req.params.deviceId, req.params.command, req.body, {});
 
-					//check that res.json is called with the response.
-					expect(res.json).to.have.been.calledWith({
-						"foo": "bar"
-					});
+					//check that res.send is called with the response.
+					expect(res.send).to.have.been.calledOnce;
 
 					done();
 				}, 0);
