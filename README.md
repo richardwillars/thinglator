@@ -7,28 +7,26 @@ The really cool thing is that the Thinglator ecosystem is entirely open source a
 
 So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
 
-    POST http://localhost:3000/devices/:deviceId/setState
+    POST http://localhost:3000/devices/:deviceId/setHSBState
     {
       "colour": {
         "hue": 230,
         "saturation": 1,
         "brightness": 0.5
       },
-      "duration": 2,
-      "on": true
+      "duration": 2
     }
     
 .. and to make a Philips Hue lightbulb turn on over 2 seconds and go blue..
 
-    POST http://localhost:3000/devices/:deviceId/setState
+    POST http://localhost:3000/devices/:deviceId/setHSBState
     {
       "colour": {
         "hue": 230,
         "saturation": 1,
         "brightness": 0.5
       },
-      "duration": 2,
-      "on": true
+      "duration": 2
     }
     
     
