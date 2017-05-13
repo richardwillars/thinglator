@@ -1,9 +1,9 @@
 # Thinglator
-Thinglator (which stands for internet of things translator) makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Most home automation devices have their own communication protocols and standards, which make it a nightmare to integrate into home automation hubs (you have to build, maintain and support each and every device individually). Thinglator acts as a translator and **provides a consistent and standard way for accessing home automation devices**.
+Building a home automation platform? You're in the right place.
 
-The result is that home automation hubs no longer have to have knowledge of how to work with each device - they just need to know how to communicate with types of devices (speakers, lights, switches etc) on Thinglator and they'll have support for potentially unlimited devices!
+Thinglator (which is stands for internet of things translator) makes home automation simple and flexible. It provides a uniform interface for interacting with IOT and home automation devices. Rather than trying to integrate with different APIs and communication protocols for each IOT device out there, Thinglator will expose them as consistent and simple APIs. You don't need to know how a particular device works or it's API - you just need to integrate with the basic Thinglator APIs. This allows you to stop worrying about connecting to each device, you can concrentate on making a killer home automation user interface. The brilliant part is your product will automatically support hundreds of IOT things devices out of the box!
 
-The really cool thing is that the Thinglator ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Thinglator how to communicate with the device in question). Thinglator will then expose the device using REST APIs and websockets.
+The really cool thing is that the Thinglator ecosystem is entirely open source and based around npm. Developers, manufacturers (or anyone with knowledge of JavaScript) can add support for a particular device by creating a driver (this is an npm package that tells Thinglator how to communicate with a particular device). Thinglator will then expose the device to your home automation UI using REST APIs and websockets.
 
 So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
 
@@ -31,7 +31,7 @@ So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
     
     
 (no it's not a mistake - both requests are identical (apart from the device ID)!)
-Thinglator takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform REST API.
+Thinglator takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform API.
 
 
 ## Requirements
