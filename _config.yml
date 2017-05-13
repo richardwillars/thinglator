@@ -1,0 +1,8 @@
+title: Homebox
+description: Provides a uniform interface for interacting with IOT and home automation devices
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-tactile
+
+gems:
+  - jekyll-mentions
