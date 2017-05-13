@@ -1,7 +1,7 @@
-title: Homebox
+title: Thinglator
 description: Provides a uniform interface for interacting with IOT and home automation devices
 google_analytics: 
-show_downloads: true
+show_downloads: false
 theme: jekyll-theme-tactile
 
 gems:
