@@ -1,6 +1,5 @@
-
-
 const fs = require('fs');
+const chalk = require('chalk');
 const models = require('../models');
 
 class DriverSettings {
@@ -14,7 +13,10 @@ class DriverSettings {
             models.driver.Model.findOne({
                 _id: self.driverId
             }).exec().then((result) => {
-                resolve(result.settings);
+                if (result) {
+                    return resolve(result.settings);
+                }
+                return resolve({});
             }).catch((e) => {
                 reject(e);
             });
@@ -38,12 +40,9 @@ const utils = {
         return DriverSettings;
     },
 
-    doesDriverExist(driverId, type, drivers) {
+    doesDriverExist(driverId, drivers) {
         return new Promise((resolve) => {
             if (!drivers[driverId]) {
-                return resolve(false);
-            }
-            if (drivers[driverId].getType() !== type) {
                 return resolve(false);
             }
             return resolve(true);
@@ -59,20 +58,27 @@ const utils = {
                 const interfaces = {
                     http: {}
                 };
+                console.log(chalk.blue(`Loading driver: ${chalk.white(name)}`)); // eslint-disable-line no-console
 
-                driversArr[name] = new Driver(new DriverSettings(name), interfaces);
-                driversArr[name].setEventEmitter(models[driversArr[name].getType()].DeviceEventEmitter);
+                driversArr[name] = new Driver();
 
-                // get a list of devices for this particular driver
-                models.device.Model.find({
-                    type: driversArr[name].getType(),
-                    driver: name
-                }).exec((err, devices) => {
-                    if (err) {
-                        throw new Error(err);
-                    }
-                    driversArr[name].initDevices(devices);
-                });
+                driversArr[name].init(
+                  new DriverSettings(name),
+                  interfaces,
+                  models[driversArr[name].getType()].DeviceEventEmitter
+                ).then(() =>
+                  // get a list of devices for this particular driver
+                   models.device.Model.find({
+                       type: driversArr[name].getType(),
+                       driver: name
+                   }).exec((err, devices) => {
+                       if (err) {
+                           throw new Error(err);
+                       }
+                       driversArr[name].initDevices(devices);
+                   })).catch((err) => {
+                       console.error(err); // eslint-disable-line no-console
+                   });
             }
         });
         return driversArr;

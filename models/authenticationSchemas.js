@@ -74,8 +74,33 @@ const AuthenticationSchemas = {
                     type: 'string'
                 },
                 next: {
-                    type: 'string'
+                    type: 'object',
+                    properties: {
+                        http: {
+                            type: 'string'
+                        },
+                        socket: {
+                            type: 'object',
+                            properties: {
+                                event: {
+                                    type: 'string'
+                                },
+                                step: {
+                                    type: 'number'
+                                }
+                            },
+                            required: [
+                                'event',
+                                'step'
+                            ]
+                        }
+                    },
+                    required: [
+                        'http',
+                        'socket'
+                    ]
                 }
+
             },
             required: [
                 'type',
@@ -101,14 +126,19 @@ const AuthenticationSchemas = {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
             properties: {
+                success: {
+                    type: 'boolean'
+                },
+                message: {
+                    type: 'string'
+                }
 
             },
             required: [
-
+                'success'
             ]
         }
     }
-
 };
 
 

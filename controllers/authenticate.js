@@ -6,8 +6,8 @@ const driverUtils = require('../utils/driver');
 const jsonValidator = new Validator();
 
 const controller = {
-    getAuthenticationProcess(driverId, type, drivers) {
-        return driverUtils.doesDriverExist(driverId, type, drivers)
+    getAuthenticationProcess(driverId, drivers) {
+        return driverUtils.doesDriverExist(driverId, drivers)
       .then((foundDriver) => {
         // if found, load it
           if (foundDriver === false) {
@@ -21,23 +21,23 @@ const controller = {
         // call the getAuthenticationProcess method on the driver
            driver.getAuthenticationProcess())
       .then((authenticationProcess) => {
-          for (const i in authenticationProcess) {
-          // validate the json
-              if (typeof models.authenticationSchemas.requested[authenticationProcess[i].type] === 'undefined') {
-                  const e = new Error('validation schema not found');
+          authenticationProcess.forEach((authenticationStep) => {
+              // validate the json
+              if (typeof models.authenticationSchemas.requested[authenticationStep.type] === 'undefined') {
+                  const e = new Error(`${authenticationStep.type} validation schema not found`);
                   e.type = 'Driver';
                   throw e;
               }
-              const jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
+              const jsonSchema = models.authenticationSchemas.requested[authenticationStep.type];
 
-              const validated = jsonValidator.validate(authenticationProcess[i], jsonSchema);
+              const validated = jsonValidator.validate(authenticationStep, jsonSchema);
               if (validated.errors.length !== 0) {
-                  const e = new Error('the driver produced invalid json');
+                  const e = new Error('the driver produced invalid authentication steps');
                   e.type = 'Validation';
                   e.errors = validated.errors;
                   throw e;
               }
-          }
+          });
           return authenticationProcess;
       })
       .catch((e) => {
@@ -51,10 +51,10 @@ const controller = {
     },
 
 
-    authenticationStep(driverId, type, drivers, stepId, body) {
+    authenticationStep(driverId, drivers, stepId, body) {
         const steppy = stepId; // for some reason access stepId further down the promises sets it to undefined.
         let driver;
-        return driverUtils.doesDriverExist(driverId, type, drivers)
+        return driverUtils.doesDriverExist(driverId, drivers)
       .then((foundDriver) => {
         // if found, load it
           if (foundDriver === false) {

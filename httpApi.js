@@ -14,8 +14,8 @@ module.exports = (app, drivers) => {
         });
     });
 
-    app.get('/authenticate/:type/:driver', (req, res, next) => {
-        authenticateCtrl.getAuthenticationProcess(req.params.driver, req.params.type, drivers)
+    app.get('/authenticate/:driver', (req, res, next) => {
+        authenticateCtrl.getAuthenticationProcess(req.params.driver, drivers)
         .then((result) => {
             res.json(result);
         }).catch((err) => {
@@ -23,8 +23,8 @@ module.exports = (app, drivers) => {
         });
     });
 
-    app.post('/authenticate/:type/:driver/:stepId', jsonParser, (req, res, next) => {
-        authenticateCtrl.authenticationStep(req.params.driver, req.params.type, drivers, req.params.stepId, req.body)
+    app.post('/authenticate/:driver/:stepId', jsonParser, (req, res, next) => {
+        authenticateCtrl.authenticationStep(req.params.driver, drivers, req.params.stepId, req.body)
         .then((result) => {
             res.json(result);
         }).catch((err) => {
@@ -36,8 +36,8 @@ module.exports = (app, drivers) => {
   GET discover/:type/:driver
   -> GET discover/speaker/sonos
   */
-    app.get('/discover/:type/:driver', (req, res, next) => {
-        driverCtrl.discover(req.params.driver, req.params.type, drivers)
+    app.get('/discover/:driver', (req, res, next) => {
+        driverCtrl.discover(req.params.driver, drivers)
         .then((results) => {
             res.json(results);
         }).catch((err) => {
@@ -63,7 +63,7 @@ module.exports = (app, drivers) => {
   GET devices/:type
   -> GET devices/speaker
   */
-    app.get('/devices/:type', (req, res, next) => {
+    app.get('/devices/type/:type', (req, res, next) => {
         deviceCtrl.getDevicesByType(req.params.type)
         .then((results) => {
             res.json(results);
@@ -76,7 +76,7 @@ module.exports = (app, drivers) => {
   GET devices/:type/:driver
   -> GET devices/speaker/sonos
   */
-    app.get('/devices/:type/:driver', (req, res, next) => {
+    app.get('/devices/driver/:driver', (req, res, next) => {
         deviceCtrl.getDevicesByTypeAndDriver(req.params.type, req.params.driver)
         .then((results) => {
             res.json(results);
@@ -137,14 +137,13 @@ module.exports = (app, drivers) => {
         });
     });
 
-  // Error handling middleware
-    app.use((err, req, res) => {
+    // Error handling middleware
+    app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
         switch (err.type) {
         case 'Driver':
             console.error(err); // eslint-disable-line no-console
             res.status(500);
             return res.json({
-                code: 500,
                 type: err.type,
                 driver: err.driver,
                 message: err.message
@@ -152,21 +151,18 @@ module.exports = (app, drivers) => {
         case 'BadRequest':
             res.status(400);
             return res.json({
-                code: 400,
                 type: err.type,
                 message: err.message
             });
         case 'NotFound':
             res.status(404);
             return res.json({
-                code: 404,
                 type: err.type,
                 message: err.message
             });
         case 'Validation':
             res.status(400);
             return res.json({
-                code: 400,
                 type: err.type,
                 message: err.message,
                 errors: err.errors
@@ -181,7 +177,6 @@ module.exports = (app, drivers) => {
         case 'Authentication':
             res.status(401);
             return res.json({
-                code: 401,
                 type: err.type,
                 message: err.message
             });
@@ -189,9 +184,7 @@ module.exports = (app, drivers) => {
             console.error(err); // eslint-disable-line no-console
             res.status(500);
             return res.json({
-                type: 'Internal',
-                code: 500,
-                stack: err.stack
+                type: 'Internal'
             });
         }
     });

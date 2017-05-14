@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
-
 const EventModel = require('./event').Model;
 
 // colour must be specifed in the following format: "hue:120 saturation:1.0 brightness:0.5"

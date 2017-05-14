@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
-
 const EventModel = require('./event').Model;
 
 const SwitchSchema = new mongoose.Schema({

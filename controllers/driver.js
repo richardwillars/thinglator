@@ -20,30 +20,32 @@ const controller = {
         }]).exec()
         .then((results) => {
             devicesGroupedByDrivers = results;
+
             const driversWithStats = [];
-            for (const i in drivers) {
+            Object.keys(drivers).forEach((driverId) => {
                 const obj = {
-                    _id: drivers[i].getName(),
-                    type: drivers[i].getType(),
+                    _id: drivers[driverId].getName(),
+                    type: drivers[driverId].getType(),
                     deviceCount: 0
                 };
                 const foundStats = _.findWhere(devicesGroupedByDrivers, {
-                    _id: drivers[i].getName()
+                    _id: drivers[driverId].getName()
                 });
                 if (foundStats) {
                     obj.deviceCount = foundStats.deviceCount;
                 }
                 driversWithStats.push(obj);
-            }
+            });
             return driversWithStats;
         });
     },
-    discover(driverId, type, drivers) {
+    discover(driverId, drivers) {
       // check that the driver exists and that it matches the specified type
         let foundDevices = [];
         let existingDevices = [];
         let finalDevices = [];
-        return driverUtils.doesDriverExist(driverId, type, drivers)
+        let type = '';
+        return driverUtils.doesDriverExist(driverId, drivers)
         .then((foundDriver) => {
           // if found, load it
             if (foundDriver === false) {
@@ -53,7 +55,10 @@ const controller = {
             }
             return drivers[driverId];
         })
-        .then(driver => driver.discover()) // call the discover method on the driver and wait for it to return devices
+        .then((driver) => {
+            type = driver.getType();
+            return driver.discover();
+        }) // call the discover method on the driver and wait for it to return devices
         .then((devices) => {
             foundDevices = devices;
             // get a list of existing devices from the db
@@ -79,9 +84,9 @@ const controller = {
             }));
             // if they do exist in the discovery list, update them
             const promises = [];
-            for (const i in toUpdate) {
-                promises.push(deviceUtils.updateDevice(toUpdate[i].device, toUpdate[i].specs));
-            }
+            toUpdate.forEach((r) => {
+                promises.push(deviceUtils.updateDevice(r.device, r.specs));
+            });
             return Promise.all(promises);
         })
         .then(() => {
@@ -91,7 +96,7 @@ const controller = {
             );
             // if they don't exist in the discovery list, delete them
             if (noLongerExists.length === 0) {
-                return;
+                return false;
             }
             const noLongerExistsIds = _.pluck(noLongerExists, '_id');
             return models.device.Model.remove({
@@ -107,9 +112,9 @@ const controller = {
             );
             // if there are any other devices in discovery list, create them
             const promises = [];
-            for (const i in newDevices) {
-                promises.push(deviceUtils.createDevice(type, driverId, newDevices[i]));
-            }
+            newDevices.forEach((r) => {
+                promises.push(deviceUtils.createDevice(type, driverId, r));
+            });
             return Promise.all(promises);
         })
         .then(() => models.device.Model.find({ // get the entire list of devices from the db

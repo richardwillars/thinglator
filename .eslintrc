@@ -9,6 +9,7 @@
         "indent": [2, 4],
         "semi": 2,
         "no-restricted-syntax": 2,
+        "no-underscore-dangle": ["error", { "allow": ["_id"] }],
         "newline-per-chained-call": 0,
         "comma-dangle": ['error','never'],
         "max-len": ['error',120]
