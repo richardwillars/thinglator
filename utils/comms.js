@@ -1,4 +1,5 @@
 const fs = require('fs');
+const chalk = require('chalk');
 
 const utils = {
     loadInterfaces() {
@@ -25,6 +26,7 @@ const utils = {
             const commsId = file.slice(0, -3);
             // if there's an interface for this particular communication protocol, initialise it
             if (availableInterfaces[commsId]) {
+                console.log(chalk.blue(`Connecting to comms: ${chalk.white(`${commsId} using ${availableInterfaces[commsId]} interface`)}`));
                 const CommsClass = require(`../comms/${file}`);
                 if (typeof interfaceConfig[commsId] === 'undefined') {
                     newInterfaceConfig[commsId] = {};

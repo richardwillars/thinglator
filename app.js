@@ -32,7 +32,6 @@ const comms = commsUtils.loadComms(availableInterfaces, interfaceConfig);
 // loop through the comms and connect them
 const commsConnectPromises = [];
 Object.keys(comms).forEach((i) => {
-    console.log(chalk.blue(`Connecting to comms: ${chalk.white(i)}`));
     commsConnectPromises.push(comms[i].connect());
 });
 
