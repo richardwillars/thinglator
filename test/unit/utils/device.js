@@ -1,247 +1,246 @@
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
+const chai = require('chai');
+const expect = chai.expect;
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
-var mockery = require('mockery');
+const mockery = require('mockery');
 
 describe('utils/device', () => {
-	var moduleToBeTested, app, drivers;
-	var modelsMock;
+    let moduleToBeTested,
+        app,
+        drivers;
+    let modelsMock;
 
 
-	afterEach(function(done) {
-		mockery.deregisterMock('../models');
-		mockery.disable();
-		done();
-	});
+    afterEach((done) => {
+        mockery.deregisterMock('../models');
+        mockery.disable();
+        done();
+    });
 
-	describe('createDevice', () => {
+    describe('createDevice', () => {
+        it('should create a new device', (done) => {
+            modelsMock = {
+                light: {
+                    Model(deviceSpecs) {
+                        deviceSpecs.validate = function () {
+                            return Promise.resolve();
+                        };
+                        return deviceSpecs;
+                    }
+                },
 
-		it('should create a new device', (done) => {
-			modelsMock = {
-				light: {
-					Model: function(deviceSpecs) {
-						deviceSpecs.validate = function() {
-							return Promise.resolve();
-						};
-						return deviceSpecs;
-					}
-				},
+                device: {
+                    Model(props) {
+                        return {
+                            save() {
+                                return Promise.resolve(props);
+                            }
+                        };
+                    }
+                }
+            };
 
-				device: {
-					Model: function(props) {
-						return {
-							save: function() {
-								return Promise.resolve(props);
-							}
-						}
-					}
-				}
-			};
+            mockery.enable({
+                useCleanCache: true,
+                warnOnUnregistered: false
+            });
 
-			mockery.enable({
-				useCleanCache: true,
-				warnOnUnregistered: false
-			});
+            mockery.registerMock('../models', modelsMock);
 
-			mockery.registerMock('../models', modelsMock);
-
-			//call the module to be tested
-			moduleToBeTested = require('../../../utils/device');
-
-
-			var type = 'light';
-			var driver = 'foo';
-			var deviceSpecs = {
-				foo: 'bar',
-				bee: 'boo'
-			};
-			var promise = moduleToBeTested.createDevice(type, driver, deviceSpecs);
-			expect(promise).to.be.an.object;
-
-			promise.then(function(result) {
-				expect(result._id).to.equal('8dcc4387d8e0de6cf7ce74a278ce24c0');
-				expect(result.type).to.equal('light');
-				expect(result.driver).to.equal('foo');
-				expect(result.specs.foo).to.equal('bar');
-				expect(result.specs.bee).to.equal('boo');
-				done();
-			});
-
-		});
-
-		it('should have error validation', (done) => {
-			modelsMock = {
-				light: {
-					Model: function(deviceSpecs) {
-						deviceSpecs.validate = function() {
-							return Promise.resolve('errrrooorrr');
-						};
-						return deviceSpecs;
-					}
-				},
-
-				device: {
-					Model: function(props) {
-						return {
-							save: function() {
-								return Promise.resolve(props);
-							}
-						}
-					}
-				}
-			};
-
-			mockery.enable({
-				useCleanCache: true,
-				warnOnUnregistered: false
-			});
-
-			mockery.registerMock('../models', modelsMock);
-
-			//call the module to be tested
-			moduleToBeTested = require('../../../utils/device');
+			// call the module to be tested
+            moduleToBeTested = require('../../../utils/device');
 
 
-			var type = 'light';
-			var driver = 'foo';
-			var deviceSpecs = {
-				foo: 'bar',
-				bee: 'boo'
-			};
-			var promise = moduleToBeTested.createDevice(type, driver, deviceSpecs);
-			expect(promise).to.be.an.object;
+            const type = 'light';
+            const driver = 'foo';
+            const deviceSpecs = {
+                foo: 'bar',
+                bee: 'boo'
+            };
+            const promise = moduleToBeTested.createDevice(type, driver, deviceSpecs);
+            expect(promise).to.be.an.object;
 
-			promise.catch(function(err) {
-				expect(err.message).to.equal('errrrooorrr');
-				expect(err.type).to.equal('Validation');
-				done();
-			});
-		});
-	});
+            promise.then((result) => {
+                expect(result._id).to.equal('8dcc4387d8e0de6cf7ce74a278ce24c0');
+                expect(result.type).to.equal('light');
+                expect(result.driver).to.equal('foo');
+                expect(result.specs.foo).to.equal('bar');
+                expect(result.specs.bee).to.equal('boo');
+                done();
+            });
+        });
 
-	describe('updateDevice', () => {
-		it('should update an existing device', (done) => {
-			modelsMock = {
-				light: {
-					Model: function(deviceSpecs) {
-						deviceSpecs.validate = function() {
-							return Promise.resolve();
-						};
-						return deviceSpecs;
-					}
-				},
+        it('should have error validation', (done) => {
+            modelsMock = {
+                light: {
+                    Model(deviceSpecs) {
+                        deviceSpecs.validate = function () {
+                            return Promise.resolve('errrrooorrr');
+                        };
+                        return deviceSpecs;
+                    }
+                },
 
-				device: {
-					Model: function(props) {
-						return {
-							save: function() {
-								return Promise.resolve(props);
-							}
-						}
-					}
-				}
-			};
+                device: {
+                    Model(props) {
+                        return {
+                            save() {
+                                return Promise.resolve(props);
+                            }
+                        };
+                    }
+                }
+            };
 
-			mockery.enable({
-				useCleanCache: true,
-				warnOnUnregistered: false
-			});
+            mockery.enable({
+                useCleanCache: true,
+                warnOnUnregistered: false
+            });
 
-			mockery.registerMock('../models', modelsMock);
+            mockery.registerMock('../models', modelsMock);
 
-			//call the module to be tested
-			moduleToBeTested = require('../../../utils/device');
+			// call the module to be tested
+            moduleToBeTested = require('../../../utils/device');
 
-			var device = {
-				type: 'light',
-				driver: 'foo',
-				specs: {
-					foo: 'bar',
-					bee: 'boo'
-				},
-				save: function() {
-					return Promise.resolve(this);
-				}
-			};
 
-			var newSpecs = {
-				foo: 'bar',
-				bee: 'boo2'
-			};
+            const type = 'light';
+            const driver = 'foo';
+            const deviceSpecs = {
+                foo: 'bar',
+                bee: 'boo'
+            };
+            const promise = moduleToBeTested.createDevice(type, driver, deviceSpecs);
+            expect(promise).to.be.an.object;
 
-			var promise = moduleToBeTested.updateDevice(device, newSpecs);
-			expect(promise).to.be.an.object;
+            promise.catch((err) => {
+                expect(err.message).to.equal('errrrooorrr');
+                expect(err.type).to.equal('Validation');
+                done();
+            });
+        });
+    });
 
-			promise.then(function(result) {
-				expect(result.type).to.equal('light');
-				expect(result.driver).to.equal('foo');
-				expect(result.specs.foo).to.equal('bar');
-				expect(result.specs.bee).to.equal('boo2');
-				done();
-			});
-		});
+    describe('updateDevice', () => {
+        it('should update an existing device', (done) => {
+            modelsMock = {
+                light: {
+                    Model(deviceSpecs) {
+                        deviceSpecs.validate = function () {
+                            return Promise.resolve();
+                        };
+                        return deviceSpecs;
+                    }
+                },
 
-		it('should have error validation', (done) => {
-			modelsMock = null;
-			modelsMock = {
-				light: {
-					Model: function(deviceSpecs) {
-						deviceSpecs.validate = function() {
-							return Promise.resolve('errrrooorrr');
-						};
-						return deviceSpecs;
-					}
-				},
+                device: {
+                    Model(props) {
+                        return {
+                            save() {
+                                return Promise.resolve(props);
+                            }
+                        };
+                    }
+                }
+            };
 
-				device: {
-					Model: function(props) {
-						return {
-							save: function() {
-								return Promise.resolve(props);
-							}
-						}
-					}
-				}
-			};
+            mockery.enable({
+                useCleanCache: true,
+                warnOnUnregistered: false
+            });
 
-			mockery.enable({
-				useCleanCache: true,
-				warnOnUnregistered: false
-			});
+            mockery.registerMock('../models', modelsMock);
 
-			mockery.registerMock('../models', modelsMock);
+			// call the module to be tested
+            moduleToBeTested = require('../../../utils/device');
 
-			//call the module to be tested
-			moduleToBeTested = require('../../../utils/device');
+            const device = {
+                type: 'light',
+                driver: 'foo',
+                specs: {
+                    foo: 'bar',
+                    bee: 'boo'
+                },
+                save() {
+                    return Promise.resolve(this);
+                }
+            };
 
-			var device = {
-				type: 'light',
-				driver: 'foo',
-				specs: {
-					foo: 'bar',
-					bee: 'boo'
-				},
-				save: function() {
-					return Promise.resolve(this);
-				}
-			};
+            const newSpecs = {
+                foo: 'bar',
+                bee: 'boo2'
+            };
 
-			var newSpecs = {
-				foo: 'bar',
-				bee: 'boo2'
-			};
+            const promise = moduleToBeTested.updateDevice(device, newSpecs);
+            expect(promise).to.be.an.object;
 
-			var promise = moduleToBeTested.updateDevice(device, newSpecs);
-			expect(promise).to.be.an.object;
+            promise.then((result) => {
+                expect(result.type).to.equal('light');
+                expect(result.driver).to.equal('foo');
+                expect(result.specs.foo).to.equal('bar');
+                expect(result.specs.bee).to.equal('boo2');
+                done();
+            });
+        });
 
-			promise.catch(function(err) {
-				expect(err.message).to.equal('errrrooorrr');
-				expect(err.type).to.equal('Validation');
-				done();
-			});
-		});
-	});
+        it('should have error validation', (done) => {
+            modelsMock = null;
+            modelsMock = {
+                light: {
+                    Model(deviceSpecs) {
+                        deviceSpecs.validate = function () {
+                            return Promise.resolve('errrrooorrr');
+                        };
+                        return deviceSpecs;
+                    }
+                },
 
+                device: {
+                    Model(props) {
+                        return {
+                            save() {
+                                return Promise.resolve(props);
+                            }
+                        };
+                    }
+                }
+            };
+
+            mockery.enable({
+                useCleanCache: true,
+                warnOnUnregistered: false
+            });
+
+            mockery.registerMock('../models', modelsMock);
+
+			// call the module to be tested
+            moduleToBeTested = require('../../../utils/device');
+
+            const device = {
+                type: 'light',
+                driver: 'foo',
+                specs: {
+                    foo: 'bar',
+                    bee: 'boo'
+                },
+                save() {
+                    return Promise.resolve(this);
+                }
+            };
+
+            const newSpecs = {
+                foo: 'bar',
+                bee: 'boo2'
+            };
+
+            const promise = moduleToBeTested.updateDevice(device, newSpecs);
+            expect(promise).to.be.an.object;
+
+            promise.catch((err) => {
+                expect(err.message).to.equal('errrrooorrr');
+                expect(err.type).to.equal('Validation');
+                done();
+            });
+        });
+    });
 });

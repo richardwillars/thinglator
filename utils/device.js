@@ -4,6 +4,7 @@ var models = require('../models');
 var utils = {
   createDevice: function(type, driver, deviceSpecs) {
     var deviceSpecsObj = new models[type].Model(deviceSpecs);
+    console.log(deviceSpecsObj);
 
     return deviceSpecsObj.validate()
       .then(function(validationFailed) {

@@ -1,84 +1,83 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var EventEmitter2 = require('eventemitter2').EventEmitter2;
-var EventModel = require('./event').Model;
+const mongoose = require('mongoose');
+const EventEmitter2 = require('eventemitter2').EventEmitter2;
 
-var SwitchSchema = new mongoose.Schema({
-	_id: false,
-	name: {
-		type: String,
-		required: true
-	},
-	deviceId: {
-		type: String,
-		required: true
-	},
-	additionalInfo: {
-		type: Object,
-		required: false,
-		default: {}
-	},
-	capabilities: {
+const EventModel = require('./event').Model;
 
-		on: {
-			type: Boolean,
-			default: false,
-			eventName: 'on',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"on"
-				]
-			}
-		},
+const SwitchSchema = new mongoose.Schema({
+    _id: false,
+    name: {
+        type: String,
+        required: true
+    },
+    deviceId: {
+        type: String,
+        required: true
+    },
+    additionalInfo: {
+        type: Object,
+        required: false,
+        default: {}
+    },
+    capabilities: {
 
-		off: {
-			type: Boolean,
-			default: false,
-			eventName: 'on',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"on"
-				]
-			}
-		}
-	}
+        on: {
+            type: Boolean,
+            default: false,
+            eventName: 'on',
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    on: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'on'
+                ]
+            }
+        },
+
+        off: {
+            type: Boolean,
+            default: false,
+            eventName: 'on',
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    on: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'on'
+                ]
+            }
+        }
+    }
 });
 
 
-var Switch = mongoose.model('Switch', SwitchSchema);
-var deviceEventEmitter = new EventEmitter2();
+const Switch = mongoose.model('Switch', SwitchSchema);
+const deviceEventEmitter = new EventEmitter2();
 
-deviceEventEmitter.on('on', function(driverId, deviceId, value) {
-	console.log('switch turned', driverId, deviceId);
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'switch',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'on',
-		value: value.on
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('on', (driverId, deviceId, value) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'switch',
+        driverId,
+        deviceId,
+        event: 'on',
+        value: value.on
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
 
 module.exports = {
-	Model: Switch,
-	DeviceEventEmitter: deviceEventEmitter
+    Model: Switch,
+    DeviceEventEmitter: deviceEventEmitter
 };
