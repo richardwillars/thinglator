@@ -1,41 +1,40 @@
-var md5 = require('md5');
-var models = require('../models');
+const md5 = require('md5');
+const models = require('../models');
 
-var utils = {
-  createDevice: function(type, driver, deviceSpecs) {
-    var deviceSpecsObj = new models[type].Model(deviceSpecs);
-    console.log(deviceSpecsObj);
-
-    return deviceSpecsObj.validate()
-      .then(function(validationFailed) {
-        if (validationFailed) {
-          var e = new Error(validationFailed);
-          e.type = 'Validation';
-          throw e;
-        }
-        var deviceObj = new models['device'].Model({
-          _id: md5(type + driver + deviceSpecsObj.deviceId),
-          type: type,
-          driver: driver,
-          specs: deviceSpecsObj
-        });
-        return deviceObj.save();
+const utils = {
+    createDevice(type, driver, deviceSpecs) {
+        const deviceSpecsObj = new models[type].Model(deviceSpecs);
+        return deviceSpecsObj.validate()
+      .then((validationFailed) => {
+          if (validationFailed) {
+              const e = new Error(validationFailed);
+              e.type = 'Validation';
+              throw e;
+          }
+          const deviceObj = new models.device.Model({
+              _id: md5(type + driver + deviceSpecsObj.deviceId),
+              type,
+              driver,
+              specs: deviceSpecsObj
+          });
+          return deviceObj.save();
       });
-  },
+    },
 
-  updateDevice: function(device, specs) {
-    var deviceSpecsObj = new models[device.type].Model(specs);
-    return deviceSpecsObj.validate()
-      .then(function(validationFailed) {
-        if (validationFailed) {
-          var e = new Error(validationFailed);
-          e.type = 'Validation';
-          throw e;
-        }
-        device.specs = specs;
-        return device.save();
+    updateDevice(device, specs) {
+        const newDevice = device;
+        const deviceSpecsObj = new models[device.type].Model(specs);
+        return deviceSpecsObj.validate()
+      .then((validationFailed) => {
+          if (validationFailed) {
+              const e = new Error(validationFailed);
+              e.type = 'Validation';
+              throw e;
+          }
+          newDevice.specs = specs;
+          return newDevice.save();
       });
-  }
+    }
 };
 
 module.exports = utils;
