@@ -43,7 +43,7 @@
     "test:debug": "mocha -- test --recursive"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=6.10.0"
   },
   "main": "app.js"
 }
