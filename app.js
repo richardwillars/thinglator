@@ -17,18 +17,12 @@ const app = express();
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/thinglator');
 
-const interfaceConfig = {
-    zwave: {
-        hardwareLocation: '/dev/cu.usbmodem1411',
-        debug: true
-    }
-};
 
 // get a list of all potential interfaces (one for each communication protocol)
 const availableInterfaces = commsUtils.loadInterfaces();
 
 // load the comms using the available interfaces and their configs
-const comms = commsUtils.loadComms(availableInterfaces, interfaceConfig);
+const comms = commsUtils.loadComms(availableInterfaces, config.get('interfaces'));
 // loop through the comms and connect them
 const commsConnectPromises = [];
 Object.keys(comms).forEach((i) => {
@@ -39,7 +33,7 @@ Promise.all(commsConnectPromises).then(() => {
     console.log(chalk.blue('All comms connected!'));
 
     // Get the drivers and initialise them
-    const drivers = driverUtils.loadDrivers();
+    const drivers = driverUtils.loadDrivers(comms);
     console.log(chalk.blue('All drivers connected!'));
     // setup the HTTP API
     httpApi(app, drivers);
@@ -53,7 +47,7 @@ Promise.all(commsConnectPromises).then(() => {
     socketApi.socketApi(httpServer, drivers);
     console.log(chalk.blue(`WebSocket server listening on port ${config.get('port')}`));
 }).catch((err) => {
-    console.log(chalk.red(err));
+    console.log(err);
     process.emit('SIGINT');
 });
 
@@ -67,7 +61,7 @@ process.on('SIGINT', () => {
     Promise.all(commsDisconnectPromises).then(() => {
         console.log(chalk.blue('All comms disconnected!'));
     }).catch((err) => {
-        console.log(chalk.red(err));
+        console.log(err);
     }).then(() => {
         console.log(chalk.yellow('Stopping Thinglator'));
         process.exit();

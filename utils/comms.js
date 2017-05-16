@@ -10,7 +10,6 @@ const utils = {
             if (file.match(/thinglator-interface-/) !== null) {
                 const name = file.replace('thinglator-interface-', '');
                 const interfaceObj = require(`thinglator-interface-${name}`);
-
                 if (!interfacesArr[interfaceObj.type]) {
                     interfacesArr[interfaceObj.type] = name;
                 }
@@ -28,6 +27,7 @@ const utils = {
             if (availableInterfaces[commsId]) {
                 console.log(chalk.blue(`Connecting to comms: ${chalk.white(`${commsId} using ${availableInterfaces[commsId]} interface`)}`));
                 const CommsClass = require(`../comms/${file}`);
+
                 if (typeof interfaceConfig[commsId] === 'undefined') {
                     newInterfaceConfig[commsId] = {};
                 }

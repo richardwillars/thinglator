@@ -48,23 +48,19 @@ const utils = {
             return resolve(true);
         });
     },
-    loadDrivers() {
+    loadDrivers(interfaces) {
         const driversArr = [];
         fs.readdirSync('./node_modules').forEach((file) => {
             if (file.match(/thinglator-driver-/) !== null) {
                 const name = file.replace('thinglator-driver-', '');
                 const Driver = require(`thinglator-driver-${name}`);
 
-                const interfaces = {
-                    http: {}
-                };
                 console.log(chalk.blue(`Loading driver: ${chalk.white(name)}`)); // eslint-disable-line no-console
 
                 driversArr[name] = new Driver();
-
                 driversArr[name].init(
                   new DriverSettings(name),
-                  interfaces,
+                  interfaces[driversArr[name].getInterface()],
                   models[driversArr[name].getType()].DeviceEventEmitter
                 ).then(() =>
                   // get a list of devices for this particular driver

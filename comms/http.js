@@ -3,6 +3,7 @@ const commsClass = class HttpComms {
     constructor(interfaceId, config) {
         this.interfaceId = interfaceId;
         this.config = config;
+        return this;
     }
 
     getType() {
