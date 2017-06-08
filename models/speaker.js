@@ -17,11 +17,184 @@ const SpeakerSchema = new mongoose.Schema({
         required: false,
         default: {}
     },
-    capabilities: {
+    commands: {
         getCurrentTrack: {
+            type: Boolean
+        },
+
+        flushQueue: {
+            type: Boolean
+        },
+
+        getLEDState: {
+            type: Boolean
+        },
+
+        getMuted: {
+            type: Boolean
+        },
+
+        getVolume: {
+            type: Boolean
+        },
+
+        next: {
+            type: Boolean
+        },
+
+        pause: {
+            type: Boolean
+        },
+
+        play: {
+            type: Boolean
+        },
+
+        previous: {
+            type: Boolean
+        },
+
+        addToQueueBottom: {
             type: Boolean,
-            default: false,
-            eventName: 'currentTrack',
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    uri: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'uri'
+                ]
+            }
+        },
+
+        addToQueueNext: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    uri: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'uri'
+                ]
+            }
+        },
+
+        seek: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    position: {
+                        type: 'integer',
+                        minimum: 0
+                    }
+                },
+                required: [
+                    'position'
+                ]
+            }
+        },
+
+        setLEDState: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    on: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'on'
+                ]
+            }
+        },
+
+        setMuted: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    muted: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'muted'
+                ]
+            }
+        },
+
+        setName: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    name: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'name'
+                ]
+            }
+        },
+
+        setPlayMode: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    playMode: {
+                        type: 'string',
+                        enum: [
+                            'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
+                        ]
+                    }
+                },
+                required: [
+                    'playMode'
+                ]
+            }
+        },
+
+        setVolume: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    volume: {
+                        type: 'integer',
+                        minimum: 0,
+                        maximum: 100
+                    }
+                },
+                required: [
+                    'volume'
+                ]
+            }
+        },
+
+        stop: {
+            type: Boolean
+        }
+    },
+    events: {
+        currentTrack: {
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -51,11 +224,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        flushQueue: {
+        queueFlushed: {
             type: Boolean,
-            default: false,
-            eventName: 'queueFlushed',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -69,11 +239,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        getLEDState: {
+        ledState: {
             type: Boolean,
-            default: false,
-            eventName: 'LEDState',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -87,11 +254,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        getMuted: {
+        muted: {
             type: Boolean,
-            default: false,
-            eventName: 'muted',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -105,11 +269,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        getVolume: {
+        volume: {
             type: Boolean,
-            default: false,
-            eventName: 'volume',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -123,11 +284,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
         next: {
             type: Boolean,
-            default: false,
-            eventName: 'next',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -141,11 +299,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        pause: {
+        playingState: {
             type: Boolean,
-            default: false,
-            eventName: 'playingState',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -165,35 +320,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        play: {
-            type: Boolean,
-            default: false,
-            eventName: 'playingState',
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    paused: {
-                        paused: 'boolean'
-                    },
-                    playing: {
-                        paused: 'boolean'
-                    },
-                    stopped: {
-                        paused: 'boolean'
-                    }
-                },
-                required: [
-                    'paused', 'playing', 'stopped'
-                ]
-            }
-        },
-
         previous: {
             type: Boolean,
-            default: false,
-            eventName: 'previous',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -207,23 +335,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        addToQueueBottom: {
+        addedToQueueBottom: {
             type: Boolean,
-            default: false,
-            eventName: 'addedToQueueBottom',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    uri: {
-                        type: 'string'
-                    }
-                },
-                required: [
-                    'uri'
-                ]
-            },
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -237,23 +350,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        addToQueueNext: {
+        addedToQueueNext: {
             type: Boolean,
-            default: false,
-            eventName: 'addedToQueueNext',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    uri: {
-                        type: 'string'
-                    }
-                },
-                required: [
-                    'uri'
-                ]
-            },
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -267,24 +365,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
         seek: {
             type: Boolean,
-            default: false,
-            eventName: 'seek',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    position: {
-                        type: 'integer',
-                        minimum: 0
-                    }
-                },
-                required: [
-                    'position'
-                ]
-            },
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -299,83 +381,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        setLEDState: {
+        name: {
             type: Boolean,
-            default: false,
-            eventName: 'LEDState',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'on'
-                ]
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'on'
-                ]
-            }
-        },
-
-        setMuted: {
-            type: Boolean,
-            default: false,
-            eventName: 'muted',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    muted: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'muted'
-                ]
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    muted: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'muted'
-                ]
-            }
-        },
-
-        setName: {
-            type: Boolean,
-            default: false,
-            eventName: 'name',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    name: {
-                        type: 'string'
-                    }
-                },
-                required: [
-                    'name'
-                ]
-            },
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -389,26 +396,8 @@ const SpeakerSchema = new mongoose.Schema({
                 ]
             }
         },
-
-        setPlayMode: {
+        playMode: {
             type: Boolean,
-            default: false,
-            eventName: 'playMode',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    playMode: {
-                        type: 'string',
-                        enum: [
-                            'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
-                        ]
-                    }
-                },
-                required: [
-                    'playMode'
-                ]
-            },
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -422,64 +411,6 @@ const SpeakerSchema = new mongoose.Schema({
                 },
                 required: [
                     'playMode'
-                ]
-            }
-        },
-
-        setVolume: {
-            type: Boolean,
-            default: false,
-            eventName: 'volume',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    volume: {
-                        type: 'integer',
-                        minimum: 0,
-                        maximum: 100
-                    }
-                },
-                required: [
-                    'volume'
-                ]
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    volume: {
-                        type: 'integer',
-                        minimum: 0,
-                        maximum: 100
-                    }
-                },
-                required: [
-                    'volume'
-                ]
-            }
-        },
-
-        stop: {
-            type: Boolean,
-            default: false,
-            eventName: 'playingState',
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    paused: {
-                        paused: 'boolean'
-                    },
-                    playing: {
-                        paused: 'boolean'
-                    },
-                    stopped: {
-                        paused: 'boolean'
-                    }
-                },
-                required: [
-                    'paused', 'playing', 'stopped'
                 ]
             }
         }

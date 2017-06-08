@@ -6,7 +6,7 @@ describe('utils/event', () => {
 
     it('getEventEmitter should return an event emitter', () => {
 		// call the module to be tested
-        moduleToBeTested = require('../../../utils/event');
+        moduleToBeTested = require('../../utils/event');
 
         expect(moduleToBeTested.getEventEmitter).to.be.a.function;
         const ee = moduleToBeTested.getEventEmitter();
@@ -18,7 +18,7 @@ describe('utils/event', () => {
 
     it('newEventCreated should fire an error', (done) => {
 		// call the module to be tested
-        moduleToBeTested = require('../../../utils/event');
+        moduleToBeTested = require('../../utils/event');
 
         const ee = moduleToBeTested.getEventEmitter();
 

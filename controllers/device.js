@@ -47,21 +47,21 @@ const controller = {
                 e.type = 'NotFound';
                 throw e;
             }
-            if (typeof device.specs.capabilities[command] === 'undefined') {
-                const e = new Error('capability not found');
+            if (typeof device.specs.commands[command] === 'undefined') {
+                const e = new Error('command not found');
                 e.type = 'BadRequest';
                 throw e;
             }
-            if (device.specs.capabilities[command] === false) {
-                const e = new Error('capability not supported');
+            if (device.specs.commands[command] === false) {
+                const e = new Error('command not supported');
                 e.type = 'BadRequest';
                 throw e;
             }
             driverObj = drivers[deviceObj.driver];
         }).then(() => {
-            const fnName = `capability_${command}`;
+            const fnName = `command_${command}`;
             // if a schema is specified, confirm that the request body matches it
-            const jsonSchema = models[device.type].Model.schema.paths[`capabilities.${command}`].options.requestSchema;
+            const jsonSchema = models[device.type].Model.schema.paths[`commands.${command}`].options.requestSchema;
             if (jsonSchema) {
                 const validated = jsonValidator.validate(body, jsonSchema);
                 if (validated.errors.length !== 0) {
@@ -72,21 +72,6 @@ const controller = {
                 }
             }
             return driverObj[fnName](device, body);
-        })
-        .then((commandResult) => {
-        // confirm that the action response matches the schema
-            const jsonSchema = models[device.type].Model.schema.paths[`capabilities.${command}`].options.responseSchema;
-            const validated = jsonValidator.validate(commandResult, jsonSchema);
-            if (validated.errors.length !== 0) {
-                const e = new Error('the driver produced invalid json');
-                e.type = 'Validation';
-                e.errors = validated.errors;
-                throw e;
-            }
-
-            const ee = driverObj.getEventEmitter();
-            const eventName = models[device.type].Model.schema.paths[`capabilities.${command}`].options.eventName;
-            ee.emit(eventName, driverObj.getName(), device._id, commandResult);
         });
     }
 };

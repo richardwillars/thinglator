@@ -143,6 +143,14 @@ const socketApi = (httpServer, drivers) => {
                 cb(errorHandler(err));
             });
         });
+
+        socket.on('getLatestCommandEvents', (cb) => {
+            eventCtrl.getLatestCommandEvents().then((results) => {
+                cb(results);
+            }).catch((err) => {
+                cb(errorHandler(err));
+            });
+        });
     });
     return io;
 };

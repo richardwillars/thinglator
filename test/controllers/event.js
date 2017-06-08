@@ -52,7 +52,7 @@ describe('controllers/event', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/event');
+            moduleToBeTested = require('../../controllers/event');
             expect(moduleToBeTested.getEventsByType).to.be.a.function;
             return moduleToBeTested.getEventsByType('event')
 				.then((result) => {
@@ -131,7 +131,7 @@ describe('controllers/event', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/event');
+            moduleToBeTested = require('../../controllers/event');
             expect(moduleToBeTested.getEventsByType).to.be.a.function;
             return moduleToBeTested.getEventsByType('event', 'abc123')
 				.then((result) => {
@@ -202,7 +202,7 @@ describe('controllers/event', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/event');
+            moduleToBeTested = require('../../controllers/event');
             expect(moduleToBeTested.getEventsByType).to.be.a.function;
             return moduleToBeTested.getEventsByType('event').catch((errThrown) => {
                 expect(errThrown).to.equal(err);

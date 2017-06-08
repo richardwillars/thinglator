@@ -86,20 +86,20 @@ module.exports = function driverTests(driverName, driver, type, driverInterface)
             });
         });
 
-        describe(`${type} capabilities`, () => {
-            let capabilities = [];
+        describe(`${type} commands`, () => {
+            let commands = [];
             beforeEach(() => {
-                capabilities = Object.getOwnPropertyNames(driver.prototype).filter(r => r.startsWith('capability_'));
+                commands = Object.getOwnPropertyNames(driver.prototype).filter(r => r.startsWith('capability_'));
             });
 
             it('should expose at least one capability', () => {
-                expect(capabilities.length > 0).to.equal(true);
+                expect(commands.length > 0).to.equal(true);
             });
 
-            it('should only expose valid capabilities', () => {
+            it('should only expose valid commands', () => {
                 const validCapabilities = models[type].Model.schema.paths;
-                capabilities.forEach((capability) => {
-                    expect(typeof validCapabilities[`capabilities.${capability.substring(11)}`]).to.equal('object', `${capability.substring(11)} is not a valid capability for ${type}`);
+                commands.forEach((capability) => {
+                    expect(typeof validCapabilities[`commands.${capability.substring(11)}`]).to.equal('object', `${capability.substring(11)} is not a valid capability for ${type}`);
                 });
             });
         });

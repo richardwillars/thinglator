@@ -45,7 +45,7 @@ describe('models/switch', () => {
                 on(event, callback) {
                     eventEmitterOnSpy(event, callback);
                 }
-			}
+          }
         };
 
         const eventMock = {
@@ -60,6 +60,10 @@ describe('models/switch', () => {
             }
         };
 
+        const eventUtilsMock = {
+            eventValidator: () => true
+        };
+
 
         mockery.enable({
             useCleanCache: true,
@@ -68,6 +72,7 @@ describe('models/switch', () => {
 
         mockery.registerMock('mongoose', mongooseMock);
         mockery.registerMock('eventemitter2', eventEmitterMock);
+        mockery.registerMock('../utils/event', eventUtilsMock);
         mockery.registerMock('./event', eventMock);
         done();
     });
@@ -75,6 +80,7 @@ describe('models/switch', () => {
     afterEach((done) => {
         mockery.deregisterMock('mongoose');
         mockery.deregisterMock('eventemitter2');
+        mockery.deregisterMock('../utils/event');
         mockery.deregisterMock('./event');
         done();
     });
@@ -82,7 +88,7 @@ describe('models/switch', () => {
     it('should create a mongoose schema representing a switch', () => {
 		// call the module to be tested
 
-        moduleToBeTested = require('../../../models/switch');
+        moduleToBeTested = require('../../models/switch');
         expect(switchConstructorSpy).to.have.been.calledOnce;
         expect(switchConstructorSpy).to.have.been.calledWith({
             _id: false,
@@ -99,30 +105,32 @@ describe('models/switch', () => {
                 required: false,
                 default: {}
             },
-            capabilities: {
-
+            commands: {
                 on: {
+                    type: Boolean
+                },
+                off: {
+                    type: Boolean
+                }
+            },
+            events: {
+                energy: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'on',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
                         properties: {
-                            on: {
-                                type: 'boolean'
+                            energy: {
+                                type: 'number'
                             }
                         },
                         required: [
-                            'on'
+                            'energy'
                         ]
                     }
                 },
-
-                off: {
+                on: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'on',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -141,7 +149,7 @@ describe('models/switch', () => {
     });
 
     it('should create a mongoose model from the schema', () => {
-        moduleToBeTested = require('../../../models/switch');
+        moduleToBeTested = require('../../models/switch');
         expect(modelSpy).have.been.calledOnce;
         expect(modelSpy).to.have.been.calledWith('Switch');
         expect(moduleToBeTested.Model).to.be.an.object;
@@ -149,54 +157,34 @@ describe('models/switch', () => {
 
     describe('events', () => {
         it('should setup an event listener and expose it', () => {
-            moduleToBeTested = require('../../../models/switch');
+            moduleToBeTested = require('../../models/switch');
             expect(eventEmitterConstructorSpy).to.have.been.calledOnce;
             expect(moduleToBeTested.DeviceEventEmitter).to.be.an.object;
         });
 
-        it('should have created 1 event listener', () => {
-            moduleToBeTested = require('../../../models/switch');
-            expect(eventEmitterOnSpy).to.have.been.callCount(1);
+        it('should have created 3 event listeners', () => {
+            moduleToBeTested = require('../../models/switch');
+            expect(eventEmitterOnSpy).to.have.been.calledThrice;
         });
 
         describe('\'on\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/switch');
-                expect(eventEmitterOnSpy.args[0][0]).to.equal('on');
+                moduleToBeTested = require('../../models/switch');
+                expect(eventEmitterOnSpy.secondCall).to.have.been.calledWith('on');
             });
+        });
 
-            it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/switch');
-                const eventCallback = eventEmitterOnSpy.args[0][1];
-				// call the function
-                eventCallback('abc123', 'def456', {
-                    on: true
-                });
-                expect(eventCreateSpy).to.have.been.calledOnce;
-                expect(eventCreateSpy).to.have.been.calledWith({
-                    eventType: 'device',
-                    driverType: 'switch',
-                    driverId: 'abc123',
-                    deviceId: 'def456',
-                    event: 'on',
-                    value: true
-                });
+        describe('\'energy\' event', () => {
+            it('should register the event listener', () => {
+                moduleToBeTested = require('../../models/switch');
+                expect(eventEmitterOnSpy.thirdCall).to.have.been.calledWith('energy');
             });
+        });
 
-            it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/switch');
-                const eventCallback = eventEmitterOnSpy.args[0][1];
-
-				// call the function
-                eventCallback('abc123', 'def456', {
-                    on: true
-                });
-				// check that the save function has been called
-                expect(eventSaveSpy).to.have.been.calledOnce;
-            });
-
-            xit('should handle a failed save accordingly', () => {
-
+        describe('\'batteryLevel\' event', () => {
+            it('should register the event listener', () => {
+                moduleToBeTested = require('../../models/switch');
+                expect(eventEmitterOnSpy.firstCall).to.have.been.calledWith('batteryLevel');
             });
         });
     });

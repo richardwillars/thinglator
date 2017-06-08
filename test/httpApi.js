@@ -1,9 +1,11 @@
 const chai = require('chai');
-const expect = chai.expect;
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-chai.use(sinonChai);
 const mockery = require('mockery');
+
+const expect = chai.expect;
+chai.use(sinonChai);
+
 
 describe('httpApi', () => {
     let moduleToBeTested,
@@ -11,14 +13,14 @@ describe('httpApi', () => {
         drivers;
 
     beforeEach((done) => {
-		// mock out app
+      // mock out app
         app = {
             use(fn) {},
             get(path, cb) {},
             post(path, cb) {}
         };
 
-		// mock out drivers
+        // mock out drivers
         drivers = {};
 
         done();
@@ -27,20 +29,20 @@ describe('httpApi', () => {
     it('should setup an error listener', () => {
         const cb = sinon.spy();
         app.use = cb;
-		// call the module to be tested
-        moduleToBeTested = require('../../httpApi')(app, drivers);
+        // call the module to be tested
+        moduleToBeTested = require('../httpApi')(app, drivers);
         expect(cb).to.have.been.calledOnce;
     });
 
     it('the error listener should handle different types of errors correctly', () => {
-		// capture the error handler function..
+      // capture the error handler function..
         let errorHandler;
         app.use = function (fn) {
             errorHandler = fn;
         };
-        moduleToBeTested = require('../../httpApi')(app, drivers);
+        moduleToBeTested = require('../httpApi')(app, drivers);
 
-		// build up a fake call to the error handler function..
+        // build up a fake call to the error handler function..
         const reqObject = {};
         const resObject = {};
         const next = function () {};
@@ -57,8 +59,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(500);
         expect(resObject.json).to.have.been.calledWith({
-            code: 500,
-            stack: undefined,
             type: 'Internal'
         });
 
@@ -71,8 +71,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(500);
         expect(resObject.json).to.have.been.calledWith({
-            code: 500,
-            stack: ['bla', 'bla', 'bla'],
             type: 'Internal'
         });
 
@@ -82,7 +80,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(500);
         expect(resObject.json).to.have.been.calledWith({
-            code: 500,
             type: 'Driver',
             driver: 'lifx',
             message: 'This is a driver error'
@@ -93,7 +90,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(400);
         expect(resObject.json).to.have.been.calledWith({
-            code: 400,
             type: 'BadRequest',
             message: 'This is a bad request'
         });
@@ -103,7 +99,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(404);
         expect(resObject.json).to.have.been.calledWith({
-            code: 404,
             type: 'NotFound',
             message: 'This is not found'
         });
@@ -116,7 +111,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(400);
         expect(resObject.json).to.have.been.calledWith({
-            code: 400,
             type: 'Validation',
             message: 'This is validation',
             errors: {
@@ -129,7 +123,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(503);
         expect(resObject.json).to.have.been.calledWith({
-            code: 503,
             type: 'Connection',
             message: 'This is connection'
         });
@@ -139,7 +132,6 @@ describe('httpApi', () => {
         errorHandler(errorObject, reqObject, resObject, next);
         expect(resObject.status).to.have.been.calledWith(401);
         expect(resObject.json).to.have.been.calledWith({
-            code: 401,
             type: 'Authentication',
             message: 'This is authentication'
         });
@@ -150,7 +142,7 @@ describe('httpApi', () => {
         let authenticateCtrlMock;
 
         beforeEach((done) => {
-			// capture the get handler function..
+          // capture the get handler function..
             app.get = function (path, fn) {
                 paths[path] = fn;
             };
@@ -160,7 +152,7 @@ describe('httpApi', () => {
                 warnOnUnregistered: false
             });
 
-			// mock out authenticateCtrl, deviceCtrl, eventCtrl, driverCtrl
+            // mock out authenticateCtrl, deviceCtrl, eventCtrl, driverCtrl
             authenticateCtrlMock = {
                 getAuthenticationProcess(driver, type, drivers) {
                     return Promise.resolve({
@@ -238,7 +230,7 @@ describe('httpApi', () => {
 
         describe('GET /', () => {
             it('it should setup a route', () => {
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
                 expect(typeof paths['/']).to.equal('function');
             });
 
@@ -257,11 +249,11 @@ describe('httpApi', () => {
             });
         });
 
-        describe('GET /authenticate/:type/:driver', () => {
+        describe('GET /authenticate/:driver', () => {
             const paths = {};
             let getAuthenticationProcessSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -270,8 +262,8 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getAuthenticationProcessSpy = sinon.spy(authenticateCtrlMock, 'getAuthenticationProcess');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
-                expect(typeof paths['/authenticate/:type/:driver']).to.equal('function');
+                moduleToBeTested = require('../httpApi')(app, drivers);
+                expect(typeof paths['/authenticate/:driver']).to.equal('function');
             });
 
             it('it should call the correct controller method when called', (done) => {
@@ -286,15 +278,15 @@ describe('httpApi', () => {
                 };
                 const next = function () {};
 
-                paths['/authenticate/:type/:driver'](req, res, next);
+                paths['/authenticate/:driver'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
-                    expect(getAuthenticationProcessSpy).to.have.been.calledWith(req.params.driver, req.params.type, {});
+                    // check that the controller method is called
+                    expect(getAuthenticationProcessSpy).to.have.been.calledWith(req.params.driver, {});
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -312,7 +304,7 @@ describe('httpApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -323,22 +315,22 @@ describe('httpApi', () => {
                 const res = {};
                 const next = sinon.spy();
 
-                paths['/authenticate/:type/:driver'](req, res, next);
+                paths['/authenticate/:driver'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
             });
         });
 
-        describe('POST /authenticate/:type/:driver/:stepId', () => {
+        describe('POST /authenticate/:driver/:stepId', () => {
             const paths = {};
             let getAuthenticationProcessSpy;
             beforeEach((done) => {
-				// capture the post handler function..
+              // capture the post handler function..
                 app.post = function (path, jsonParser, fn) {
                     paths[path] = fn;
                 };
@@ -347,8 +339,8 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 authenticationStepSpy = sinon.spy(authenticateCtrlMock, 'authenticationStep');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
-                expect(typeof paths['/authenticate/:type/:driver/:stepId']).to.equal('function');
+                moduleToBeTested = require('../httpApi')(app, drivers);
+                expect(typeof paths['/authenticate/:driver/:stepId']).to.equal('function');
             });
 
             it('it should call the correct controller method when called', (done) => {
@@ -367,15 +359,15 @@ describe('httpApi', () => {
                 };
                 const next = function () {};
 
-                paths['/authenticate/:type/:driver/:stepId'](req, res, next);
+                paths['/authenticate/:driver/:stepId'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
-                    expect(authenticationStepSpy).to.have.been.calledWith(req.params.driver, req.params.type, {}, req.params.stepId, req.body);
+                  // check that the controller method is called
+                    expect(authenticationStepSpy).to.have.been.calledWith(req.params.driver, {}, req.params.stepId, req.body);
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -393,7 +385,7 @@ describe('httpApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -408,22 +400,22 @@ describe('httpApi', () => {
                 const res = {};
                 const next = sinon.spy();
 
-                paths['/authenticate/:type/:driver/:stepId'](req, res, next);
+                paths['/authenticate/:driver/:stepId'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
             });
         });
 
-        describe('GET /discover/:type/:driver', () => {
+        describe('GET /discover/:driver', () => {
             const paths = {};
             let getAuthenticationProcessSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -432,8 +424,8 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 discoverSpy = sinon.spy(driverCtrlMock, 'discover');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
-                expect(typeof paths['/discover/:type/:driver']).to.equal('function');
+                moduleToBeTested = require('../httpApi')(app, drivers);
+                expect(typeof paths['/discover/:driver']).to.equal('function');
             });
 
             it('it should call the correct controller method when called', (done) => {
@@ -448,15 +440,15 @@ describe('httpApi', () => {
                 };
                 const next = function () {};
 
-                paths['/discover/:type/:driver'](req, res, next);
+                paths['/discover/:driver'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
-                    expect(discoverSpy).to.have.been.calledWith(req.params.driver, req.params.type, {});
+                  // check that the controller method is called
+                    expect(discoverSpy).to.have.been.calledWith(req.params.driver, {});
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -475,7 +467,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/driver', driverCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -486,11 +478,11 @@ describe('httpApi', () => {
                 const res = {};
                 const next = sinon.spy();
 
-                paths['/discover/:type/:driver'](req, res, next);
+                paths['/discover/:driver'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
@@ -501,7 +493,7 @@ describe('httpApi', () => {
             const paths = {};
             let getAllDevicesSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -510,7 +502,7 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getAllDevicesSpy = sinon.spy(deviceCtrlMock, 'getAllDevices');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
                 expect(typeof paths['/devices']).to.equal('function');
             });
 
@@ -524,12 +516,12 @@ describe('httpApi', () => {
                 paths['/devices'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(getAllDevicesSpy).to.have.been.calledOnce;
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -548,7 +540,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {};
                 const res = {};
@@ -556,20 +548,20 @@ describe('httpApi', () => {
 
                 paths['/devices'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
             });
         });
 
-        describe('GET /devices/:type', () => {
+        describe('GET /devices/type/:type', () => {
             const paths = {};
             let getDevicesByTypeSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -578,8 +570,8 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getDevicesByTypeSpy = sinon.spy(deviceCtrlMock, 'getDevicesByType');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
-                expect(typeof paths['/devices/:type']).to.equal('function');
+                moduleToBeTested = require('../httpApi')(app, drivers);
+                expect(typeof paths['/devices/type/:type']).to.equal('function');
             });
 
             it('it should call the correct controller method when called', (done) => {
@@ -593,15 +585,15 @@ describe('httpApi', () => {
                 };
                 const next = function () {};
 
-                paths['/devices/:type'](req, res, next);
+                paths['/devices/type/:type'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(getDevicesByTypeSpy).to.have.been.calledWith(req.params.type);
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -620,7 +612,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -630,22 +622,22 @@ describe('httpApi', () => {
                 const res = {};
                 const next = sinon.spy();
 
-                paths['/devices/:type'](req, res, next);
+                paths['/devices/type/:type'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
             });
         });
 
-        describe('GET /devices/:type/:driver', () => {
+        describe('GET /devices/driver/:driver', () => {
             const paths = {};
             let getDevicesByTypeAndDriverSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -654,8 +646,8 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getDevicesByTypeAndDriverSpy = sinon.spy(deviceCtrlMock, 'getDevicesByTypeAndDriver');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
-                expect(typeof paths['/devices/:type/:driver']).to.equal('function');
+                moduleToBeTested = require('../httpApi')(app, drivers);
+                expect(typeof paths['/devices/driver/:driver']).to.equal('function');
             });
 
             it('it should call the correct controller method when called', (done) => {
@@ -670,15 +662,15 @@ describe('httpApi', () => {
                 };
                 const next = function () {};
 
-                paths['/devices/:type/:driver'](req, res, next);
+                paths['/devices/driver/:driver'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(getDevicesByTypeAndDriverSpy).to.have.been.calledWith(req.params.type, req.params.driver);
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -697,7 +689,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -708,11 +700,11 @@ describe('httpApi', () => {
                 const res = {};
                 const next = sinon.spy();
 
-                paths['/devices/:type/:driver'](req, res, next);
+                paths['/devices/driver/:driver'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
@@ -723,7 +715,7 @@ describe('httpApi', () => {
             const paths = {};
             let getDeviceByIdSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -732,7 +724,7 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getDeviceByIdSpy = sinon.spy(deviceCtrlMock, 'getDeviceById');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
                 expect(typeof paths['/device/:deviceId']).to.equal('function');
             });
 
@@ -750,12 +742,12 @@ describe('httpApi', () => {
                 paths['/device/:deviceId'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(getDeviceByIdSpy).to.have.been.calledWith(req.params.deviceId);
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -774,7 +766,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -786,9 +778,9 @@ describe('httpApi', () => {
 
                 paths['/device/:deviceId'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
@@ -799,7 +791,7 @@ describe('httpApi', () => {
             const paths = {};
             let runCommandSpy;
             beforeEach((done) => {
-				// capture the post handler function..
+              // capture the post handler function..
                 app.post = function (path, jsonParser, fn) {
                     paths[path] = fn;
                 };
@@ -808,7 +800,7 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 runCommandSpy = sinon.spy(deviceCtrlMock, 'runCommand');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
                 expect(typeof paths['/device/:deviceId/:command']).to.equal('function');
             });
 
@@ -830,12 +822,12 @@ describe('httpApi', () => {
                 paths['/device/:deviceId/:command'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(runCommandSpy).to.have.been.calledWith(req.params.deviceId, req.params.command, req.body, {});
 
-					// check that res.send is called with the response.
+                    // check that res.send is called with the response.
                     expect(res.send).to.have.been.calledOnce;
 
                     done();
@@ -852,7 +844,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -868,9 +860,9 @@ describe('httpApi', () => {
 
                 paths['/device/:deviceId/:command'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
@@ -881,7 +873,7 @@ describe('httpApi', () => {
             const paths = {};
             let getDriversWithStatsSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -890,7 +882,7 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getDriversWithStatsSpy = sinon.spy(driverCtrlMock, 'getDriversWithStats');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
                 expect(typeof paths['/drivers']).to.equal('function');
             });
 
@@ -904,12 +896,12 @@ describe('httpApi', () => {
                 paths['/drivers'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(getDriversWithStatsSpy).to.have.been.calledWith({});
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -928,7 +920,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/driver', driverCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {};
                 const res = {};
@@ -936,9 +928,9 @@ describe('httpApi', () => {
 
                 paths['/drivers'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);
@@ -949,7 +941,7 @@ describe('httpApi', () => {
             const paths = {};
             let getEventsByTypeSpy;
             beforeEach((done) => {
-				// capture the get handler function..
+              // capture the get handler function..
                 app.get = function (path, fn) {
                     paths[path] = fn;
                 };
@@ -958,7 +950,7 @@ describe('httpApi', () => {
             it('it should setup a route', () => {
                 getEventsByTypeSpy = sinon.spy(eventCtrlMock, 'getEventsByType');
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
                 expect(typeof paths['/event/:eventType']).to.equal('function');
             });
 
@@ -979,12 +971,12 @@ describe('httpApi', () => {
                 paths['/event/:eventType'](req, res, next);
 
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that the controller method is called
+                  // check that the controller method is called
                     expect(getEventsByTypeSpy).to.have.been.calledWith(req.params.eventType, req.query.from);
 
-					// check that res.json is called with the response.
+                    // check that res.json is called with the response.
                     expect(res.json).to.have.been.calledWith({
                         foo: 'bar'
                     });
@@ -1003,7 +995,7 @@ describe('httpApi', () => {
                 };
                 mockery.registerMock('./controllers/event', eventCtrlMock);
 
-                moduleToBeTested = require('../../httpApi')(app, drivers);
+                moduleToBeTested = require('../httpApi')(app, drivers);
 
                 const req = {
                     params: {
@@ -1018,9 +1010,9 @@ describe('httpApi', () => {
 
                 paths['/event/:eventType'](req, res, next);
 
-				// We put it in a timeout to ensure the promise executes first
+                // We put it in a timeout to ensure the promise executes first
                 setTimeout(() => {
-					// check that next is called with the error
+                  // check that next is called with the error
                     expect(next).to.have.been.calledWith(err);
                     done();
                 }, 0);

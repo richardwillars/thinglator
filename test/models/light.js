@@ -26,7 +26,7 @@ describe('models/light', () => {
             constructor(props) {
                 lightConstructorSpy(props);
             }
-		};
+    };
 
         const mongooseMock = {
             Schema: schemaClass,
@@ -45,7 +45,7 @@ describe('models/light', () => {
                 on(event, callback) {
                     eventEmitterOnSpy(event, callback);
                 }
-			}
+            }
         };
 
         const eventMock = {
@@ -60,6 +60,10 @@ describe('models/light', () => {
             }
         };
 
+        const eventUtilsMock = {
+            eventValidator: () => true
+        };
+
 
         mockery.enable({
             useCleanCache: true,
@@ -68,7 +72,9 @@ describe('models/light', () => {
 
         mockery.registerMock('mongoose', mongooseMock);
         mockery.registerMock('eventemitter2', eventEmitterMock);
+        mockery.registerMock('../utils/event', eventUtilsMock);
         mockery.registerMock('./event', eventMock);
+
         done();
     });
 
@@ -76,13 +82,14 @@ describe('models/light', () => {
         mockery.deregisterMock('mongoose');
         mockery.deregisterMock('eventemitter2');
         mockery.deregisterMock('./event');
+        mockery.deregisterMock('../utils/event');
         done();
     });
 
     it('should create a mongoose schema representing a light', () => {
-		// call the module to be tested
+        // call the module to be tested
 
-        moduleToBeTested = require('../../../models/light');
+        moduleToBeTested = require('../../models/light');
         expect(lightConstructorSpy).to.have.been.calledOnce;
         expect(lightConstructorSpy).to.have.been.calledWith({
             _id: false,
@@ -99,52 +106,33 @@ describe('models/light', () => {
                 required: false,
                 default: {}
             },
-            capabilities: {
+            commands: {
                 toggle: {
-                    type: Boolean,
-                    default: false,
-                    eventName: 'state',
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            toggled: {
-                                type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'toggled'
-                        ]
-                    }
+                    type: Boolean
                 },
                 setHSBState: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'state',
                     requestSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
                         properties: {
-                            on: {
-                                type: 'boolean'
-                            },
                             colour: {
                                 type: 'object',
                                 properties: {
                                     hue: {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
+                                        type: 'integer',
+                                        minimum: 0,
+                                        maxiumum: 360
                                     },
-                                    'saturation': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                    saturation: {
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     },
                                     brightness: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                        type: 'double',
+                                        minimum: 0.01,
+                                        maximum: 1
                                     }
                                 },
                                 required: [
@@ -155,178 +143,72 @@ describe('models/light', () => {
                             },
 
                             duration: {
-                                duration: 'integer',
+                                type: 'integer',
                                 minimum: 0,
                                 maxiumum: 99999
                             }
                         },
                         required: [
                             'colour',
-                            'duration',
-                            'on'
-                        ]
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            on: {
-                                type: 'boolean'
-                            },
-                            colour: {
-                                type: 'object',
-                                properties: {
-                                    hue: {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
-                                    },
-                                    saturation: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
-                                    },
-                                    'brightness': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
-                                    }
-                                }
-                            }
-                        },
-                        required: [
-                            'colour',
-                            'on'
+                            'duration'
                         ]
                     }
-
                 },
                 setBrightnessState: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'state',
                     requestSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
                         properties: {
-                            on: {
-                                type: 'boolean'
-                            },
                             colour: {
                                 type: 'object',
                                 properties: {
-                                    'brightness': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                    brightness: {
+                                        type: 'double',
+                                        minimum: 0.01,
+                                        maximum: 1
                                     }
                                 },
                                 required: [
                                     'brightness'
                                 ]
                             },
-
                             duration: {
-                                duration: 'integer',
+                                type: 'integer',
                                 minimum: 0,
                                 maxiumum: 99999
                             }
                         },
                         required: [
                             'colour',
-                            'duration',
-                            'on'
-                        ]
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            on: {
-                                type: 'boolean'
-                            },
-                            colour: {
-                                type: 'object',
-                                properties: {
-                                    hue: {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
-                                    },
-                                    saturation: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
-                                    },
-                                    'brightness': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
-                                    }
-                                }
-                            }
-                        },
-                        required: [
-                            'colour',
-                            'on'
+                            'duration'
                         ]
                     }
                 },
                 setBooleanState: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'state',
                     requestSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
                         properties: {
                             on: {
                                 type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'on'
-                        ]
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            on: {
-                                type: 'boolean'
                             },
-                            colour: {
-                                type: 'object',
-                                properties: {
-                                    hue: {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
-                                    },
-                                    saturation: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
-                                    },
-                                    'brightness': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
-                                    }
-                                }
+                            duration: {
+                                type: 'integer',
+                                minimum: 0,
+                                maxiumum: 99999
                             }
                         },
                         required: [
-                            'colour',
-                            'on'
+                            'on',
+                            'duration'
                         ]
                     }
 
                 },
                 breatheEffect: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'breatheEffect',
                     requestSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -334,20 +216,20 @@ describe('models/light', () => {
                             colour: {
                                 type: 'object',
                                 properties: {
-                                    'hue': {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
+                                    hue: {
+                                        type: 'integer',
+                                        minimum: 0,
+                                        maxiumum: 360
                                     },
-                                    'saturation': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                    saturation: {
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     },
-                                    'brightness': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                    brightness: {
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     }
                                 },
                                 required: [
@@ -359,20 +241,20 @@ describe('models/light', () => {
                             fromColour: {
                                 type: 'object',
                                 properties: {
-                                    'hue': {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
+                                    hue: {
+                                        type: 'integer',
+                                        minimum: 0,
+                                        maxiumum: 360
                                     },
                                     saturation: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     },
                                     brightness: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     }
                                 },
                                 required: [
@@ -408,24 +290,10 @@ describe('models/light', () => {
                             'peak'
                         ]
 
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            breatheEffect: {
-                                type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'breatheEffect'
-                        ]
                     }
                 },
                 pulseEffect: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'pulseEffect',
                     requestSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -434,19 +302,19 @@ describe('models/light', () => {
                                 type: 'object',
                                 properties: {
                                     hue: {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
+                                        type: 'integer',
+                                        minimum: 0,
+                                        maxiumum: 360
                                     },
                                     saturation: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     },
                                     brightness: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     }
                                 },
                                 required: [
@@ -459,19 +327,19 @@ describe('models/light', () => {
                                 type: 'object',
                                 properties: {
                                     hue: {
-                                        "type": 'integer',
-                                        "minimum": 0,
-                                        "maxiumum": 360
+                                        type: 'integer',
+                                        minimum: 0,
+                                        maxiumum: 360
                                     },
-                                    'saturation': {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                    saturation: {
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     },
                                     brightness: {
-                                        "type": 'double',
-                                        "minimum": 0,
-                                        "maximum": 1
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
                                     }
                                 },
                                 required: [
@@ -501,7 +369,27 @@ describe('models/light', () => {
                             'persist'
                         ]
 
-                    },
+                    }
+                }
+            },
+            events: {
+                breatheEffect: {
+                    type: Boolean,
+                    responseSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            breatheEffect: {
+                                type: 'boolean'
+                            }
+                        },
+                        required: [
+                            'breatheEffect'
+                        ]
+                    }
+                },
+                pulseEffect: {
+                    type: Boolean,
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -514,13 +402,49 @@ describe('models/light', () => {
                             'pulseEffect'
                         ]
                     }
+                },
+                state: {
+                    type: Boolean,
+                    responseSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            on: {
+                                type: 'boolean'
+                            },
+                            colour: {
+                                type: 'object',
+                                properties: {
+                                    hue: {
+                                        type: 'integer',
+                                        minimum: 0,
+                                        maxiumum: 360
+                                    },
+                                    saturation: {
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
+                                    },
+                                    brightness: {
+                                        type: 'double',
+                                        minimum: 0,
+                                        maximum: 1
+                                    }
+                                }
+                            }
+                        },
+                        required: [
+                            'colour',
+                            'on'
+                        ]
+                    }
                 }
             }
         });
     });
 
     it('should create a mongoose model from the schema', () => {
-        moduleToBeTested = require('../../../models/light');
+        moduleToBeTested = require('../../models/light');
         expect(modelSpy).have.been.calledOnce;
         expect(modelSpy).to.have.been.calledWith('Light');
         expect(moduleToBeTested.Model).to.be.an.object;
@@ -528,49 +452,34 @@ describe('models/light', () => {
 
     describe('events', () => {
         it('should setup an event listener and expose it', () => {
-            moduleToBeTested = require('../../../models/light');
+            moduleToBeTested = require('../../models/light');
             expect(eventEmitterConstructorSpy).to.have.been.calledOnce;
             expect(moduleToBeTested.DeviceEventEmitter).to.be.an.object;
         });
 
-        it('should have created 1 event listener', () => {
-            moduleToBeTested = require('../../../models/light');
-            expect(eventEmitterOnSpy).to.have.been.calledOnce;
+        it('should have created 3 event listeners', () => {
+            moduleToBeTested = require('../../models/light');
+            expect(eventEmitterOnSpy).to.have.been.calledThrice;
         });
 
         describe('\'state\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/light');
+                moduleToBeTested = require('../../models/light');
                 expect(eventEmitterOnSpy.firstCall).to.have.been.calledWith('state');
             });
+        });
 
-            it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/light');
-                const eventCallback = eventEmitterOnSpy.firstCall.args[1];
-				// call the function
-                eventCallback('abc123', 'def456', 'foo');
-                expect(eventCreateSpy).to.have.been.calledOnce;
-                expect(eventCreateSpy).to.have.been.calledWith({
-                    eventType: 'device',
-                    driverType: 'light',
-                    driverId: 'abc123',
-                    deviceId: 'def456',
-                    event: 'state',
-                    value: 'foo'
-                });
+        describe('\'pulseEffect\' event', () => {
+            it('should register the event listener', () => {
+                moduleToBeTested = require('../../models/light');
+                expect(eventEmitterOnSpy.secondCall).to.have.been.calledWith('pulseEffect');
             });
+        });
 
-            it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/light');
-                const eventCallback = eventEmitterOnSpy.firstCall.args[1];
-				// call the function
-                eventCallback('abc123', 'def456', 'foo');
-				// check that the save function has been called
-                expect(eventSaveSpy).to.have.been.calledOnce;
-            });
-
-            xit('should handle a failed save accordingly', () => {
-
+        describe('\'breatheEffect\' event', () => {
+            it('should register the event listener', () => {
+                moduleToBeTested = require('../../models/light');
+                expect(eventEmitterOnSpy.thirdCall).to.have.been.calledWith('breatheEffect');
             });
         });
     });

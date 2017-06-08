@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
+
 const EventModel = require('./event').Model;
+const eventValidator = require('../utils/event').eventValidator;
 
 // colour must be specifed in the following format: "hue:120 saturation:1.0 brightness:0.5"
 const LightSchema = new mongoose.Schema({
@@ -18,49 +20,12 @@ const LightSchema = new mongoose.Schema({
         required: false,
         default: {}
     },
-    capabilities: {
+    commands: {
         toggle: {
-            type: Boolean,
-            default: false,
-            eventName: 'state',
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    },
-                    colour: {
-                        type: 'object',
-                        properties: {
-                            hue: {
-                                type: 'integer',
-                                minimum: 0,
-                                maxiumum: 360
-                            },
-                            saturation: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            },
-                            brightness: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            }
-                        }
-                    }
-                },
-                required: [
-                    'colour',
-                    'on'
-                ]
-            }
+            type: Boolean
         },
         setHSBState: {
             type: Boolean,
-            default: false,
-            eventName: 'state',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -101,45 +66,10 @@ const LightSchema = new mongoose.Schema({
                     'colour',
                     'duration'
                 ]
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    },
-                    colour: {
-                        type: 'object',
-                        properties: {
-                            hue: {
-                                type: 'integer',
-                                minimum: 0,
-                                maxiumum: 360
-                            },
-                            saturation: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            },
-                            brightness: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            }
-                        }
-                    }
-                },
-                required: [
-                    'colour',
-                    'on'
-                ]
             }
         },
         setBrightnessState: {
             type: Boolean,
-            default: false,
-            eventName: 'state',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -167,45 +97,10 @@ const LightSchema = new mongoose.Schema({
                     'colour',
                     'duration'
                 ]
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    },
-                    colour: {
-                        type: 'object',
-                        properties: {
-                            hue: {
-                                type: 'integer',
-                                minimum: 0,
-                                maxiumum: 360
-                            },
-                            saturation: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            },
-                            brightness: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            }
-                        }
-                    }
-                },
-                required: [
-                    'colour',
-                    'on'
-                ]
             }
         },
         setBooleanState: {
             type: Boolean,
-            default: false,
-            eventName: 'state',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -223,46 +118,11 @@ const LightSchema = new mongoose.Schema({
                     'on',
                     'duration'
                 ]
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    },
-                    colour: {
-                        type: 'object',
-                        properties: {
-                            hue: {
-                                type: 'integer',
-                                minimum: 0,
-                                maxiumum: 360
-                            },
-                            saturation: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            },
-                            brightness: {
-                                type: 'double',
-                                minimum: 0,
-                                maximum: 1
-                            }
-                        }
-                    }
-                },
-                required: [
-                    'colour',
-                    'on'
-                ]
             }
 
         },
         breatheEffect: {
             type: Boolean,
-            default: false,
-            eventName: 'breatheEffect',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -344,24 +204,10 @@ const LightSchema = new mongoose.Schema({
                     'peak'
                 ]
 
-            },
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    breatheEffect: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'breatheEffect'
-                ]
             }
         },
         pulseEffect: {
             type: Boolean,
-            default: false,
-            eventName: 'pulseEffect',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -437,7 +283,27 @@ const LightSchema = new mongoose.Schema({
                     'persist'
                 ]
 
-            },
+            }
+        }
+    },
+    events: {
+        breatheEffect: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    breatheEffect: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'breatheEffect'
+                ]
+            }
+        },
+        pulseEffect: {
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -450,6 +316,42 @@ const LightSchema = new mongoose.Schema({
                     'pulseEffect'
                 ]
             }
+        },
+        state: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    on: {
+                        type: 'boolean'
+                    },
+                    colour: {
+                        type: 'object',
+                        properties: {
+                            hue: {
+                                type: 'integer',
+                                minimum: 0,
+                                maxiumum: 360
+                            },
+                            saturation: {
+                                type: 'double',
+                                minimum: 0,
+                                maximum: 1
+                            },
+                            brightness: {
+                                type: 'double',
+                                minimum: 0,
+                                maximum: 1
+                            }
+                        }
+                    }
+                },
+                required: [
+                    'colour',
+                    'on'
+                ]
+            }
         }
     }
 });
@@ -458,18 +360,37 @@ const LightSchema = new mongoose.Schema({
 const Light = mongoose.model('Light', LightSchema);
 const deviceEventEmitter = new EventEmitter2();
 
-deviceEventEmitter.on('state', (driverId, deviceId, state) => {
-    const eventObj = EventModel({
-        eventType: 'device',
-        driverType: 'light',
-        driverId,
-        deviceId,
-        event: 'state',
-        value: state
-    });
-    eventObj.save().catch((err) => {
-        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
-    });
+function processEvent(driverId, deviceId, value, eventName) {
+  // validate the event against the schema
+    const validated = eventValidator(value, Light.schema.paths[`events.${eventName}`].options.responseSchema);
+    if (validated === true) {
+        const eventObj = EventModel({
+            eventType: 'device',
+            driverType: 'sensor',
+            driverId,
+            deviceId,
+            event: eventName,
+            value
+        });
+        eventObj.save().catch((err) => {
+            console.log('Unable to save event..', eventObj, err);
+        });
+    } else {
+        console.log('Invalid event', driverId, eventName, value);
+        console.error(validated);
+    }
+}
+
+deviceEventEmitter.on('state', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'state');
+});
+
+deviceEventEmitter.on('pulseEffect', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'pulseEffect');
+});
+
+deviceEventEmitter.on('breatheEffect', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'breatheEffect');
 });
 
 module.exports = {

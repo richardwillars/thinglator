@@ -62,7 +62,7 @@ describe('models/event', () => {
     it('should create a mongoose schema representing an event', () => {
 		// call the module to be tested
 
-        moduleToBeTested = require('../../../models/event');
+        moduleToBeTested = require('../../models/event');
         expect(eventConstructorSpy).to.have.been.calledOnce;
         expect(eventConstructorSpy).to.have.been.calledWith({
             eventType: {
@@ -100,14 +100,14 @@ describe('models/event', () => {
     });
 
     it('should create a mongoose model from the schema', () => {
-        moduleToBeTested = require('../../../models/event');
+        moduleToBeTested = require('../../models/event');
         expect(modelSpy).have.been.calledOnce;
         expect(modelSpy).to.have.been.calledWith('Event');
         expect(moduleToBeTested.Model).to.be.an.object;
     });
 
     it('should call eventUtils.newEventCreated whenever a new event is created', (done) => {
-        moduleToBeTested = require('../../../models/event');
+        moduleToBeTested = require('../../models/event');
         expect(preSpy).to.have.been.calledOnce;
         expect(preSpy).to.have.been.calledWith('save');
 

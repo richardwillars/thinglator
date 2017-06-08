@@ -15,10 +15,11 @@ const commsClass = class ZwaveComms {
         this.interface = new interfaceObj.interface(this.config, this.onValueChanged);
     }
 
-    onValueChanged(driverId, nodeId, comClass, value) {
+    onValueChanged(driverId, nodeId, comclass, index, value) {
         this.eventEmitter.emit(driverId, {
             nodeId,
-            comClass,
+            comclass,
+            index,
             value
         });
     }
@@ -63,8 +64,8 @@ const commsClass = class ZwaveComms {
         return this.interface.claimNode(driverId, nodeId);
     }
 
-    setValue() {
-        return this.interface.setValue();
+    setValue(nodeId, classId, instance, index, value) {
+        return this.interface.setValue(nodeId, classId, instance, index, value);
     }
 };
 

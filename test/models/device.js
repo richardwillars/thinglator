@@ -7,17 +7,18 @@ const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const mockery = require('mockery');
 
-describe('models/driver', () => {
+describe('models/device', () => {
     let moduleToBeTested;
-    let driverConstructorSpy;
+    let deviceConstructorSpy;
     const modelSpy = sinon.spy();
 
     beforeEach((done) => {
-        driverConstructorSpy = sinon.spy();
+        deviceConstructorSpy = sinon.spy();
+
 
         const schemaClass = class Event {
             constructor(props) {
-                driverConstructorSpy(props);
+                deviceConstructorSpy(props);
             }
 		};
         const mongooseMock = {
@@ -43,18 +44,31 @@ describe('models/driver', () => {
         done();
     });
 
-    it('should create a mongoose schema representing a driver', () => {
+    it('should create a mongoose schema representing a device', () => {
 		// call the module to be tested
 
-        moduleToBeTested = require('../../../models/driver');
-        expect(driverConstructorSpy).to.have.been.calledOnce;
-        expect(driverConstructorSpy).to.have.been.calledWith({
+        moduleToBeTested = require('../../models/device');
+        expect(deviceConstructorSpy).to.have.been.calledOnce;
+        expect(deviceConstructorSpy).to.have.been.calledWith({
             _id: {
                 type: String,
                 required: true,
                 unique: true
             },
-            settings: {
+            created: {
+                type: Date,
+                required: false,
+                default: Date.now
+            },
+            type: {
+                type: String,
+                required: true
+            },
+            driver: {
+                type: String,
+                required: true
+            },
+            specs: {
                 type: Object,
                 required: true,
                 default: {}
@@ -63,9 +77,9 @@ describe('models/driver', () => {
     });
 
     it('should create a mongoose model from the schema', () => {
-        moduleToBeTested = require('../../../models/driver');
+        moduleToBeTested = require('../../models/device');
         expect(modelSpy).have.been.calledOnce;
-        expect(modelSpy).to.have.been.calledWith('Driver');
+        expect(modelSpy).to.have.been.calledWith('Device');
         expect(moduleToBeTested.Model).to.be.an.object;
     });
 });

@@ -15,7 +15,7 @@ describe('utils/driver', () => {
     describe('doesDriverExist', () => {
         it('should return true if the driver exists and is of the correct type', (done) => {
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
 
             expect(moduleToBeTested.doesDriverExist).to.be.a.function;
 
@@ -26,21 +26,30 @@ describe('utils/driver', () => {
                 def: {
                     getType() {
                         return 'foo';
+                    },
+                    getInterface() {
+                        return 'http';
                     }
                 },
                 abc: {
                     getType() {
                         return 'light';
+                    },
+                    getInterface() {
+                        return 'http';
                     }
                 },
                 ghi: {
                     getType() {
                         return 'foo';
+                    },
+                    getInterface() {
+                        return 'http';
                     }
                 }
             };
 
-            const promise = moduleToBeTested.doesDriverExist(driverId, type, drivers);
+            const promise = moduleToBeTested.doesDriverExist(driverId, drivers);
 
             expect(promise).to.be.an.object;
             promise.then((exists) => {
@@ -51,7 +60,7 @@ describe('utils/driver', () => {
 
         it('should return false if the driver exists but is not of the correct type', (done) => {
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
 
             expect(moduleToBeTested.doesDriverExist).to.be.a.function;
 
@@ -87,7 +96,7 @@ describe('utils/driver', () => {
 
         it('should return false if the driver does not exist', (done) => {
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
 
             expect(moduleToBeTested.doesDriverExist).to.be.a.function;
 
@@ -142,10 +151,10 @@ describe('utils/driver', () => {
                             return {
                                 exec(cb) {
                                     cb(null, [{
-                                    _id: 'abc123'
-                                }, {
-                                _id: 'def234'
-                            }]);
+                                        _id: 'abc123'
+                                    }, {
+                                        _id: 'def234'
+                                    }]);
                                 }
                             };
                         }
@@ -154,12 +163,20 @@ describe('utils/driver', () => {
             };
 
             const driverFooMock = class FooDriver {
-                constructor(driverSettingsObj, interfaces) {
+                constructor() {
 
+                }
+
+                init(driverSettingsObj, interfaces, eventEmitter) {
+                    return Promise.resolve();
                 }
 
                 getType() {
                     return 'light';
+                }
+
+                getInterface() {
+                    return 'http';
                 }
 
                 setEventEmitter(eventEmitter) {
@@ -169,25 +186,31 @@ describe('utils/driver', () => {
                 initDevices() {
 
                 }
-			};
+			      };
 
             const driverBlaMock = class BlaDriver {
-                constructor(driverSettingsObj, interfaces) {
+                constructor() {
 
+                }
+
+                init(driverSettingsObj, interfaces, eventEmitter) {
+                    return Promise.resolve();
                 }
 
                 getType() {
                     return 'light';
                 }
 
-                setEventEmitter(eventEmitter) {
 
+                getInterface() {
+                    return 'http';
                 }
+
 
                 initDevices() {
 
                 }
-			};
+			      };
 
             mockery.enable({
                 useCleanCache: true,
@@ -211,11 +234,14 @@ describe('utils/driver', () => {
         });
 
         it('should load valid drivers', () => {
+            const interfaces = {
+                http: 'http interface'
+            };
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
             expect(moduleToBeTested.loadDrivers).to.be.a.function;
 
-            const loadedDrivers = moduleToBeTested.loadDrivers();
+            const loadedDrivers = moduleToBeTested.loadDrivers(interfaces);
             expect(Object.keys(loadedDrivers).length).to.equal(2);
 
             expect(loadedDrivers.foo).to.be.an.object;
@@ -235,14 +261,14 @@ describe('utils/driver', () => {
 
 
         it('should get the DriverSettings class', () => {
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
             expect(moduleToBeTested.getDriverSettingsClass).to.be.a.function;
             const classObj = moduleToBeTested.getDriverSettingsClass();
             expect(classObj).to.be.a.function;
         });
 
         it('should create a new instance of the DriverSettings class', () => {
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
             const classObj = moduleToBeTested.getDriverSettingsClass();
             const instance = new classObj('foo');
             expect(instance).to.be.an.object;
@@ -254,14 +280,14 @@ describe('utils/driver', () => {
                     Model: {
                         findOne(query) {
                             return {
-                                exec () {
-                                return Promise.resolve({
-                                settings: {
-                                foo: 'bar',
-                                boo: 'zoo'
-                            }
-                            });
-                            }
+                                exec() {
+                                    return Promise.resolve({
+                                        settings: {
+                                            foo: 'bar',
+                                            boo: 'zoo'
+                                        }
+                                    });
+                                }
                             };
                         }
                     }
@@ -275,7 +301,7 @@ describe('utils/driver', () => {
 
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
             const classObj = moduleToBeTested.getDriverSettingsClass();
             const instance = new classObj('foo');
             const promise = instance.get();
@@ -293,9 +319,9 @@ describe('utils/driver', () => {
                     Model: {
                         findOne(query) {
                             return {
-                                exec () {
-                                throw new Error('example error thrown by the db');
-                            }
+                                exec() {
+                                    throw new Error('example error thrown by the db');
+                                }
                             };
                         }
                     }
@@ -309,7 +335,7 @@ describe('utils/driver', () => {
 
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
             const classObj = moduleToBeTested.getDriverSettingsClass();
             const instance = new classObj('foo');
             const promise = instance.get();
@@ -326,9 +352,9 @@ describe('utils/driver', () => {
                     Model: {
                         update(query, obj, updateSettings) {
                             return {
-                                exec () {
-                                return Promise.resolve();
-                            }
+                                exec() {
+                                    return Promise.resolve();
+                                }
                             };
                         }
                     }
@@ -342,7 +368,7 @@ describe('utils/driver', () => {
 
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../utils/driver');
+            moduleToBeTested = require('../../utils/driver');
             const classObj = moduleToBeTested.getDriverSettingsClass();
             const instance = new classObj('foo');
             const promise = instance.set({

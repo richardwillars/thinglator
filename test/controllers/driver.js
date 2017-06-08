@@ -31,10 +31,10 @@ describe('controllers/driver', () => {
 
 
             const execStub = sinon.stub(deviceModel, 'exec', () => Promise.resolve([
-					{ _id: 'driverA', type: 'foo', deviceCount: 3 },
-  					{ _id: 'driverB', type: 'bar', deviceCount: 2 },
-  					{ _id: 'driverC', type: 'foo', deviceCount: 1 }
-  				]));
+{ _id: 'driverA', type: 'foo', deviceCount: 3 },
+{ _id: 'driverB', type: 'bar', deviceCount: 2 },
+{ _id: 'driverC', type: 'foo', deviceCount: 1 }
+            ]));
 
             modelsMock = {
                 device: {
@@ -48,7 +48,7 @@ describe('controllers/driver', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const drivers = {
                 driverA: new class DriverADriver {
@@ -58,7 +58,7 @@ describe('controllers/driver', () => {
                     getType() {
                         return 'foo';
                     }
-				}(),
+                }(),
                 driverB: new class DriverBDriver {
                     getName() {
                         return 'driverB';
@@ -66,7 +66,7 @@ describe('controllers/driver', () => {
                     getType() {
                         return 'bar';
                     }
-				}(),
+                }(),
                 driverC: new class DriverCDriver {
                     getName() {
                         return 'driverC';
@@ -74,33 +74,32 @@ describe('controllers/driver', () => {
                     getType() {
                         return 'foo';
                     }
-				}()
+              }()
             };
 
             expect(moduleToBeTested.getDriversWithStats).to.be.a.function;
-            return moduleToBeTested.getDriversWithStats(drivers)
-				.then((result) => {
-    expect(JSON.stringify(result)).to.equal(JSON.stringify([
-						{ _id: 'driverA', type: 'foo', deviceCount: 3 },
-						{ _id: 'driverB', type: 'bar', deviceCount: 2 },
-						{ _id: 'driverC', type: 'foo', deviceCount: 1 }
-    ]));
+            return moduleToBeTested.getDriversWithStats(drivers).then((result) => {
+                expect(JSON.stringify(result)).to.equal(JSON.stringify([
+                  { _id: 'driverA', type: 'foo', deviceCount: 3 },
+                  { _id: 'driverB', type: 'bar', deviceCount: 2 },
+                  { _id: 'driverC', type: 'foo', deviceCount: 1 }
+                ]));
 
-    expect(aggregateStub).to.have.been.calledOnce;
-    expect(aggregateStub).to.have.been.calledWith([{
-        $group: {
-            _id: '$driver',
-            type: {
-                $first: '$type'
-            },
-            deviceCount: {
-                $sum: 1
-            }
-        }
-    }]);
+                expect(aggregateStub).to.have.been.calledOnce;
+                expect(aggregateStub).to.have.been.calledWith([{
+                    $group: {
+                        _id: '$driver',
+                        type: {
+                            $first: '$type'
+                        },
+                        deviceCount: {
+                            $sum: 1
+                        }
+                    }
+                }]);
 
-    expect(execStub).to.have.been.calledOnce;
-});
+                expect(execStub).to.have.been.calledOnce;
+            });
         });
 
         it('should catch any errors and throw them up the promise', () => {
@@ -130,7 +129,7 @@ describe('controllers/driver', () => {
 
             const drivers = {};
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
             expect(moduleToBeTested.getDriversWithStats).to.be.a.function;
             return moduleToBeTested.getDriversWithStats(drivers).catch((errThrown) => {
                 expect(errThrown).to.equal(err);
@@ -154,33 +153,34 @@ describe('controllers/driver', () => {
 
             const driverFooDriver = new class DriverFooDriver {
                 discover() {}
+                getType() { return 'foo'; }
                 initDevices() {}
-			}();
+            }();
 
             const discoverMock = sinon.stub(driverFooDriver, 'discover', () => [
                 {
                     deviceId: 'deviceA',
-    					name: 'DeviceA',
-					    address: '192.168.1.1',
-					    capabilities: {
-					    	doSomething: true
-					    }
+                    name: 'DeviceA',
+                    address: '192.168.1.1',
+                    capabilities: {
+                        doSomething: true
+                    }
                 },
                 {
                     deviceId: 'deviceB',
-    					name: 'DeviceB',
-					    address: '192.168.1.2',
-					    capabilities: {
-					    	doSomething: true
-					    }
+                    name: 'DeviceB',
+                    address: '192.168.1.2',
+                    capabilities: {
+                        doSomething: true
+                    }
                 },
                 {
                     deviceId: 'deviceC',
-    					name: 'DeviceC',
-					    address: '192.168.1.3',
-					    capabilities: {
-					    	doSomething: true
-					    }
+                    name: 'DeviceC',
+                    address: '192.168.1.3',
+                    capabilities: {
+                        doSomething: true
+                    }
                 }
             ]);
 
@@ -201,27 +201,27 @@ describe('controllers/driver', () => {
                 return Promise.resolve([
                     {
                         _id: '13c5295b5e55cdc347c6e05d0acfce3c',
-					    type: 'foo',
-					    driver: 'driverFoo',
-					    specs: {
-        deviceId: 'deviceB',
-        name: 'DeviceB',
-        address: '192.168.1.2',
-        capabilities: {}
-					   }
+                        type: 'foo',
+                        driver: 'driverFoo',
+                        specs: {
+                            deviceId: 'deviceB',
+                            name: 'DeviceB',
+                            address: '192.168.1.2',
+                            capabilities: {}
+                        }
                     },
                     {
                         _id: '13c5295b5e55cdc347c6e05d0acfce3d',
-					    type: 'foo',
-					    driver: 'driverFoo',
-					    specs: {
-        deviceId: 'deviceD',
-        name: 'DeviceD',
-        address: '192.168.1.4',
-        capabilities: {}
-					   }
+                        type: 'foo',
+                        driver: 'driverFoo',
+                        specs: {
+                            deviceId: 'deviceD',
+                            name: 'DeviceD',
+                            address: '192.168.1.4',
+                            capabilities: {}
+                        }
                     }
-    			]);
+                ]);
             };
 
             const execCallback2 = function () {
@@ -230,9 +230,9 @@ describe('controllers/driver', () => {
 
             const execCallback3 = function () {
                 return Promise.resolve([
-					{ _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
-					{ _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
-					{ _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
+                  { _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
+                  { _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
+                  { _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
                 ]);
             };
 
@@ -258,96 +258,95 @@ describe('controllers/driver', () => {
             mockery.registerMock('../utils/device', deviceUtilsMock);
 
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const drivers = {
                 driverFoo: driverFooDriver
             };
 
             expect(moduleToBeTested.discover).to.be.a.function;
-            return moduleToBeTested.discover('driverFoo', 'foo', drivers)
-				.then((result) => {
-    expect(JSON.stringify(result)).to.equal(JSON.stringify([
-						{ _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
-						{ _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
-						{ _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
-    ]));
+            return moduleToBeTested.discover('driverFoo', drivers).then((result) => {
+                expect(JSON.stringify(result)).to.equal(JSON.stringify([
+                  { _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
+                  { _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
+                  { _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
+                ]));
 
-    expect(doesDriverExistMock).to.have.been.calledOnce;
-    expect(doesDriverExistMock).to.have.been.calledWith('driverFoo', 'foo');
+                expect(doesDriverExistMock).to.have.been.calledOnce;
+                expect(doesDriverExistMock).to.have.been.calledWith('driverFoo', drivers);
 
-    expect(execStub).to.have.been.calledThrice;
+                expect(execStub).to.have.been.calledThrice;
 
-    expect(discoverMock).to.have.been.calledOnce;
-    expect(findStub).to.have.been.calledTwice;
-    expect(findStub.firstCall).to.have.been.calledWith({
-        type: 'foo',
-        driver: 'driverFoo'
-    });
+                expect(discoverMock).to.have.been.calledOnce;
+                expect(findStub).to.have.been.calledTwice;
+                expect(findStub.firstCall).to.have.been.calledWith({
+                    type: 'foo',
+                    driver: 'driverFoo'
+                });
 
-    expect(updateDeviceMock).to.have.been.calledOnce;
-    expect(updateDeviceMock).to.have.been.calledWith({
-					  _id: '13c5295b5e55cdc347c6e05d0acfce3c',
-					  driver: 'driverFoo',
-					  specs: {
-					  	address: '192.168.1.2',
-					  	capabilities: {},
-					  	deviceId: 'deviceB',
-					  	name: 'DeviceB'
-					  },
-					  type: 'foo'
-    },
-        {
-					  address: '192.168.1.2',
-					  capabilities: { doSomething: true },
-					  deviceId: 'deviceB',
-					  name: 'DeviceB'
-        });
+                expect(updateDeviceMock).to.have.been.calledOnce;
+                expect(updateDeviceMock).to.have.been.calledWith({
+                    _id: '13c5295b5e55cdc347c6e05d0acfce3c',
+                    driver: 'driverFoo',
+                    specs: {
+                        address: '192.168.1.2',
+                        capabilities: {},
+                        deviceId: 'deviceB',
+                        name: 'DeviceB'
+                    },
+                    type: 'foo'
+                },
+                    {
+                        address: '192.168.1.2',
+                        capabilities: { doSomething: true },
+                        deviceId: 'deviceB',
+                        name: 'DeviceB'
+                    });
 
-    expect(removeStub).to.have.been.calledOnce;
-    expect(removeStub).to.have.been.calledWith({
-        _id: {
-            $in: ['13c5295b5e55cdc347c6e05d0acfce3d']
-        }
-    });
+                expect(removeStub).to.have.been.calledOnce;
+                expect(removeStub).to.have.been.calledWith({
+                    _id: {
+                        $in: ['13c5295b5e55cdc347c6e05d0acfce3d']
+                    }
+                });
 
-    expect(createDeviceMock).to.have.been.calledTwice;
-    expect(createDeviceMock.firstCall).to.have.been.calledWith('foo', 'driverFoo', {
-					  address: '192.168.1.1',
-					  capabilities: { doSomething: true },
-					  deviceId: 'deviceA',
-					  name: 'DeviceA'
-    });
-    expect(createDeviceMock.secondCall).to.have.been.calledWith('foo', 'driverFoo', {
-					  address: '192.168.1.3',
-					  capabilities: { doSomething: true },
-					  deviceId: 'deviceC',
-					  name: 'DeviceC'
-    });
+                expect(createDeviceMock).to.have.been.calledTwice;
+                expect(createDeviceMock.firstCall).to.have.been.calledWith('foo', 'driverFoo', {
+                    address: '192.168.1.1',
+                    capabilities: { doSomething: true },
+                    deviceId: 'deviceA',
+                    name: 'DeviceA'
+                });
+                expect(createDeviceMock.secondCall).to.have.been.calledWith('foo', 'driverFoo', {
+                    address: '192.168.1.3',
+                    capabilities: { doSomething: true },
+                    deviceId: 'deviceC',
+                    name: 'DeviceC'
+                });
 
-    expect(findStub.secondCall).to.have.been.calledWith({
-        type: 'foo',
-        driver: 'driverFoo'
-    });
+                expect(findStub.secondCall).to.have.been.calledWith({
+                    type: 'foo',
+                    driver: 'driverFoo'
+                });
 
-    expect(initDevicesMock).to.have.been.calledOnce;
-    expect(initDevicesMock).to.have.been.calledWith([{
-					  _id: 'deviceAId',
-					  driver: 'driverFoo',
-					  specs: { address: '192.168.1.1', capabilities: { }, deviceId: 'deviceA', name: 'DeviceA' },
-					  type: 'foo'
-    }, {
-					  _id: 'deviceBId',
-					  driver: 'driverFoo',
-					  specs: { address: '192.168.1.2', capabilities: { }, deviceId: 'deviceB', name: 'DeviceB' },
-					  type: 'foo'
-    }, {
-					  _id: 'deviceCId',
-					  driver: 'driverFoo',
-					  specs: { address: '192.168.1.3', capabilities: { }, deviceId: 'deviceC', name: 'DeviceC' },
-					  type: 'foo'
-    }]);
-});
+                expect(initDevicesMock).to.have.been.calledOnce;
+                expect(initDevicesMock).to.have.been.calledWith([{
+                    _id: 'deviceAId',
+                    driver: 'driverFoo',
+                    specs: { address: '192.168.1.1', capabilities: { }, deviceId: 'deviceA', name: 'DeviceA' },
+                    type: 'foo'
+                }, {
+                    _id: 'deviceBId',
+                    driver: 'driverFoo',
+                    specs: { address: '192.168.1.2', capabilities: { }, deviceId: 'deviceB', name: 'DeviceB' },
+                    type: 'foo'
+                }, {
+                    _id: 'deviceCId',
+                    driver: 'driverFoo',
+                    specs: { address: '192.168.1.3', capabilities: { }, deviceId: 'deviceC', name: 'DeviceC' },
+                    type: 'foo'
+                }]);
+            });
         });
 
         it('should return a list of discovered devices from a driver, even if there are no existing ones that no longer exist', () => {
@@ -365,33 +364,34 @@ describe('controllers/driver', () => {
 
             const driverFooDriver = new class DriverFooDriver {
                 discover() {}
+                getType() { return 'foo'; }
                 initDevices() {}
-			}();
+          }();
 
             const discoverMock = sinon.stub(driverFooDriver, 'discover', () => [
                 {
                     deviceId: 'deviceA',
-    					name: 'DeviceA',
-					    address: '192.168.1.1',
-					    capabilities: {
-					    	doSomething: true
-					    }
+                    name: 'DeviceA',
+                    address: '192.168.1.1',
+                    capabilities: {
+                        doSomething: true
+                    }
                 },
                 {
                     deviceId: 'deviceB',
-    					name: 'DeviceB',
-					    address: '192.168.1.2',
-					    capabilities: {
-					    	doSomething: true
-					    }
+                    name: 'DeviceB',
+                    address: '192.168.1.2',
+                    capabilities: {
+                        doSomething: true
+                    }
                 },
                 {
                     deviceId: 'deviceC',
-    					name: 'DeviceC',
-					    address: '192.168.1.3',
-					    capabilities: {
-					    	doSomething: true
-					    }
+                    name: 'DeviceC',
+                    address: '192.168.1.3',
+                    capabilities: {
+                        doSomething: true
+                    }
                 }
             ]);
 
@@ -412,23 +412,23 @@ describe('controllers/driver', () => {
                 return Promise.resolve([
                     {
                         _id: '13c5295b5e55cdc347c6e05d0acfce3c',
-					    type: 'foo',
-					    driver: 'driverFoo',
-					    specs: {
-        deviceId: 'deviceB',
-        name: 'DeviceB',
-        address: '192.168.1.2',
-        capabilities: {}
-					   }
+                        type: 'foo',
+                        driver: 'driverFoo',
+                        specs: {
+                            deviceId: 'deviceB',
+                            name: 'DeviceB',
+                            address: '192.168.1.2',
+                            capabilities: {}
+                        }
                     }
-    			]);
+                ]);
             };
 
             const execCallback2 = function () {
                 return Promise.resolve([
-					{ _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
-					{ _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
-					{ _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
+                  { _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
+                  { _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
+                  { _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
                 ]);
             };
 
@@ -452,24 +452,23 @@ describe('controllers/driver', () => {
             mockery.registerMock('../utils/device', deviceUtilsMock);
 
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const drivers = {
                 driverFoo: driverFooDriver
             };
 
             expect(moduleToBeTested.discover).to.be.a.function;
-            return moduleToBeTested.discover('driverFoo', 'foo', drivers)
-				.then((result) => {
-    expect(JSON.stringify(result)).to.equal(JSON.stringify([
-						{ _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
-						{ _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
-						{ _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
-    ]));
+            return moduleToBeTested.discover('driverFoo', drivers).then((result) => {
+                expect(JSON.stringify(result)).to.equal(JSON.stringify([
+                  { _id: 'deviceAId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceA', name: 'DeviceA', address: '192.168.1.1', capabilities: {} } },
+                  { _id: 'deviceBId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceB', name: 'DeviceB', address: '192.168.1.2', capabilities: {} } },
+                  { _id: 'deviceCId', type: 'foo', driver: 'driverFoo', specs: { deviceId: 'deviceC', name: 'DeviceC', address: '192.168.1.3', capabilities: {} } }
+                ]));
 
 
-    expect(removeStub).to.not.have.been.called;
-});
+                expect(removeStub).to.not.have.been.called;
+            });
         });
 
         it('should throw a driver not found error if the driver can\'t be found', () => {
@@ -496,7 +495,7 @@ describe('controllers/driver', () => {
             mockery.registerMock('../utils/device', deviceUtilsMock);
 
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const driverFooDriver = new class DriverFooDriver {}();
 
@@ -505,11 +504,10 @@ describe('controllers/driver', () => {
             };
 
             expect(moduleToBeTested.discover).to.be.a.function;
-            return moduleToBeTested.discover('driverFoo', 'foo', drivers)
-				.catch((err) => {
-    expect(err.message).to.equal('driver not found');
-    expect(err.type).to.equal('NotFound');
-});
+            return moduleToBeTested.discover('driverFoo', 'foo', drivers).catch((err) => {
+                expect(err.message).to.equal('driver not found');
+                expect(err.type).to.equal('NotFound');
+            });
         });
 
 
@@ -541,7 +539,7 @@ describe('controllers/driver', () => {
             mockery.registerMock('../utils/device', deviceUtilsMock);
 
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const driverFooDriver = new class DriverFooDriver {}();
 
@@ -550,12 +548,11 @@ describe('controllers/driver', () => {
             };
 
             expect(moduleToBeTested.discover).to.be.a.function;
-            return moduleToBeTested.discover('driverFoo', 'foo', drivers)
-				.catch((err) => {
-    expect(err.message).to.equal('this is an error');
-    expect(err.type).to.equal('BadRequest');
-    expect(err.driver).to.equal(undefined);
-});
+            return moduleToBeTested.discover('driverFoo', 'foo', drivers).catch((err) => {
+                expect(err.message).to.equal('this is an error');
+                expect(err.type).to.equal('BadRequest');
+                expect(err.driver).to.equal(undefined);
+            });
         });
 
         it('should catch any unknown type errors and throw them up the promise', () => {
@@ -585,7 +582,7 @@ describe('controllers/driver', () => {
             mockery.registerMock('../utils/device', deviceUtilsMock);
 
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const driverFooDriver = new class DriverFooDriver {}();
 
@@ -594,12 +591,11 @@ describe('controllers/driver', () => {
             };
 
             expect(moduleToBeTested.discover).to.be.a.function;
-            return moduleToBeTested.discover('driverFoo', 'foo', drivers)
-				.catch((err) => {
-    expect(err.message).to.equal('this is an error');
-    expect(err.type).to.equal(undefined);
-    expect(err.driver).to.equal(undefined);
-});
+            return moduleToBeTested.discover('driverFoo', 'foo', drivers).catch((err) => {
+                expect(err.message).to.equal('this is an error');
+                expect(err.type).to.equal(undefined);
+                expect(err.driver).to.equal(undefined);
+            });
         });
 
         it('should catch any driver errors and throw them up the promise', () => {
@@ -630,7 +626,7 @@ describe('controllers/driver', () => {
             mockery.registerMock('../utils/device', deviceUtilsMock);
 
 
-            moduleToBeTested = require('../../../controllers/driver');
+            moduleToBeTested = require('../../controllers/driver');
 
             const driverFooDriver = new class DriverFooDriver {}();
 
@@ -639,12 +635,11 @@ describe('controllers/driver', () => {
             };
 
             expect(moduleToBeTested.discover).to.be.a.function;
-            return moduleToBeTested.discover('driverFoo', 'foo', drivers)
-				.catch((err) => {
-    expect(err.message).to.equal('this is an error');
-    expect(err.type).to.equal('Driver');
-    expect(err.driver).to.equal('driverFoo');
-});
+            return moduleToBeTested.discover('driverFoo', 'foo', drivers).catch((err) => {
+                expect(err.message).to.equal('this is an error');
+                expect(err.type).to.equal('Driver');
+                expect(err.driver).to.equal('driverFoo');
+            });
         });
     });
 });

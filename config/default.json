@@ -1,5 +1,5 @@
 {
-  "port": 3007,
+  "port": 3003,
   "interfaces": {
     "zwave": {
         "hardwareLocation": "/dev/cu.usbmodem1421",

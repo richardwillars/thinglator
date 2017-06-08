@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
 const EventModel = require('./event').Model;
+const eventValidator = require('../utils/event').eventValidator;
 
 const SensorSchema = new mongoose.Schema({
     _id: false,
@@ -17,10 +18,12 @@ const SensorSchema = new mongoose.Schema({
         required: false,
         default: {}
     },
-    capabilities: {
+    commands: {
+
+    },
+    events: {
         motion: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -35,8 +38,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         tamper: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -51,8 +53,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         vibration: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -69,8 +70,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         temperature: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -87,8 +87,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         humidity: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -105,8 +104,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         light: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -114,7 +112,7 @@ const SensorSchema = new mongoose.Schema({
                     level: {
                         type: 'double',
                         minimum: 0,
-                        maxiumum: 100
+                        maxiumum: 30000
                     }
                 },
                 required: [
@@ -123,8 +121,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         uv: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -132,7 +129,7 @@ const SensorSchema = new mongoose.Schema({
                     level: {
                         type: 'double',
                         minimum: 0,
-                        maxiumum: 100
+                        maxiumum: 15
                     }
                 },
                 required: [
@@ -141,8 +138,7 @@ const SensorSchema = new mongoose.Schema({
             }
         },
         batteryLevel: {
-            type: 'object',
-            default: false,
+            type: Boolean,
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -165,19 +161,49 @@ const SensorSchema = new mongoose.Schema({
 const Sensor = mongoose.model('Sensor', SensorSchema);
 const deviceEventEmitter = new EventEmitter2();
 
-deviceEventEmitter.on('on', (driverId, deviceId, value) => {
-    console.log('sensor turned', driverId, deviceId);
-    const eventObj = EventModel({
-        eventType: 'device',
-        driverType: 'sensor',
-        driverId,
-        deviceId,
-        event: 'on',
-        value: value.on
-    });
-    eventObj.save().catch((err) => {
-        console.log('Unable to save event..', eventObj, err);
-    });
+function processEvent(driverId, deviceId, value, eventName) {
+  // validate the event against the schema
+    const validated = eventValidator(value, Sensor.schema.paths[`events.${eventName}`].options.responseSchema);
+    if (validated === true) {
+        const eventObj = EventModel({
+            eventType: 'device',
+            driverType: 'sensor',
+            driverId,
+            deviceId,
+            event: eventName,
+            value
+        });
+        eventObj.save().catch((err) => {
+            console.log('Unable to save event..', eventObj, err);
+        });
+    } else {
+        console.log('Invalid event', driverId, eventName, value);
+        console.error(validated);
+    }
+}
+
+deviceEventEmitter.on('batteryLevel', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'batteryLevel');
+});
+
+deviceEventEmitter.on('uv', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'uv');
+});
+
+deviceEventEmitter.on('temperature', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'temperature');
+});
+
+deviceEventEmitter.on('humidity', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'humidity');
+});
+
+deviceEventEmitter.on('light', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'light');
+});
+
+deviceEventEmitter.on('motion', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'motion');
 });
 
 

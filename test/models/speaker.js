@@ -60,6 +60,10 @@ describe('models/speaker', () => {
             }
         };
 
+        const eventUtilsMock = {
+            eventValidator: () => true
+        };
+
 
         mockery.enable({
             useCleanCache: true,
@@ -68,6 +72,7 @@ describe('models/speaker', () => {
 
         mockery.registerMock('mongoose', mongooseMock);
         mockery.registerMock('eventemitter2', eventEmitterMock);
+        mockery.registerMock('../utils/event', eventUtilsMock);
         mockery.registerMock('./event', eventMock);
         done();
     });
@@ -75,6 +80,7 @@ describe('models/speaker', () => {
     afterEach((done) => {
         mockery.deregisterMock('mongoose');
         mockery.deregisterMock('eventemitter2');
+        mockery.deregisterMock('../utils/event');
         mockery.deregisterMock('./event');
         done();
     });
@@ -82,7 +88,7 @@ describe('models/speaker', () => {
     it('should create a mongoose schema representing a speaker', () => {
 		// call the module to be tested
 
-        moduleToBeTested = require('../../../models/speaker');
+        moduleToBeTested = require('../../models/speaker');
         expect(speakerConstructorSpy).to.have.been.calledOnce;
         expect(speakerConstructorSpy).to.have.been.calledWith({
             _id: false,
@@ -99,11 +105,184 @@ describe('models/speaker', () => {
                 required: false,
                 default: {}
             },
-            capabilities: {
+            commands: {
                 getCurrentTrack: {
+                    type: Boolean
+                },
+
+                flushQueue: {
+                    type: Boolean
+                },
+
+                getLEDState: {
+                    type: Boolean
+                },
+
+                getMuted: {
+                    type: Boolean
+                },
+
+                getVolume: {
+                    type: Boolean
+                },
+
+                next: {
+                    type: Boolean
+                },
+
+                pause: {
+                    type: Boolean
+                },
+
+                play: {
+                    type: Boolean
+                },
+
+                previous: {
+                    type: Boolean
+                },
+
+                addToQueueBottom: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'currentTrack',
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            uri: {
+                                type: 'string'
+                            }
+                        },
+                        required: [
+                            'uri'
+                        ]
+                    }
+                },
+
+                addToQueueNext: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            uri: {
+                                type: 'string'
+                            }
+                        },
+                        required: [
+                            'uri'
+                        ]
+                    }
+                },
+
+                seek: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            position: {
+                                type: 'integer',
+                                minimum: 0
+                            }
+                        },
+                        required: [
+                            'position'
+                        ]
+                    }
+                },
+
+                setLEDState: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            on: {
+                                type: 'boolean'
+                            }
+                        },
+                        required: [
+                            'on'
+                        ]
+                    }
+                },
+
+                setMuted: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            muted: {
+                                type: 'boolean'
+                            }
+                        },
+                        required: [
+                            'muted'
+                        ]
+                    }
+                },
+
+                setName: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            name: {
+                                type: 'string'
+                            }
+                        },
+                        required: [
+                            'name'
+                        ]
+                    }
+                },
+
+                setPlayMode: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            playMode: {
+                                type: 'string',
+                                enum: [
+                                    'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
+                                ]
+                            }
+                        },
+                        required: [
+                            'playMode'
+                        ]
+                    }
+                },
+
+                setVolume: {
+                    type: Boolean,
+                    requestSchema: {
+                        $schema: 'http://json-schema.org/draft-04/schema#',
+                        type: 'object',
+                        properties: {
+                            volume: {
+                                type: 'integer',
+                                minimum: 0,
+                                maximum: 100
+                            }
+                        },
+                        required: [
+                            'volume'
+                        ]
+                    }
+                },
+
+                stop: {
+                    type: Boolean
+                }
+            },
+            events: {
+                currentTrack: {
+                    type: Boolean,
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -133,11 +312,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                flushQueue: {
+                queueFlushed: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'queueFlushed',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -151,11 +327,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                getLEDState: {
+                ledState: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'LEDState',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -169,11 +342,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                getMuted: {
+                muted: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'muted',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -187,11 +357,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                getVolume: {
+                volume: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'volume',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -205,11 +372,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
                 next: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'next',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -223,11 +387,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                pause: {
+                playingState: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'playingState',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -247,35 +408,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                play: {
-                    type: Boolean,
-                    default: false,
-                    eventName: 'playingState',
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            paused: {
-                                paused: 'boolean'
-                            },
-                            playing: {
-                                paused: 'boolean'
-                            },
-                            stopped: {
-                                paused: 'boolean'
-                            }
-                        },
-                        required: [
-                            'paused', 'playing', 'stopped'
-                        ]
-                    }
-                },
-
                 previous: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'previous',
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -289,23 +423,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                addToQueueBottom: {
+                addedToQueueBottom: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'addedToQueueBottom',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            uri: {
-                                type: 'string'
-                            }
-                        },
-                        required: [
-                            'uri'
-                        ]
-                    },
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -319,23 +438,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                addToQueueNext: {
+                addedToQueueNext: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'addedToQueueNext',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            uri: {
-                                type: 'string'
-                            }
-                        },
-                        required: [
-                            'uri'
-                        ]
-                    },
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -349,24 +453,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
                 seek: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'seek',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            position: {
-                                type: 'integer',
-                                minimum: 0
-                            }
-                        },
-                        required: [
-                            'position'
-                        ]
-                    },
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -381,83 +469,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                setLEDState: {
+                name: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'LEDState',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            on: {
-                                type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'on'
-                        ]
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            on: {
-                                type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'on'
-                        ]
-                    }
-                },
-
-                setMuted: {
-                    type: Boolean,
-                    default: false,
-                    eventName: 'muted',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            muted: {
-                                type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'muted'
-                        ]
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            muted: {
-                                type: 'boolean'
-                            }
-                        },
-                        required: [
-                            'muted'
-                        ]
-                    }
-                },
-
-                setName: {
-                    type: Boolean,
-                    default: false,
-                    eventName: 'name',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            name: {
-                                type: 'string'
-                            }
-                        },
-                        required: [
-                            'name'
-                        ]
-                    },
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -471,26 +484,8 @@ describe('models/speaker', () => {
                         ]
                     }
                 },
-
-                setPlayMode: {
+                playMode: {
                     type: Boolean,
-                    default: false,
-                    eventName: 'playMode',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            playMode: {
-                                type: 'string',
-                                enum: [
-                                    'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
-                                ]
-                            }
-                        },
-                        required: [
-                            'playMode'
-                        ]
-                    },
                     responseSchema: {
                         $schema: 'http://json-schema.org/draft-04/schema#',
                         type: 'object',
@@ -504,64 +499,6 @@ describe('models/speaker', () => {
                         },
                         required: [
                             'playMode'
-                        ]
-                    }
-                },
-
-                setVolume: {
-                    type: Boolean,
-                    default: false,
-                    eventName: 'volume',
-                    requestSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            volume: {
-                                type: 'integer',
-                                minimum: 0,
-                                maximum: 100
-                            }
-                        },
-                        required: [
-                            'volume'
-                        ]
-                    },
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            volume: {
-                                type: 'integer',
-                                minimum: 0,
-                                maximum: 100
-                            }
-                        },
-                        required: [
-                            'volume'
-                        ]
-                    }
-                },
-
-                stop: {
-                    type: Boolean,
-                    default: false,
-                    eventName: 'playingState',
-                    responseSchema: {
-                        $schema: 'http://json-schema.org/draft-04/schema#',
-                        type: 'object',
-                        properties: {
-                            paused: {
-                                paused: 'boolean'
-                            },
-                            playing: {
-                                paused: 'boolean'
-                            },
-                            stopped: {
-                                paused: 'boolean'
-                            }
-                        },
-                        required: [
-                            'paused', 'playing', 'stopped'
                         ]
                     }
                 }
@@ -570,7 +507,7 @@ describe('models/speaker', () => {
     });
 
     it('should create a mongoose model from the schema', () => {
-        moduleToBeTested = require('../../../models/speaker');
+        moduleToBeTested = require('../../models/speaker');
         expect(modelSpy).have.been.calledOnce;
         expect(modelSpy).to.have.been.calledWith('Speaker');
         expect(moduleToBeTested.Model).to.be.an.object;
@@ -578,24 +515,24 @@ describe('models/speaker', () => {
 
     describe('events', () => {
         it('should setup an event listener and expose it', () => {
-            moduleToBeTested = require('../../../models/speaker');
+            moduleToBeTested = require('../../models/speaker');
             expect(eventEmitterConstructorSpy).to.have.been.calledOnce;
             expect(moduleToBeTested.DeviceEventEmitter).to.be.an.object;
         });
 
         it('should have created 13 event listeners', () => {
-            moduleToBeTested = require('../../../models/speaker');
+            moduleToBeTested = require('../../models/speaker');
             expect(eventEmitterOnSpy).to.have.been.callCount(13);
         });
 
         describe('\'playMode\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[0][0]).to.equal('playMode');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[0][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -611,7 +548,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[0][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -626,12 +563,12 @@ describe('models/speaker', () => {
 
         describe('\'name\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[1][0]).to.equal('name');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[1][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -647,7 +584,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[1][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -662,12 +599,12 @@ describe('models/speaker', () => {
 
         describe('\'LEDState\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[2][0]).to.equal('LEDState');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[2][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -683,7 +620,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[2][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -698,12 +635,12 @@ describe('models/speaker', () => {
 
         describe('\'addedToQueueBottom\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[3][0]).to.equal('addedToQueueBottom');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[3][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -719,7 +656,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[3][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -734,12 +671,12 @@ describe('models/speaker', () => {
 
         describe('\'addedToQueueNext\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[4][0]).to.equal('addedToQueueNext');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[4][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -755,7 +692,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[4][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -770,12 +707,12 @@ describe('models/speaker', () => {
 
         describe('\'previous\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[5][0]).to.equal('previous');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[5][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -791,7 +728,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[5][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -806,12 +743,12 @@ describe('models/speaker', () => {
 
         describe('\'next\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[6][0]).to.equal('next');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[6][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -827,7 +764,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[6][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -842,12 +779,12 @@ describe('models/speaker', () => {
 
         describe('\'queueFlushed\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[7][0]).to.equal('queueFlushed');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[7][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -863,7 +800,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[7][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -878,12 +815,12 @@ describe('models/speaker', () => {
 
         describe('\'playingState\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[8][0]).to.equal('playingState');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[8][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -899,7 +836,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[8][1];
 				// call the function
                 eventCallback('abc123', 'def456');
@@ -914,12 +851,12 @@ describe('models/speaker', () => {
 
         describe('\'currentTrack\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[9][0]).to.equal('currentTrack');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[9][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -935,7 +872,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[9][1];
 				// call the function
                 eventCallback('abc123', 'def456', 'ghi789');
@@ -950,12 +887,12 @@ describe('models/speaker', () => {
 
         describe('\'volume\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[10][0]).to.equal('volume');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[10][1];
 				// call the function
                 eventCallback('abc123', 'def456', 10);
@@ -971,7 +908,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[10][1];
 				// call the function
                 eventCallback('abc123', 'def456', 10);
@@ -986,12 +923,12 @@ describe('models/speaker', () => {
 
         describe('\'muted\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[11][0]).to.equal('muted');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[11][1];
 				// call the function
                 eventCallback('abc123', 'def456', true);
@@ -1007,7 +944,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[11][1];
 				// call the function
                 eventCallback('abc123', 'def456', false);
@@ -1022,12 +959,12 @@ describe('models/speaker', () => {
 
         describe('\'seek\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 expect(eventEmitterOnSpy.args[12][0]).to.equal('seek');
             });
 
             it('should create a new event', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[12][1];
 				// call the function
                 eventCallback('abc123', 'def456', 123);
@@ -1043,7 +980,7 @@ describe('models/speaker', () => {
             });
 
             it('should save the event to the database', () => {
-                moduleToBeTested = require('../../../models/speaker');
+                moduleToBeTested = require('../../models/speaker');
                 const eventCallback = eventEmitterOnSpy.args[12][1];
 				// call the function
                 eventCallback('abc123', 'def456', 123);

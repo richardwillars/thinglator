@@ -22,22 +22,25 @@ describe('utils/device', () => {
         it('should create a new device', (done) => {
             modelsMock = {
                 light: {
-                    Model(deviceSpecs) {
-                        deviceSpecs.validate = function () {
+                    Model: class Light {
+                        constructor(deviceSpecs) {
+
+                        }
+                        validate() {
                             return Promise.resolve();
-                        };
-                        return deviceSpecs;
-                    }
+                        }
+                  }
                 },
 
                 device: {
-                    Model(props) {
-                        return {
-                            save() {
-                                return Promise.resolve(props);
-                            }
-                        };
-                    }
+                    Model: class Device {
+                        constructor(props) {
+                            this.props = props;
+                        }
+                        save() {
+                            return Promise.resolve(this.props);
+                        }
+                  }
                 }
             };
 
@@ -48,8 +51,8 @@ describe('utils/device', () => {
 
             mockery.registerMock('../models', modelsMock);
 
-			// call the module to be tested
-            moduleToBeTested = require('../../../utils/device');
+            // call the module to be tested
+            moduleToBeTested = require('../../utils/device');
 
 
             const type = 'light';
@@ -65,8 +68,7 @@ describe('utils/device', () => {
                 expect(result._id).to.equal('8dcc4387d8e0de6cf7ce74a278ce24c0');
                 expect(result.type).to.equal('light');
                 expect(result.driver).to.equal('foo');
-                expect(result.specs.foo).to.equal('bar');
-                expect(result.specs.bee).to.equal('boo');
+                expect(result.specs instanceof modelsMock.light.Model).to.equal(true);
                 done();
             });
         });
@@ -74,21 +76,24 @@ describe('utils/device', () => {
         it('should have error validation', (done) => {
             modelsMock = {
                 light: {
-                    Model(deviceSpecs) {
-                        deviceSpecs.validate = function () {
+                    Model: class Light {
+                        constructor(deviceSpecs) {
+
+                        }
+                        validate() {
                             return Promise.resolve('errrrooorrr');
-                        };
-                        return deviceSpecs;
+                        }
                     }
                 },
 
                 device: {
-                    Model(props) {
-                        return {
-                            save() {
-                                return Promise.resolve(props);
-                            }
-                        };
+                    Model: class Device {
+                        constructor(props) {
+                            this.props = props;
+                        }
+                        save() {
+                            return Promise.resolve(this.props);
+                        }
                     }
                 }
             };
@@ -101,7 +106,7 @@ describe('utils/device', () => {
             mockery.registerMock('../models', modelsMock);
 
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/device');
+            moduleToBeTested = require('../../utils/device');
 
 
             const type = 'light';
@@ -125,22 +130,25 @@ describe('utils/device', () => {
         it('should update an existing device', (done) => {
             modelsMock = {
                 light: {
-                    Model(deviceSpecs) {
-                        deviceSpecs.validate = function () {
+                    Model: class Light {
+                        constructor(deviceSpecs) {
+
+                        }
+                        validate() {
                             return Promise.resolve();
-                        };
-                        return deviceSpecs;
-                    }
+                        }
+                  }
                 },
 
                 device: {
-                    Model(props) {
-                        return {
-                            save() {
-                                return Promise.resolve(props);
-                            }
-                        };
-                    }
+                    Model: class Device {
+                        constructor(props) {
+                            this.props = props;
+                        }
+                        save() {
+                            return Promise.resolve(this.props);
+                        }
+                  }
                 }
             };
 
@@ -152,7 +160,7 @@ describe('utils/device', () => {
             mockery.registerMock('../models', modelsMock);
 
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/device');
+            moduleToBeTested = require('../../utils/device');
 
             const device = {
                 type: 'light',
@@ -184,25 +192,27 @@ describe('utils/device', () => {
         });
 
         it('should have error validation', (done) => {
-            modelsMock = null;
             modelsMock = {
                 light: {
-                    Model(deviceSpecs) {
-                        deviceSpecs.validate = function () {
+                    Model: class Light {
+                        constructor(deviceSpecs) {
+
+                        }
+                        validate() {
                             return Promise.resolve('errrrooorrr');
-                        };
-                        return deviceSpecs;
-                    }
+                        }
+                  }
                 },
 
                 device: {
-                    Model(props) {
-                        return {
-                            save() {
-                                return Promise.resolve(props);
-                            }
-                        };
-                    }
+                    Model: class Device {
+                        constructor(props) {
+                            this.props = props;
+                        }
+                        save() {
+                            return Promise.resolve(this.props);
+                        }
+                  }
                 }
             };
 
@@ -214,7 +224,7 @@ describe('utils/device', () => {
             mockery.registerMock('../models', modelsMock);
 
 			// call the module to be tested
-            moduleToBeTested = require('../../../utils/device');
+            moduleToBeTested = require('../../utils/device');
 
             const device = {
                 type: 'light',

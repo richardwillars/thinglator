@@ -1,5 +1,3 @@
-
-
 const chai = require('chai');
 const expect = chai.expect;
 const sinon = require('sinon');
@@ -14,6 +12,7 @@ describe('controllers/device', () => {
 
     afterEach((done) => {
         mockery.deregisterMock('../models');
+        mockery.deregisterMock('jsonschema');
         mockery.disable();
         done();
     });
@@ -48,7 +47,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.getAllDevices).to.be.a.function;
             return moduleToBeTested.getAllDevices()
@@ -96,7 +95,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
             expect(moduleToBeTested.getAllDevices).to.be.a.function;
             return moduleToBeTested.getAllDevices().catch((errThrown) => {
                 expect(errThrown).to.equal(err);
@@ -134,7 +133,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.getDevicesByType).to.be.a.function;
             return moduleToBeTested.getDevicesByType('foo')
@@ -184,7 +183,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
             expect(moduleToBeTested.getDevicesByType).to.be.a.function;
             return moduleToBeTested.getDevicesByType('bar').catch((errThrown) => {
                 expect(errThrown).to.equal(err);
@@ -222,7 +221,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.getDevicesByTypeAndDriver).to.be.a.function;
             return moduleToBeTested.getDevicesByTypeAndDriver('foo', 'bar')
@@ -273,7 +272,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
             expect(moduleToBeTested.getDevicesByTypeAndDriver).to.be.a.function;
             return moduleToBeTested.getDevicesByTypeAndDriver('bar', 'foo').catch((errThrown) => {
                 expect(errThrown).to.equal(err);
@@ -309,7 +308,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.getDeviceById).to.be.a.function;
             return moduleToBeTested.getDeviceById('foo')
@@ -355,7 +354,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
             expect(moduleToBeTested.getDeviceById).to.be.a.function;
 
             return moduleToBeTested.getDeviceById('bar').catch((errThrown) => {
@@ -392,7 +391,7 @@ describe('controllers/device', () => {
             });
             mockery.registerMock('../models', modelsMock);
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
             expect(moduleToBeTested.getDeviceById).to.be.a.function;
             return moduleToBeTested.getDeviceById('bar').catch((errThrown) => {
                 expect(errThrown).to.equal(err);
@@ -417,7 +416,7 @@ describe('controllers/device', () => {
                 type: 'deviceType',
                 driver: 'foo',
                 specs: {
-                    capabilities: {
+                    commands: {
                         commandTruthy: true,
                         commandFalsy: false
                     }
@@ -432,14 +431,14 @@ describe('controllers/device', () => {
                     Model: {
                         schema: {
                             paths: {
-                                'capabilities.commandTruthy': {
+                                'commands.commandTruthy': {
                                     options: {
                                         requestSchema: {
-                                        foo: 'bar'
-                                    },
+                                            foo: 'bar'
+                                        },
                                         responseSchema: {
-                                        bar: 'foo'
-                                    },
+                                            bar: 'foo'
+                                        },
                                         eventName: 'on'
                                     }
                                 }
@@ -469,7 +468,7 @@ describe('controllers/device', () => {
 
             const drivers = {
                 foo: {
-                    capability_commandTruthy() {},
+                    command_commandTruthy() {},
                     getEventEmitter() {},
                     getName() {
                         return 'foo';
@@ -477,7 +476,7 @@ describe('controllers/device', () => {
                 }
             };
 
-            const driverActionStub = sinon.stub(drivers.foo, 'capability_commandTruthy', () => ({
+            const driverActionStub = sinon.stub(drivers.foo, 'command_commandTruthy', () => ({
                 on: true
             }));
 
@@ -486,7 +485,7 @@ describe('controllers/device', () => {
                 emit: eventEmitterEmitStub
             }));
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
             return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
@@ -500,7 +499,7 @@ describe('controllers/device', () => {
 
     expect(execStub).to.have.been.calledOnce;
 
-    expect(jsonValidatorStub).to.have.been.calledTwice;
+    expect(jsonValidatorStub).to.have.been.calledOnce;
     expect(jsonValidatorStub.firstCall).to.have.been.calledWith('fee', {
         foo: 'bar'
     });
@@ -511,23 +510,12 @@ describe('controllers/device', () => {
         type: 'deviceType',
         driver: 'foo',
         specs: {
-            capabilities: {
+            commands: {
                 commandTruthy: true,
                 commandFalsy: false
             }
         }
     }, 'fee');
-
-    expect(jsonValidatorStub.secondCall).to.have.been.calledWith({
-        on: true
-    }, {
-        bar: 'foo'
-    });
-
-    expect(getEventEmitterActionStub).to.have.been.calledOnce;
-    expect(eventEmitterEmitStub).to.have.been.calledWith('on', 'foo', 'fee', {
-        on: true
-    });
 });
         });
 
@@ -547,7 +535,7 @@ describe('controllers/device', () => {
                 type: 'deviceType',
                 driver: 'foo',
                 specs: {
-                    capabilities: {
+                    commands: {
                         commandTruthy: true,
                         commandFalsy: false
                     }
@@ -562,11 +550,11 @@ describe('controllers/device', () => {
                     Model: {
                         schema: {
                             paths: {
-                                'capabilities.commandTruthy': {
+                                'commands.commandTruthy': {
                                     options: {
                                         responseSchema: {
-                                        bar: 'foo'
-                                    },
+                                            bar: 'foo'
+                                        },
                                         eventName: 'on'
                                     }
                                 }
@@ -598,7 +586,7 @@ describe('controllers/device', () => {
 
             const drivers = {
                 foo: {
-                    capability_commandTruthy() {},
+                    command_commandTruthy() {},
                     getEventEmitter() {
                         return {
                             emit: eventEmitterEmitStub
@@ -610,20 +598,14 @@ describe('controllers/device', () => {
                 }
             };
 
-            const driverActionStub = sinon.stub(drivers.foo, 'capability_commandTruthy', () => ({
+            const driverActionStub = sinon.stub(drivers.foo, 'command_commandTruthy', () => ({
                 on: true
             }));
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
-            return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
-				.then(() => {
-    expect(eventEmitterEmitStub).to.have.been.calledOnce;
-    expect(eventEmitterEmitStub).to.have.been.calledWith('on', 'foo', 'fee', {
-        on: true
-    });
-});
+            return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers);
         });
 
 
@@ -656,7 +638,7 @@ describe('controllers/device', () => {
             const drivers = {};
 
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
             return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
@@ -666,7 +648,7 @@ describe('controllers/device', () => {
 });
         });
 
-        it('should throw an error if the specified capability doesn\'t exist', () => {
+        it('should throw an error if the specified command doesn\'t exist', () => {
             const deviceModel = {
                 findOne() {},
                 lean() {},
@@ -681,7 +663,7 @@ describe('controllers/device', () => {
                 type: 'deviceType',
                 driver: 'foo',
                 specs: {
-                    capabilities: {
+                    commands: {
                         commandTruthy: true,
                         commandFalsy: false
                     }
@@ -704,17 +686,17 @@ describe('controllers/device', () => {
             const drivers = {};
 
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
             return moduleToBeTested.runCommand('foo', 'commandNotExist', 'fee', drivers)
 				.catch((error) => {
-    expect(error.message).to.equal('capability not found');
+    expect(error.message).to.equal('command not found');
     expect(error.type).to.equal('BadRequest');
 });
         });
 
-        it('should throw an error if the specified capability isn\'t supported', () => {
+        it('should throw an error if the specified command isn\'t supported', () => {
             const deviceModel = {
                 findOne() {},
                 lean() {},
@@ -729,7 +711,7 @@ describe('controllers/device', () => {
                 type: 'deviceType',
                 driver: 'foo',
                 specs: {
-                    capabilities: {
+                    commands: {
                         commandTruthy: true,
                         commandFalsy: false
                     }
@@ -752,12 +734,12 @@ describe('controllers/device', () => {
             const drivers = {};
 
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
             return moduleToBeTested.runCommand('foo', 'commandFalsy', 'fee', drivers)
 				.catch((error) => {
-    expect(error.message).to.equal('capability not supported');
+    expect(error.message).to.equal('command not supported');
     expect(error.type).to.equal('BadRequest');
 });
         });
@@ -777,7 +759,7 @@ describe('controllers/device', () => {
                 type: 'deviceType',
                 driver: 'foo',
                 specs: {
-                    capabilities: {
+                    commands: {
                         commandTruthy: true,
                         commandFalsy: false
                     }
@@ -792,14 +774,14 @@ describe('controllers/device', () => {
                     Model: {
                         schema: {
                             paths: {
-                                'capabilities.commandTruthy': {
+                                'commands.commandTruthy': {
                                     options: {
                                         requestSchema: {
-                                        foo: 'bar'
-                                    },
+                                            foo: 'bar'
+                                        },
                                         responseSchema: {
-                                        bar: 'foo'
-                                    }
+                                            bar: 'foo'
+                                        }
                                     }
                                 }
                             }
@@ -835,7 +817,7 @@ describe('controllers/device', () => {
 
             const drivers = {};
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
             return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)
@@ -862,7 +844,7 @@ describe('controllers/device', () => {
                 type: 'deviceType',
                 driver: 'foo',
                 specs: {
-                    capabilities: {
+                    commands: {
                         commandTruthy: true,
                         commandFalsy: false
                     }
@@ -877,14 +859,14 @@ describe('controllers/device', () => {
                     Model: {
                         schema: {
                             paths: {
-                                'capabilities.commandTruthy': {
+                                'commands.commandTruthy': {
                                     options: {
                                         requestSchema: {
-                                        foo: 'bar'
-                                    },
+                                            foo: 'bar'
+                                        },
                                         responseSchema: {
-                                        bar: 'foo'
-                                    }
+                                            bar: 'foo'
+                                        }
                                     }
                                 }
                             }
@@ -929,7 +911,7 @@ describe('controllers/device', () => {
 
             const drivers = {
                 foo: {
-                    capability_commandTruthy() {
+                    command_commandTruthy() {
                         return {
                             processed: true
                         };
@@ -937,7 +919,7 @@ describe('controllers/device', () => {
                 }
             };
 
-            moduleToBeTested = require('../../../controllers/device');
+            moduleToBeTested = require('../../controllers/device');
 
             expect(moduleToBeTested.runCommand).to.be.a.function;
             return moduleToBeTested.runCommand('foo', 'commandTruthy', 'fee', drivers)

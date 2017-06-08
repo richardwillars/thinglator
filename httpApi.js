@@ -32,10 +32,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-  /*
-  GET discover/:type/:driver
-  -> GET discover/speaker/sonos
-  */
     app.get('/discover/:driver', (req, res, next) => {
         driverCtrl.discover(req.params.driver, drivers)
         .then((results) => {
@@ -45,11 +41,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-
-  /*
-  GET devices
-  -> GET devices
-  */
     app.get('/devices', (req, res, next) => {
         deviceCtrl.getAllDevices()
         .then((results) => {
@@ -59,10 +50,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-  /*
-  GET devices/:type
-  -> GET devices/speaker
-  */
     app.get('/devices/type/:type', (req, res, next) => {
         deviceCtrl.getDevicesByType(req.params.type)
         .then((results) => {
@@ -72,10 +59,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-  /*
-  GET devices/:type/:driver
-  -> GET devices/speaker/sonos
-  */
     app.get('/devices/driver/:driver', (req, res, next) => {
         deviceCtrl.getDevicesByTypeAndDriver(req.params.type, req.params.driver)
         .then((results) => {
@@ -85,10 +68,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-  /*
-  GET device/:_id
-  -> GET device/abc123
-  */
     app.get('/device/:deviceId', (req, res, next) => {
         deviceCtrl.getDeviceById(req.params.deviceId)
         .then((result) => {
@@ -98,10 +77,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-  /*
-  POST device/:_id/:command
-  -> POST device/abc123/on
-  */
     app.post('/device/:deviceId/:command', jsonParser, (req, res, next) => {
         deviceCtrl.runCommand(req.params.deviceId, req.params.command, req.body, drivers)
         .then(() => {
@@ -111,9 +86,6 @@ module.exports = (app, drivers) => {
         });
     });
 
-  /*
-  GET drivers
-  */
     app.get('/drivers', (req, res, next) => {
         driverCtrl.getDriversWithStats(drivers)
         .then((results) => {
@@ -123,11 +95,15 @@ module.exports = (app, drivers) => {
         });
     });
 
+    app.get('/event/latestCommands', (req, res, next) => {
+        eventCtrl.getLatestCommandEvents()
+          .then((results) => {
+              res.json(results);
+          }).catch((err) => {
+              next(err);
+          });
+    });
 
-  /*
-  GET event/:eventType
-  -> GET event/device
-  */
     app.get('/event/:eventType', (req, res, next) => {
         eventCtrl.getEventsByType(req.params.eventType, req.query.from)
         .then((results) => {
@@ -170,7 +146,6 @@ module.exports = (app, drivers) => {
         case 'Connection':
             res.status(503);
             return res.json({
-                code: 503,
                 type: err.type,
                 message: err.message
             });

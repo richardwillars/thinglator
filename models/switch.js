@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
 const EventModel = require('./event').Model;
+const eventValidator = require('../utils/event').eventValidator;
 
 const SwitchSchema = new mongoose.Schema({
     _id: false,
@@ -17,30 +18,32 @@ const SwitchSchema = new mongoose.Schema({
         required: false,
         default: {}
     },
-    capabilities: {
-
+    commands: {
         on: {
+            type: Boolean
+        },
+        off: {
+            type: Boolean
+        }
+    },
+    events: {
+        energy: {
             type: Boolean,
-            default: false,
-            eventName: 'on',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
                 properties: {
-                    on: {
-                        type: 'boolean'
+                    energy: {
+                        type: 'number'
                     }
                 },
                 required: [
-                    'on'
+                    'energy'
                 ]
             }
         },
-
-        off: {
+        on: {
             type: Boolean,
-            default: false,
-            eventName: 'on',
             responseSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -61,18 +64,37 @@ const SwitchSchema = new mongoose.Schema({
 const Switch = mongoose.model('Switch', SwitchSchema);
 const deviceEventEmitter = new EventEmitter2();
 
+function processEvent(driverId, deviceId, value, eventName) {
+  // validate the event against the schema
+    const validated = eventValidator(value, Switch.schema.paths[`events.${eventName}`].options.responseSchema);
+    if (validated === true) {
+        const eventObj = EventModel({
+            eventType: 'device',
+            driverType: 'switch',
+            driverId,
+            deviceId,
+            event: eventName,
+            value
+        });
+        eventObj.save().catch((err) => {
+            console.log('Unable to save event..', eventObj, err);
+        });
+    } else {
+        console.log('Invalid event', driverId, eventName, value);
+        console.error(validated);
+    }
+}
+
+deviceEventEmitter.on('batteryLevel', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'batteryLevel');
+});
+
 deviceEventEmitter.on('on', (driverId, deviceId, value) => {
-    const eventObj = EventModel({
-        eventType: 'device',
-        driverType: 'switch',
-        driverId,
-        deviceId,
-        event: 'on',
-        value: value.on
-    });
-    eventObj.save().catch((err) => {
-        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
-    });
+    processEvent(driverId, deviceId, value, 'on');
+});
+
+deviceEventEmitter.on('energy', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'energy');
 });
 
 
