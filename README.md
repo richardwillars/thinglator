@@ -16,7 +16,7 @@ So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
       },
       "duration": 2
     }
-    
+
 .. and to make a Philips Hue lightbulb turn on over 2 seconds and go blue..
 
     POST http://localhost:3000/devices/:deviceId/setHSBState
@@ -28,8 +28,8 @@ So for example, to make a LIFX lightbulb turn on over 2 seconds and go blue..
       },
       "duration": 2
     }
-    
-    
+
+
 (no it's not a mistake - both requests are identical (apart from the device ID)!)
 Thinglator takes away knowledge of different types of devices and how their different APIs and networking technologies. Instead they're exposed using a uniform API.
 
@@ -48,11 +48,6 @@ This should launch a REST API and websocket server on http://localhost:3000
 
 ## Test
 > npm run test
-
-100% code coverage is aimed for on this project. We're almost there!
-[![codecov](https://codecov.io/gh/richardwillars/thinglator/branch/master/graph/badge.svg)](https://codecov.io/gh/richardwillars/thinglator)
-[![codecoverage](https://codecov.io/gh/richardwillars/thinglator/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/richardwillars/thinglator)
-
 
 ##Getting started
 Out of the box Thinglator has no knowledge of any devices on your network or how to talk to them. The first thing you need to do is to get some drivers - these allow Thinglator to search and communicate with specific devices on your network. Check out https://github.com/richardwillars/thinglator/wiki/Drivers to learn how to search for and add drivers.
