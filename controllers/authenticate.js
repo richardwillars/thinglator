@@ -1,131 +1,132 @@
-var models = require('../models');
-var driverUtils = require('../utils/driver');
-var Validator = require('jsonschema').Validator;
-var jsonValidator = new Validator();
+const Validator = require('jsonschema').Validator;
 
-var controller = {
-  getAuthenticationProcess: function(driverId, type, drivers) {
-    return driverUtils.doesDriverExist(driverId, type, drivers)
-      .then(function(foundDriver) {
-        //if found, load it
-        if (foundDriver === false) {
-          var e = new Error('driver not found');
-          e.type = 'NotFound';
-          throw e;
-        }
-        return drivers[driverId];
-      })
-      .then(function(driver) {
-        //call the getAuthenticationProcess method on the driver
-        return driver.getAuthenticationProcess();
-      })
-      .then(function(authenticationProcess) {
-        for (var i in authenticationProcess) {
-          //validate the json
-          if(typeof models.authenticationSchemas.requested[authenticationProcess[i].type] === "undefined") {
-            var e = new Error('validation schema not found');
-            e.type = 'Driver';
-            throw e;
+const models = require('../models');
+const driverUtils = require('../utils/driver');
+
+const jsonValidator = new Validator();
+
+const controller = {
+    getAuthenticationProcess(driverId, drivers) {
+        return driverUtils.doesDriverExist(driverId, drivers)
+      .then((foundDriver) => {
+        // if found, load it
+          if (foundDriver === false) {
+              const e = new Error('driver not found');
+              e.type = 'NotFound';
+              throw e;
           }
-          var jsonSchema = models.authenticationSchemas.requested[authenticationProcess[i].type];
+          return drivers[driverId];
+      })
+      .then(driver =>
+        // call the getAuthenticationProcess method on the driver
+           driver.getAuthenticationProcess())
+      .then((authenticationProcess) => {
+          authenticationProcess.forEach((authenticationStep) => {
+              // validate the json
+              if (typeof models.authenticationSchemas.requested[authenticationStep.type] === 'undefined') {
+                  const e = new Error(`${authenticationStep.type} validation schema not found`);
+                  e.type = 'Driver';
+                  throw e;
+              }
+              const jsonSchema = models.authenticationSchemas.requested[authenticationStep.type];
 
-          var validated = jsonValidator.validate(authenticationProcess[i], jsonSchema);
+              const validated = jsonValidator.validate(authenticationStep, jsonSchema);
+              if (validated.errors.length !== 0) {
+                  const e = new Error('the driver produced invalid authentication steps');
+                  e.type = 'Validation';
+                  e.errors = validated.errors;
+                  throw e;
+              }
+          });
+          return authenticationProcess;
+      })
+      .catch((e) => {
+          if (e.type) {
+              if (e.type === 'Driver') {
+                  e.driver = driverId;
+              }
+          }
+          throw e;
+      });
+    },
+
+
+    authenticationStep(driverId, drivers, stepId, body) {
+        const steppy = stepId; // for some reason access stepId further down the promises sets it to undefined.
+        let driver;
+        return driverUtils.doesDriverExist(driverId, drivers)
+      .then((foundDriver) => {
+        // if found, load it
+          if (foundDriver === false) {
+              const e = new Error('driver not found');
+              e.type = 'NotFound';
+              throw e;
+          }
+          return drivers[driverId];
+      })
+      .then((driverObj) => {
+          driver = driverObj;
+        // call the getAuthenticationProcess method on the driver
+          return driver.getAuthenticationProcess();
+      })
+      .then((authenticationProcess) => {
+          const stepId = parseInt(steppy, 10);
+          const step = authenticationProcess[steppy];
+          if (!step) {
+              const e = new Error('authentication step not found');
+              e.type = 'NotFound';
+              throw e;
+          }
+
+        // validate the json that's been sent by comparing it against the schema
+          const jsonSchema = models.authenticationSchemas.returned[step.type];
+          const validated = jsonValidator.validate(body, jsonSchema);
           if (validated.errors.length !== 0) {
-            var e = new Error('the driver produced invalid json');
-            e.type = 'Validation';
-            e.errors = validated.errors;
-            throw e;
+              const e = new Error('the body is invalid');
+              e.type = 'Validation';
+              e.errors = validated.errors;
           }
-        }
-        return authenticationProcess;
+        // all good - call the correct authentication step method on the driver
+          return driver[`setAuthenticationStep${stepId}`](body);
       })
-      .catch(function(e) {
-        if (e.type) {
-          if (e.type === 'Driver') {
-            e.driver = driverId;
+      .then((result) => {
+          const resultSchema = {
+              $schema: 'http://json-schema.org/draft-04/schema#',
+              type: 'object',
+              properties: {
+                  success: {
+                      type: 'boolean'
+                  },
+                  message: {
+                      type: 'string'
+                  }
+              },
+              required: [
+                  'success'
+              ]
+          };
+
+          if (result.success === false) {
+              resultSchema.required.push('message');
           }
-        }
-        throw e;
-      });
-  },
+          const validated = jsonValidator.validate(result, resultSchema);
+          if (validated.errors.length !== 0) {
+              const e = new Error('the driver produced invalid json');
+              e.type = 'Driver';
+              e.errors = validated.errors;
+          }
 
-
-  authenticationStep: function(driverId, type, drivers, stepId, body) {
-    var steppy = stepId; //for some reason access stepId further down the promises sets it to undefined.
-    var driver;
-    return driverUtils.doesDriverExist(driverId, type, drivers)
-      .then(function(foundDriver) {
-        //if found, load it
-        if (foundDriver === false) {
-          var e = new Error('driver not found');
-          e.type = 'NotFound';
+          return result;
+      })
+      .catch((e) => {
+          if (e.type) {
+              if (e.type === 'Driver') {
+                  e.driver = driverId;
+              }
+          }
           throw e;
-        }
-        return drivers[driverId];
-      })
-      .then(function(driverObj) {
-        driver = driverObj;
-        //call the getAuthenticationProcess method on the driver
-        return driver.getAuthenticationProcess();
-      })
-      .then(function(authenticationProcess) {
-        var stepId = parseInt(steppy);
-        var step = authenticationProcess[steppy];
-        if (!step) {
-          var e = new Error('authentication step not found');
-          e.type = 'NotFound';
-          throw e;
-        }
-
-        //validate the json that's been sent by comparing it against the schema
-        var jsonSchema = models.authenticationSchemas.returned[step.type];
-        var validated = jsonValidator.validate(body, jsonSchema);
-        if (validated.errors.length !== 0) {
-          var e = new Error('the body is invalid');
-          e.type = 'Validation';
-          e.errors = validated.errors;
-        }
-        //all good - call the correct authentication step method on the driver
-        return driver['setAuthenticationStep' + stepId](body);
-      })
-      .then(function(result) {
-        var resultSchema = {
-          "$schema": "http://json-schema.org/draft-04/schema#",
-          "type": "object",
-          "properties": {
-            "success": {
-              "type": "boolean"
-            },
-            "message": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "success"
-          ]
-        };
-
-        if (result.success === false) {
-          resultSchema.required.push("message");
-        }
-        var validated = jsonValidator.validate(result, resultSchema);
-        if (validated.errors.length !== 0) {
-          var e = new Error('the driver produced invalid json');
-          e.type = 'Driver';
-          e.errors = validated.errors;
-        }
-
-        return result;
-      })
-      .catch(function(e) {
-        if (e.type) {
-          if (e.type === 'Driver') {
-            e.driver = driverId;
-          }
-        }
-        throw e;
       });
-  }
+    }
 };
 
 module.exports = controller;

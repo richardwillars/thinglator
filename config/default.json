@@ -1,0 +1,9 @@
+{
+  "port": 3003,
+  "interfaces": {
+    "zwave": {
+        "hardwareLocation": "/dev/cu.usbmodem1421",
+        "debug": true
+    }
+  }
+}

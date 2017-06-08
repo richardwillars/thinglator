@@ -1,83 +1,84 @@
-'use strict';
-
-var fs = require('fs');
-var models = require('../models');
+const fs = require('fs');
+const chalk = require('chalk');
+const models = require('../models');
 
 class DriverSettings {
-	constructor(driverId) {
-		this.driverId = driverId;
-	}
+    constructor(driverId) {
+        this.driverId = driverId;
+    }
 
-	get() {
-		var self = this;
-		return new Promise(function(resolve, reject) {
-			models['driver'].Model.findOne({
-				_id: self.driverId
-			}).exec().then(function(result) {
-				resolve(result.settings);
-			}).catch(function(e) {
-				reject(e);
-			});
-		})
+    get() {
+        const self = this;
+        return new Promise((resolve, reject) => {
+            models.driver.Model.findOne({
+                _id: self.driverId
+            }).exec().then((result) => {
+                if (result) {
+                    return resolve(result.settings);
+                }
+                return resolve({});
+            }).catch((e) => {
+                reject(e);
+            });
+        });
+    }
 
-	}
+    set(settings) {
+        return models.driver.Model.update({
+            _id: this.driverId
+        }, {
+            settings
+        }, {
+            upsert: true,
+            setDefaultsOnInsert: true
+        }).exec();
+    }
+}
 
-	set(settings) {
-		return models['driver'].Model.update({
-			_id: this.driverId
-		}, {
-			settings: settings
-		}, {
-			upsert: true,
-			setDefaultsOnInsert: true
-		}).exec();
-	}
-};
+const utils = {
+    getDriverSettingsClass() {
+        return DriverSettings;
+    },
 
-var utils = {
-	getDriverSettingsClass: function() {
-		return DriverSettings;
-	},
+    doesDriverExist(driverId, drivers) {
+        return new Promise((resolve) => {
+            if (!drivers[driverId]) {
+                return resolve(false);
+            }
+            return resolve(true);
+        });
+    },
+    loadDrivers(interfaces) {
+        const driversArr = [];
+        fs.readdirSync('./node_modules').forEach((file) => {
+            if (file.match(/thinglator-driver-/) !== null) {
+                const name = file.replace('thinglator-driver-', '');
+                const Driver = require(`thinglator-driver-${name}`);
 
-	doesDriverExist: function(driverId, type, drivers) {
-		return new Promise(function(resolve, reject) {
-			if (!drivers[driverId]) {
-				return resolve(false);
-			}
-			if (drivers[driverId].getType() !== type) {
-				return resolve(false);
-			}
-			resolve(true);
-		});
-	},
-	loadDrivers: function() {
-		var driversArr = [];
-		fs.readdirSync('./node_modules').forEach(function(file) {
-			if (file.match(/thinglator-driver-/) !== null) {
-				var name = file.replace('thinglator-driver-', '');
-				var Driver = require('thinglator-driver-' + name);
+                console.log(chalk.blue(`Loading driver: ${chalk.white(name)}`)); // eslint-disable-line no-console
 
-				var interfaces = {
-					http: {}
-				};
-
-				driversArr[name] = new Driver(new DriverSettings(name), interfaces);
-				driversArr[name].setEventEmitter(models[driversArr[name].getType()].DeviceEventEmitter);
-
-				//get a list of devices for this particular driver
-				models['device'].Model.find({
-					type: driversArr[name].getType(),
-					driver: name
-				}).exec(function(err, devices) {
-					if (err) {
-						throw new Error(err);
-					}
-					driversArr[name].initDevices(devices);
-				});
-			}
-		});
-		return driversArr;
-	}
+                driversArr[name] = new Driver();
+                driversArr[name].init(
+                  new DriverSettings(name),
+                  interfaces[driversArr[name].getInterface()],
+                  models[driversArr[name].getType()].DeviceEventEmitter
+                ).then(() =>
+                  // get a list of devices for this particular driver
+                   models.device.Model.find({
+                       type: driversArr[name].getType(),
+                       driver: name
+                   }).exec((err, devices) => {
+                       if (err) {
+                           throw new Error(err);
+                       }
+                       driversArr[name].initDevices(devices);
+                   })).catch((err) => {
+                       console.error(err); // eslint-disable-line no-console
+                   });
+            }
+        });
+        return driversArr;
+    }
 };
 
 module.exports = utils;

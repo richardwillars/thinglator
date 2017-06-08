@@ -1,103 +1,79 @@
-var models = require('../models');
-var Validator = require('jsonschema').Validator;
-var jsonValidator = new Validator();
+const Validator = require('jsonschema').Validator;
 
-var controller = {
-	getAllDevices: function() {
-		return models['device'].Model.find().lean().exec()
-			.then(function(devices) {
-				return devices;
-			});
-	},
-	getDevicesByType: function(type) {
-		return models['device'].Model.find({
-				type: type
-			}).lean().exec()
-			.then(function(devices) {
-				return devices;
-			});
-	},
-	getDevicesByTypeAndDriver: function(type, driverId) {
-		return models['device'].Model.find({
-				type: type,
-				driver: driverId
-			}).lean().exec()
-			.then(function(devices) {
-				return devices;
-			});
-	},
-	getDeviceById: function(deviceId) {
-		return models['device'].Model.findOne({
-				_id: deviceId
-			}).lean().exec()
-			.then(function(device) {
-				if (!device) {
-					var e = new Error('device not found');
-					e.type = 'NotFound';
-					throw e;
-				}
-				return device;
-			});
-	},
-	runCommand: function(deviceId, command, body, drivers) {
-		var device;
-		var driverObj;
-		return models['device'].Model.findOne({
-				_id: deviceId
-			}).lean().exec()
-			.then(function(deviceObj) {
-				device = deviceObj;
-				if (!deviceObj) {
-					var e = new Error('device not found');
-					e.type = 'NotFound';
-					throw e;
-				}
-				if (typeof device.specs.capabilities[command] === "undefined") {
-					var e = new Error('capability not found');
-					e.type = 'BadRequest';
-					throw e;
-				}
-				if (device.specs.capabilities[command] === false) {
-					var e = new Error('capability not supported');
-					e.type = 'BadRequest';
-					throw e;
-				}
-				driverObj = drivers[deviceObj.driver];
-			})
-			.then(function() {
-				var fnName = 'capability_' + command;
+const models = require('../models');
 
-				//if a schema is specified, confirm that the request body matches it
-				var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + command].options.requestSchema;
-				if (jsonSchema) {
-					var validated = jsonValidator.validate(body, jsonSchema);
-					if (validated.errors.length !== 0) {
-						var e = new Error('the supplied json is invalid');
-						e.type = 'Validation';
-						e.errors = validated.errors;
-						throw e;
-					}
-				}
-				return driverObj[fnName](device, body);
-			})
-			.then(function(commandResult) {
-				//confirm that the action response matches the schema
-				var jsonSchema = models[device.type].Model.schema.paths['capabilities.' + command].options.responseSchema;
-				var validated = jsonValidator.validate(commandResult, jsonSchema);
-				if (validated.errors.length !== 0) {
-					var e = new Error('the driver produced invalid json');
-					e.type = 'Validation';
-					e.errors = validated.errors;
-					throw e;
-				}
+const jsonValidator = new Validator();
 
-				var ee = driverObj.getEventEmitter();
-				var eventName = models[device.type].Model.schema.paths['capabilities.' + command].options.eventName;
-				ee.emit(eventName, driverObj.getName(), device._id, commandResult);
-
-				return;
-			});
-	}
+const controller = {
+    getAllDevices() {
+        return models.device.Model.find().lean().exec()
+        .then(devices => devices);
+    },
+    getDevicesByType(type) {
+        return models.device.Model.find({
+            type
+        }).lean().exec()
+        .then(devices => devices);
+    },
+    getDevicesByTypeAndDriver(type, driverId) {
+        return models.device.Model.find({
+            type,
+            driver: driverId
+        }).lean().exec()
+        .then(devices => devices);
+    },
+    getDeviceById(deviceId) {
+        return models.device.Model.findOne({
+            _id: deviceId
+        }).lean().exec().then((device) => {
+            if (!device) {
+                const e = new Error('device not found');
+                e.type = 'NotFound';
+                throw e;
+            }
+            return device;
+        });
+    },
+    runCommand(deviceId, command, body, drivers) {
+        let device;
+        let driverObj;
+        return models.device.Model.findOne({
+            _id: deviceId
+        }).lean().exec()
+        .then((deviceObj) => {
+            device = deviceObj;
+            if (!deviceObj) {
+                const e = new Error('device not found');
+                e.type = 'NotFound';
+                throw e;
+            }
+            if (typeof device.specs.commands[command] === 'undefined') {
+                const e = new Error('command not found');
+                e.type = 'BadRequest';
+                throw e;
+            }
+            if (device.specs.commands[command] === false) {
+                const e = new Error('command not supported');
+                e.type = 'BadRequest';
+                throw e;
+            }
+            driverObj = drivers[deviceObj.driver];
+        }).then(() => {
+            const fnName = `command_${command}`;
+            // if a schema is specified, confirm that the request body matches it
+            const jsonSchema = models[device.type].Model.schema.paths[`commands.${command}`].options.requestSchema;
+            if (jsonSchema) {
+                const validated = jsonValidator.validate(body, jsonSchema);
+                if (validated.errors.length !== 0) {
+                    const e = new Error('the supplied json is invalid');
+                    e.type = 'Validation';
+                    e.errors = validated.errors;
+                    throw e;
+                }
+            }
+            return driverObj[fnName](device, body);
+        });
+    }
 };
 
 module.exports = controller;

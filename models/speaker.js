@@ -1,680 +1,610 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var EventEmitter2 = require('eventemitter2').EventEmitter2;
-var EventModel = require('./event').Model;
+const mongoose = require('mongoose');
+const EventEmitter2 = require('eventemitter2').EventEmitter2;
+const EventModel = require('./event').Model;
 
-var SpeakerSchema = new mongoose.Schema({
-	_id: false,
-	name: {
-		type: String,
-		required: true
-	},
-	deviceId: {
-		type: String,
-		required: true
-	},
-	additionalInfo: {
-		type: Object,
-		required: false,
-		default: {}
-	},
-	capabilities: {
-		getCurrentTrack: {
-			type: Boolean,
-			default: false,
-			eventName: 'currentTrack',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"artist": {
-						"type": "string"
-					},
-					"track": {
-						"type": "string"
-					},
-					"album": {
-						"type": "string"
-					},
-					"length": {
-						"type": "integer"
-					},
-					"currentPosition": {
-						"type": "integer"
-					},
-					"artUrl": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"artist",
-					"track"
-				]
-			}
-		},
+const SpeakerSchema = new mongoose.Schema({
+    _id: false,
+    name: {
+        type: String,
+        required: true
+    },
+    deviceId: {
+        type: String,
+        required: true
+    },
+    additionalInfo: {
+        type: Object,
+        required: false,
+        default: {}
+    },
+    commands: {
+        getCurrentTrack: {
+            type: Boolean
+        },
 
-		flushQueue: {
-			type: Boolean,
-			default: false,
-			eventName: 'queueFlushed',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"queueFlushed": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"queueFlushed"
-				]
-			}
-		},
+        flushQueue: {
+            type: Boolean
+        },
 
-		getLEDState: {
-			type: Boolean,
-			default: false,
-			eventName: 'LEDState',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"on"
-				]
-			}
-		},
+        getLEDState: {
+            type: Boolean
+        },
 
-		getMuted: {
-			type: Boolean,
-			default: false,
-			eventName: 'muted',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"muted": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"muted"
-				]
-			}
-		},
+        getMuted: {
+            type: Boolean
+        },
 
-		getVolume: {
-			type: Boolean,
-			default: false,
-			eventName: 'volume',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"volume": {
-						"type": "integer"
-					}
-				},
-				"required": [
-					"volume"
-				]
-			}
-		},
+        getVolume: {
+            type: Boolean
+        },
 
-		next: {
-			type: Boolean,
-			default: false,
-			eventName: 'next',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"muted": {
-						"next": "boolean"
-					}
-				},
-				"required": [
-					"next"
-				]
-			}
-		},
+        next: {
+            type: Boolean
+        },
 
-		pause: {
-			type: Boolean,
-			default: false,
-			eventName: 'playingState',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"paused": {
-						"paused": "boolean"
-					},
-					"playing": {
-						"paused": "boolean"
-					},
-					"stopped": {
-						"paused": "boolean"
-					}
-				},
-				"required": [
-					"paused", "playing", "stopped"
-				]
-			}
-		},
+        pause: {
+            type: Boolean
+        },
 
-		play: {
-			type: Boolean,
-			default: false,
-			eventName: 'playingState',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"paused": {
-						"paused": "boolean"
-					},
-					"playing": {
-						"paused": "boolean"
-					},
-					"stopped": {
-						"paused": "boolean"
-					}
-				},
-				"required": [
-					"paused", "playing", "stopped"
-				]
-			}
-		},
+        play: {
+            type: Boolean
+        },
 
-		previous: {
-			type: Boolean,
-			default: false,
-			eventName: 'previous',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"previous": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"previous"
-				]
-			}
-		},
+        previous: {
+            type: Boolean
+        },
 
-		addToQueueBottom: {
-			type: Boolean,
-			default: false,
-			eventName: 'addedToQueueBottom',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"uri": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"uri"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"uri": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"queued"
-				]
-			}
-		},
+        addToQueueBottom: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    uri: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'uri'
+                ]
+            }
+        },
 
-		addToQueueNext: {
-			type: Boolean,
-			default: false,
-			eventName: 'addedToQueueNext',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"uri": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"uri"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"uri": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"queued"
-				]
-			}
-		},
+        addToQueueNext: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    uri: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'uri'
+                ]
+            }
+        },
 
-		seek: {
-			type: Boolean,
-			default: false,
-			eventName: 'seek',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"position": {
-						"type": "integer",
-						"minimum": 0
-					}
-				},
-				"required": [
-					"position"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"position": {
-						"type": "integer",
-						"minimum": 0
-					}
-				},
-				"required": [
-					"position"
-				]
-			}
-		},
+        seek: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    position: {
+                        type: 'integer',
+                        minimum: 0
+                    }
+                },
+                required: [
+                    'position'
+                ]
+            }
+        },
 
-		setLEDState: {
-			type: Boolean,
-			default: false,
-			eventName: 'LEDState',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"on"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"on": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"on"
-				]
-			}
-		},
+        setLEDState: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    on: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'on'
+                ]
+            }
+        },
 
-		setMuted: {
-			type: Boolean,
-			default: false,
-			eventName: 'muted',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"muted": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"muted"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"muted": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"muted"
-				]
-			}
-		},
+        setMuted: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    muted: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'muted'
+                ]
+            }
+        },
 
-		setName: {
-			type: Boolean,
-			default: false,
-			eventName: 'name',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"name": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"name": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name"
-				]
-			}
-		},
+        setName: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    name: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'name'
+                ]
+            }
+        },
 
-		setPlayMode: {
-			type: Boolean,
-			default: false,
-			eventName: 'playMode',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"playMode": {
-						"type": "string",
-						"enum": [
-							"normal", "repeat_all", "shuffle", "shuffle_norepeat"
-						]
-					}
-				},
-				"required": [
-					"playMode"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"playMode": {
-						"type": "string",
-						"enum": [
-							"normal", "repeat_all", "shuffle", "shuffle_norepeat"
-						]
-					}
-				},
-				"required": [
-					"playMode"
-				]
-			}
-		},
+        setPlayMode: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    playMode: {
+                        type: 'string',
+                        enum: [
+                            'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
+                        ]
+                    }
+                },
+                required: [
+                    'playMode'
+                ]
+            }
+        },
 
-		setVolume: {
-			type: Boolean,
-			default: false,
-			eventName: 'volume',
-			requestSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"volume": {
-						"type": "integer",
-						"minimum": 0,
-						"maximum": 100
-					}
-				},
-				"required": [
-					"volume"
-				]
-			},
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"volume": {
-						"type": "integer",
-						"minimum": 0,
-						"maximum": 100
-					}
-				},
-				"required": [
-					"volume"
-				]
-			}
-		},
+        setVolume: {
+            type: Boolean,
+            requestSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    volume: {
+                        type: 'integer',
+                        minimum: 0,
+                        maximum: 100
+                    }
+                },
+                required: [
+                    'volume'
+                ]
+            }
+        },
 
-		stop: {
-			type: Boolean,
-			default: false,
-			eventName: 'playingState',
-			responseSchema: {
-				"$schema": "http://json-schema.org/draft-04/schema#",
-				"type": "object",
-				"properties": {
-					"paused": {
-						"paused": "boolean"
-					},
-					"playing": {
-						"paused": "boolean"
-					},
-					"stopped": {
-						"paused": "boolean"
-					}
-				},
-				"required": [
-					"paused", "playing", "stopped"
-				]
-			}
-		}
-	}
+        stop: {
+            type: Boolean
+        }
+    },
+    events: {
+        currentTrack: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    artist: {
+                        type: 'string'
+                    },
+                    track: {
+                        type: 'string'
+                    },
+                    album: {
+                        type: 'string'
+                    },
+                    length: {
+                        type: 'integer'
+                    },
+                    currentPosition: {
+                        type: 'integer'
+                    },
+                    artUrl: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'artist',
+                    'track'
+                ]
+            }
+        },
+        queueFlushed: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    queueFlushed: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'queueFlushed'
+                ]
+            }
+        },
+        ledState: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    on: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'on'
+                ]
+            }
+        },
+        muted: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    muted: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'muted'
+                ]
+            }
+        },
+        volume: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    volume: {
+                        type: 'integer'
+                    }
+                },
+                required: [
+                    'volume'
+                ]
+            }
+        },
+        next: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    muted: {
+                        next: 'boolean'
+                    }
+                },
+                required: [
+                    'next'
+                ]
+            }
+        },
+        playingState: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    paused: {
+                        paused: 'boolean'
+                    },
+                    playing: {
+                        paused: 'boolean'
+                    },
+                    stopped: {
+                        paused: 'boolean'
+                    }
+                },
+                required: [
+                    'paused', 'playing', 'stopped'
+                ]
+            }
+        },
+        previous: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    previous: {
+                        type: 'boolean'
+                    }
+                },
+                required: [
+                    'previous'
+                ]
+            }
+        },
+        addedToQueueBottom: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    uri: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'queued'
+                ]
+            }
+        },
+        addedToQueueNext: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    uri: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'queued'
+                ]
+            }
+        },
+        seek: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    position: {
+                        type: 'integer',
+                        minimum: 0
+                    }
+                },
+                required: [
+                    'position'
+                ]
+            }
+        },
+        name: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    name: {
+                        type: 'string'
+                    }
+                },
+                required: [
+                    'name'
+                ]
+            }
+        },
+        playMode: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    playMode: {
+                        type: 'string',
+                        enum: [
+                            'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
+                        ]
+                    }
+                },
+                required: [
+                    'playMode'
+                ]
+            }
+        }
+    }
 });
 
 
-var Speaker = mongoose.model('Speaker', SpeakerSchema);
-var deviceEventEmitter = new EventEmitter2();
+const Speaker = mongoose.model('Speaker', SpeakerSchema);
+const deviceEventEmitter = new EventEmitter2();
 
-deviceEventEmitter.on('playMode', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'playMode',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('playMode', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'playMode',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('name', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'name',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('name', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'name',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('LEDState', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'LEDState',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('LEDState', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'LEDState',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('addedToQueueBottom', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'addedToQueueBottom',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('addedToQueueBottom', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'addedToQueueBottom',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('addedToQueueNext', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'addedToQueueNext',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('addedToQueueNext', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'addedToQueueNext',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('previous', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'previous',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('previous', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'previous',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('next', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'next',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('next', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'next',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('queueFlushed', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'queueFlushed',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('queueFlushed', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'queueFlushed',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('playingState', function(driverId, deviceId, obj) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'playingState',
-		value: obj
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('playingState', (driverId, deviceId, obj) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'playingState',
+        value: obj
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('currentTrack', function(driverId, deviceId, trackId) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'currentTrack',
-		value: trackId
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('currentTrack', (driverId, deviceId, trackId) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'currentTrack',
+        value: trackId
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('volume', function(driverId, deviceId, volume) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'volume',
-		value: volume
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('volume', (driverId, deviceId, volume) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'volume',
+        value: volume
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('muted', function(driverId, deviceId, state) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'muted',
-		value: state
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('muted', (driverId, deviceId, state) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'muted',
+        value: state
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
-deviceEventEmitter.on('seek', function(driverId, deviceId, seekPosition) {
-	var eventObj = EventModel({
-		eventType: 'device',
-		driverType: 'speaker',
-		driverId: driverId,
-		deviceId: deviceId,
-		event: 'seek',
-		value: seekPosition
-	});
-	eventObj.save().catch(function(err) {
-		console.log('Unable to save event..', eventObj, err);
-	});
+deviceEventEmitter.on('seek', (driverId, deviceId, seekPosition) => {
+    const eventObj = EventModel({
+        eventType: 'device',
+        driverType: 'speaker',
+        driverId,
+        deviceId,
+        event: 'seek',
+        value: seekPosition
+    });
+    eventObj.save().catch((err) => {
+        console.error('Unable to save event..', eventObj, err); // eslint-disable-line no-console
+    });
 });
 
 
 module.exports = {
-	Model: Speaker,
-	DeviceEventEmitter: deviceEventEmitter
+    Model: Speaker,
+    DeviceEventEmitter: deviceEventEmitter
 };
