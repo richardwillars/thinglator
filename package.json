@@ -2,7 +2,7 @@
   "name": "thinglator",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "maintainers": [
     {
       "name": "Richard Willars",
@@ -27,20 +27,21 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
-    "chai": "^3.5.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^6.10.3",
     "mocha": "^3.0.2",
     "mockery": "^1.7.0",
     "sinon": "^1.17.5",
-    "sinon-chai": "^2.8.0",
-    "eslint-plugin-react": "^6.10.3",
-    "eslint-plugin-import": "^2.2.0"
+    "sinon-chai": "^2.8.0"
   },
   "scripts": {
     "start": "node app.js",
-    "test": "istanbul cover node_modules/.bin/_mocha -- test --recursive",
-    "test:debug": "mocha -- test --recursive"
+    "test": "istanbul cover node_modules/.bin/_mocha --recursive",
+    "test:watch": "node_modules/.bin/_mocha --recursive --watch"
   },
   "engines": {
     "node": ">=6.10.0"
