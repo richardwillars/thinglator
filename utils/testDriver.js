@@ -58,9 +58,10 @@ module.exports = function driverTests(driverName, driver, type, driverInterface,
 
             it('should have a getInterface method that returns the interface required by the driver', () => {
                 const driverInstance = new driver();
-                driverInstance.init(driverSettings, interfaces, eventEmitter);
-                expect(typeof driverInstance.getInterface).to.equal('function');
-                expect(driverInstance.getInterface()).to.equal(driverInterface);
+                return driverInstance.init(driverSettings, interfaces, eventEmitter).then(() => {
+                    expect(typeof driverInstance.getInterface).to.equal('function');
+                    expect(driverInstance.getInterface()).to.equal(driverInterface);
+                });
             });
 
             it('should have an initDevices method that accepts an array of devices to be initialised if required', () => {
@@ -70,9 +71,10 @@ module.exports = function driverTests(driverName, driver, type, driverInterface,
 
             it('should have a getEventEmitter method that returns the event emitter for the driver', () => {
                 const driverInstance = new driver(driverSettings, interfaces, eventEmitter);
-                driverInstance.init(driverSettings, interfaces, eventEmitter);
-                expect(typeof driverInstance.getEventEmitter).to.equal('function');
-                expect(driverInstance.getEventEmitter()).to.equal(eventEmitter);
+                return driverInstance.init(driverSettings, interfaces, eventEmitter).then(() => {
+                    expect(typeof driverInstance.getEventEmitter).to.equal('function');
+                    expect(driverInstance.getEventEmitter()).to.equal(eventEmitter);
+                });
             });
 
             it('should have a getAuthenticationProcess method that returns the authorisation process for the driver as an array', () => {
