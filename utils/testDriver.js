@@ -1,8 +1,9 @@
-
+const chai = require('chai');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
+
 const models = require('../models');
 
-module.exports = function driverTests(driverName, driver, type, driverInterface) {
+module.exports = function driverTests(driverName, driver, type, driverInterface, expect) {
     let driverSettings;
     let interfaces = {};
     let eventEmitter;
@@ -89,17 +90,17 @@ module.exports = function driverTests(driverName, driver, type, driverInterface)
         describe(`${type} commands`, () => {
             let commands = [];
             beforeEach(() => {
-                commands = Object.getOwnPropertyNames(driver.prototype).filter(r => r.startsWith('capability_'));
+                commands = Object.getOwnPropertyNames(driver.prototype).filter(r => r.startsWith('command_'));
             });
 
-            it('should expose at least one capability', () => {
+            it('should expose at least one command', () => {
                 expect(commands.length > 0).to.equal(true);
             });
 
             it('should only expose valid commands', () => {
-                const validCapabilities = models[type].Model.schema.paths;
-                commands.forEach((capability) => {
-                    expect(typeof validCapabilities[`commands.${capability.substring(11)}`]).to.equal('object', `${capability.substring(11)} is not a valid capability for ${type}`);
+                const validCommands = models[type].Model.schema.paths;
+                commands.forEach((command) => {
+                    expect(typeof validCommands[`commands.${command.substring(8)}`]).to.equal('object', `${command.substring(8)} is not a valid command for ${type}`);
                 });
             });
         });
