@@ -20,7 +20,10 @@ module.exports = function driverTests(driverName, driver, type, driverInterface,
             }();
 
             interfaces = {
-                http: {}
+                http: {},
+                zwave: {
+                    getValueChangedEventEmitter: () => new EventEmitter2()
+                }
             };
 
             eventEmitter = new EventEmitter2();
@@ -34,10 +37,8 @@ module.exports = function driverTests(driverName, driver, type, driverInterface,
             });
 
             it('should have a init method that accepts an instance of the driver settings class, an object containing a list of available interfaces and an event emitter', () => {
-                const driverInstance = new driver(driverSettings, interfaces, eventEmitter);
-
+                const driverInstance = new driver();
                 expect(typeof driverInstance.init).to.equal('function');
-                // expect(driverInstance.init()).to.equal(driverName);
             });
 
             it('should have a getName method that returns the name of the driver', () => {
@@ -58,33 +59,33 @@ module.exports = function driverTests(driverName, driver, type, driverInterface,
 
             it('should have a getInterface method that returns the interface required by the driver', () => {
                 const driverInstance = new driver();
-                return driverInstance.init(driverSettings, interfaces, eventEmitter).then(() => {
+                return driverInstance.init(driverSettings, interfaces[driverInterface], eventEmitter).then(() => {
                     expect(typeof driverInstance.getInterface).to.equal('function');
                     expect(driverInstance.getInterface()).to.equal(driverInterface);
                 });
             });
 
             it('should have an initDevices method that accepts an array of devices to be initialised if required', () => {
-                const driverInstance = new driver(driverSettings, interfaces, eventEmitter);
+                const driverInstance = new driver();
                 expect(typeof driverInstance.initDevices).to.equal('function');
             });
 
             it('should have a getEventEmitter method that returns the event emitter for the driver', () => {
-                const driverInstance = new driver(driverSettings, interfaces, eventEmitter);
-                return driverInstance.init(driverSettings, interfaces, eventEmitter).then(() => {
+                const driverInstance = new driver();
+                return driverInstance.init(driverSettings, interfaces[driverInterface], eventEmitter).then(() => {
                     expect(typeof driverInstance.getEventEmitter).to.equal('function');
                     expect(driverInstance.getEventEmitter()).to.equal(eventEmitter);
                 });
             });
 
             it('should have a getAuthenticationProcess method that returns the authorisation process for the driver as an array', () => {
-                const driverInstance = new driver(driverSettings, interfaces, eventEmitter);
+                const driverInstance = new driver();
                 expect(typeof driverInstance.getAuthenticationProcess).to.equal('function');
                 expect(driverInstance.getAuthenticationProcess()).to.be.instanceof(Array);
             });
 
             it('should have a discover method that promises to find and return all active devices', () => {
-                const driverInstance = new driver(driverSettings, interfaces, eventEmitter);
+                const driverInstance = new driver();
                 expect(typeof driverInstance.discover).to.equal('function');
             });
         });
@@ -93,10 +94,6 @@ module.exports = function driverTests(driverName, driver, type, driverInterface,
             let commands = [];
             beforeEach(() => {
                 commands = Object.getOwnPropertyNames(driver.prototype).filter(r => r.startsWith('command_'));
-            });
-
-            it('should expose at least one command', () => {
-                expect(commands.length > 0).to.equal(true);
             });
 
             it('should only expose valid commands', () => {
