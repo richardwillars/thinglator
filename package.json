@@ -35,12 +35,13 @@
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
     "eslint-plugin-react": "^6.10.3",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3"
   },
   "scripts": {
     "start": "node app.js",
-    "test": "istanbul cover node_modules/.bin/_mocha -- test --recursive",
-    "test:debug": "mocha -- test --recursive"
+    "test": "istanbul cover node_modules/.bin/_mocha --recursive",
+    "test:watch": "node_modules/.bin/_mocha --recursive --watch"
   },
   "engines": {
     "node": ">=6.10.0"
