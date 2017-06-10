@@ -120,6 +120,21 @@ const SensorSchema = new mongoose.Schema({
                 ]
             }
         },
+        contact: {
+            type: Boolean,
+            responseSchema: {
+                $schema: 'http://json-schema.org/draft-04/schema#',
+                type: 'object',
+                properties: {
+                    contact: {
+                        type: Boolean
+                    }
+                },
+                required: [
+                    'contact'
+                ]
+            }
+        },
         uv: {
             type: Boolean,
             responseSchema: {
@@ -204,6 +219,10 @@ deviceEventEmitter.on('light', (driverId, deviceId, value) => {
 
 deviceEventEmitter.on('motion', (driverId, deviceId, value) => {
     processEvent(driverId, deviceId, value, 'motion');
+});
+
+deviceEventEmitter.on('contact', (driverId, deviceId, value) => {
+    processEvent(driverId, deviceId, value, 'contact');
 });
 
 
