@@ -27,33 +27,6 @@ const AuthenticationSchemas = {
                 },
                 dataLabel: {
                     type: 'string'
-                },
-                next: {
-                    type: 'object',
-                    properties: {
-                        http: {
-                            type: 'string'
-                        },
-                        socket: {
-                            type: 'object',
-                            properties: {
-                                event: {
-                                    type: 'string'
-                                },
-                                step: {
-                                    type: 'integer'
-                                }
-                            },
-                            required: [
-                                'event',
-                                'step'
-                            ]
-                        }
-                    },
-                    required: [
-                        'http',
-                        'socket'
-                    ]
                 }
             },
             required: [
@@ -72,35 +45,7 @@ const AuthenticationSchemas = {
                 },
                 message: {
                     type: 'string'
-                },
-                next: {
-                    type: 'object',
-                    properties: {
-                        http: {
-                            type: 'string'
-                        },
-                        socket: {
-                            type: 'object',
-                            properties: {
-                                event: {
-                                    type: 'string'
-                                },
-                                step: {
-                                    type: 'number'
-                                }
-                            },
-                            required: [
-                                'event',
-                                'step'
-                            ]
-                        }
-                    },
-                    required: [
-                        'http',
-                        'socket'
-                    ]
                 }
-
             },
             required: [
                 'type',
