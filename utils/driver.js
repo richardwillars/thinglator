@@ -1,5 +1,6 @@
 const fs = require('fs');
 const chalk = require('chalk');
+
 const models = require('../models');
 
 class DriverSettings {
@@ -56,8 +57,10 @@ const utils = {
                 const Driver = require(`thinglator-driver-${name}`);
 
                 console.log(chalk.blue(`Loading driver: ${chalk.white(name)}`)); // eslint-disable-line no-console
-
                 driversArr[name] = new Driver();
+                if (interfaces[driversArr[name].getInterface()] === undefined) {
+                    throw new Error(`${driversArr[name].getInterface()} interface not found. Required by ${name} driver`);
+                }
                 driversArr[name].init(
                   new DriverSettings(name),
                   interfaces[driversArr[name].getInterface()],

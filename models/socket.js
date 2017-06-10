@@ -3,7 +3,7 @@ const EventEmitter2 = require('eventemitter2').EventEmitter2;
 const EventModel = require('./event').Model;
 const eventValidator = require('../utils/event').eventValidator;
 
-const SwitchSchema = new mongoose.Schema({
+const SocketSchema = new mongoose.Schema({
     _id: false,
     name: {
         type: String,
@@ -61,16 +61,16 @@ const SwitchSchema = new mongoose.Schema({
 });
 
 
-const Switch = mongoose.model('Switch', SwitchSchema);
+const Socket = mongoose.model('Socket', SocketSchema);
 const deviceEventEmitter = new EventEmitter2();
 
 function processEvent(driverId, deviceId, value, eventName) {
   // validate the event against the schema
-    const validated = eventValidator(value, Switch.schema.paths[`events.${eventName}`].options.responseSchema);
+    const validated = eventValidator(value, Socket.schema.paths[`events.${eventName}`].options.responseSchema);
     if (validated === true) {
         const eventObj = EventModel({
             eventType: 'device',
-            driverType: 'switch',
+            driverType: 'socket',
             driverId,
             deviceId,
             event: eventName,
@@ -99,6 +99,6 @@ deviceEventEmitter.on('energy', (driverId, deviceId, value) => {
 
 
 module.exports = {
-    Model: Switch,
+    Model: Socket,
     DeviceEventEmitter: deviceEventEmitter
 };

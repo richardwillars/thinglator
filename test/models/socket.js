@@ -1,15 +1,14 @@
-
-
 const chai = require('chai');
+
 const expect = chai.expect;
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const mockery = require('mockery');
 
-describe('models/switch', () => {
+describe('models/socket', () => {
     let moduleToBeTested;
-    let switchConstructorSpy;
+    let socketConstructorSpy;
     const modelSpy = sinon.spy();
     const eventEmitterConstructorSpy = sinon.spy();
     const eventEmitterOnSpy = sinon.spy();
@@ -18,13 +17,13 @@ describe('models/switch', () => {
     let eventSaveSpy;
 
     beforeEach((done) => {
-        switchConstructorSpy = sinon.spy();
+        socketConstructorSpy = sinon.spy();
         eventCreateSpy = sinon.spy();
         eventSaveSpy = sinon.spy();
 
         const schemaClass = class Event {
             constructor(props) {
-                switchConstructorSpy(props);
+                socketConstructorSpy(props);
             }
 		};
 
@@ -85,12 +84,12 @@ describe('models/switch', () => {
         done();
     });
 
-    it('should create a mongoose schema representing a switch', () => {
+    it('should create a mongoose schema representing a socket', () => {
 		// call the module to be tested
 
-        moduleToBeTested = require('../../models/switch');
-        expect(switchConstructorSpy).to.have.been.calledOnce;
-        expect(switchConstructorSpy).to.have.been.calledWith({
+        moduleToBeTested = require('../../models/socket');
+        expect(socketConstructorSpy).to.have.been.calledOnce;
+        expect(socketConstructorSpy).to.have.been.calledWith({
             _id: false,
             name: {
                 type: String,
@@ -149,7 +148,7 @@ describe('models/switch', () => {
     });
 
     it('should create a mongoose model from the schema', () => {
-        moduleToBeTested = require('../../models/switch');
+        moduleToBeTested = require('../../models/socket');
         expect(modelSpy).have.been.calledOnce;
         expect(modelSpy).to.have.been.calledWith('Switch');
         expect(moduleToBeTested.Model).to.be.an.object;
@@ -157,33 +156,33 @@ describe('models/switch', () => {
 
     describe('events', () => {
         it('should setup an event listener and expose it', () => {
-            moduleToBeTested = require('../../models/switch');
+            moduleToBeTested = require('../../models/socket');
             expect(eventEmitterConstructorSpy).to.have.been.calledOnce;
             expect(moduleToBeTested.DeviceEventEmitter).to.be.an.object;
         });
 
         it('should have created 3 event listeners', () => {
-            moduleToBeTested = require('../../models/switch');
+            moduleToBeTested = require('../../models/socket');
             expect(eventEmitterOnSpy).to.have.been.calledThrice;
         });
 
         describe('\'on\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../models/switch');
+                moduleToBeTested = require('../../models/socket');
                 expect(eventEmitterOnSpy.secondCall).to.have.been.calledWith('on');
             });
         });
 
         describe('\'energy\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../models/switch');
+                moduleToBeTested = require('../../models/socket');
                 expect(eventEmitterOnSpy.thirdCall).to.have.been.calledWith('energy');
             });
         });
 
         describe('\'batteryLevel\' event', () => {
             it('should register the event listener', () => {
-                moduleToBeTested = require('../../models/switch');
+                moduleToBeTested = require('../../models/socket');
                 expect(eventEmitterOnSpy.firstCall).to.have.been.calledWith('batteryLevel');
             });
         });

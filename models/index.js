@@ -5,7 +5,7 @@ const eventModel = require('./event');
 const lightModel = require('./light');
 const sensorModel = require('./sensor');
 const speakerModel = require('./speaker');
-const switchModel = require('./switch');
+const socketModel = require('./socket');
 
 
 module.exports = {
@@ -16,5 +16,5 @@ module.exports = {
     light: lightModel,
     sensor: sensorModel,
     speaker: speakerModel,
-    switch: switchModel
+    socket: socketModel
 };
