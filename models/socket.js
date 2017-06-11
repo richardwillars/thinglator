@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const EventEmitter2 = require('eventemitter2').EventEmitter2;
-const EventModel = require('./event').Model;
-const eventValidator = require('../utils/event').eventValidator;
+
+const events = require('../events');
+const eventUtils = require('../utils/event');
+const EventModel = require('../models/event').Model;
 
 const SocketSchema = new mongoose.Schema({
     _id: false,
@@ -27,78 +28,15 @@ const SocketSchema = new mongoose.Schema({
         }
     },
     events: {
-        energy: {
-            type: Boolean,
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    energy: {
-                        type: 'number'
-                    }
-                },
-                required: [
-                    'energy'
-                ]
-            }
-        },
-        on: {
-            type: Boolean,
-            responseSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'on'
-                ]
-            }
-        }
+        energy: events.energy,
+        on: events.on
     }
 });
 
 
 const Socket = mongoose.model('Socket', SocketSchema);
-const deviceEventEmitter = new EventEmitter2();
-
-function processEvent(driverId, deviceId, value, eventName) {
-  // validate the event against the schema
-    const validated = eventValidator(value, Socket.schema.paths[`events.${eventName}`].options.responseSchema);
-    if (validated === true) {
-        const eventObj = EventModel({
-            eventType: 'device',
-            driverType: 'socket',
-            driverId,
-            deviceId,
-            event: eventName,
-            value
-        });
-        eventObj.save().catch((err) => {
-            console.log('Unable to save event..', eventObj, err);
-        });
-    } else {
-        console.log('Invalid event', driverId, eventName, value);
-        console.error(validated);
-    }
-}
-
-deviceEventEmitter.on('batteryLevel', (driverId, deviceId, value) => {
-    processEvent(driverId, deviceId, value, 'batteryLevel');
-});
-
-deviceEventEmitter.on('on', (driverId, deviceId, value) => {
-    processEvent(driverId, deviceId, value, 'on');
-});
-
-deviceEventEmitter.on('energy', (driverId, deviceId, value) => {
-    processEvent(driverId, deviceId, value, 'energy');
-});
-
 
 module.exports = {
     Model: Socket,
-    DeviceEventEmitter: deviceEventEmitter
+    DeviceEventEmitter: eventUtils.processIncomingEvents(Socket.schema, 'socket', EventModel)
 };
