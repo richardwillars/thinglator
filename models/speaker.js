@@ -21,43 +21,53 @@ const SpeakerSchema = new mongoose.Schema({
     },
     commands: {
         getCurrentTrack: {
-            type: Boolean
+            type: Boolean,
+            description: 'Gets the current track from the speaker'
         },
 
         flushQueue: {
-            type: Boolean
+            type: Boolean,
+            description: 'Empties the queue on the speaker'
         },
 
         getLEDState: {
-            type: Boolean
+            type: Boolean,
+            description: 'Gets the state of the LED on the speaker'
         },
 
         getMuted: {
-            type: Boolean
+            type: Boolean,
+            description: 'Gets whether the speaker is muted or not'
         },
 
         getVolume: {
-            type: Boolean
+            type: Boolean,
+            description: 'Gets the volume level of the speaker'
         },
 
         next: {
-            type: Boolean
+            type: Boolean,
+            description: 'Plays the next track in the queue'
         },
 
         pause: {
-            type: Boolean
+            type: Boolean,
+            description: 'Pauses the currently playing audio'
         },
 
         play: {
-            type: Boolean
+            type: Boolean,
+            description: 'Plays the current audio'
         },
 
         previous: {
-            type: Boolean
+            type: Boolean,
+            description: 'Plays the previous track in the queue'
         },
 
         addToQueueBottom: {
             type: Boolean,
+            description: 'Adds audio to the bottom of the queue',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -74,6 +84,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         addToQueueNext: {
             type: Boolean,
+            description: 'Adds audio to the top of the queue so that it plays next',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -90,6 +101,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         seek: {
             type: Boolean,
+            description: 'Seeks to the specified position within the current audio',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -107,6 +119,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         setLEDState: {
             type: Boolean,
+            description: 'Sets the state of the LED on the speaker',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -123,6 +136,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         setMuted: {
             type: Boolean,
+            description: 'Sets whether the speaker is muted or not',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -139,6 +153,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         setName: {
             type: Boolean,
+            description: 'Sets the name of the speaker',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -155,6 +170,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         setPlayMode: {
             type: Boolean,
+            description: 'Sets the play mode of the speaker',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -174,6 +190,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         setVolume: {
             type: Boolean,
+            description: 'Sets the volume of the speaker',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -191,7 +208,8 @@ const SpeakerSchema = new mongoose.Schema({
         },
 
         stop: {
-            type: Boolean
+            type: Boolean,
+            description: 'Stops the currently playing audio'
         }
     },
     events: {

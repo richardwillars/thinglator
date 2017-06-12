@@ -3,6 +3,7 @@ const models = require('../models');
 const md5 = require('md5');
 const driverUtils = require('../utils/driver');
 const deviceUtils = require('../utils/device');
+const events = require('../events');
 
 const controller = {
     getDriversWithStats(drivers) {
@@ -132,6 +133,38 @@ const controller = {
                 }
             }
             throw e;
+        });
+    },
+    getEventDescriptions() {
+        return Promise.resolve().then(() => {
+            const descriptions = {};
+            Object.keys(events).forEach((eventId) => {
+                if (events[eventId].description) {
+                    descriptions[eventId] = events[eventId].description;
+                }
+            });
+
+            return descriptions;
+        });
+    },
+    getCommandDescriptions() {
+        return Promise.resolve().then(() => {
+            // loop through each model
+            const descriptions = {};
+            Object.keys(models).forEach((modelId) => {
+                if (models[modelId].Model) {
+                    const schema = models[modelId].Model.schema.paths;
+                    Object.keys(schema).forEach((fieldId) => {
+                        if (fieldId.startsWith('commands.') && schema[fieldId].options && schema[fieldId].options.description) {
+                            if (descriptions[modelId] === undefined) {
+                                descriptions[modelId] = {};
+                            }
+                            descriptions[modelId][fieldId.substring(9)] = schema[fieldId].options.description;
+                        }
+                    });
+                }
+            });
+            return descriptions;
         });
     }
 };

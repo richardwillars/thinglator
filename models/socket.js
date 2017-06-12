@@ -21,10 +21,12 @@ const SocketSchema = new mongoose.Schema({
     },
     commands: {
         on: {
-            type: Boolean
+            type: Boolean,
+            description: 'Turns the socket on'
         },
         off: {
-            type: Boolean
+            type: Boolean,
+            description: 'Turns the socket off'
         }
     },
     events: {

@@ -21,10 +21,12 @@ const LightSchema = new mongoose.Schema({
     },
     commands: {
         toggle: {
-            type: Boolean
+            type: Boolean,
+            description: 'Toggles the light on and off'
         },
         setHSBState: {
             type: Boolean,
+            description: 'Sets the hue, saturation and brightness, allowing you to change the colour of the light',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -69,6 +71,7 @@ const LightSchema = new mongoose.Schema({
         },
         setBrightnessState: {
             type: Boolean,
+            description: 'Sets the brightness of the light',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -100,6 +103,7 @@ const LightSchema = new mongoose.Schema({
         },
         setBooleanState: {
             type: Boolean,
+            description: 'Turns the light on and off',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -122,6 +126,7 @@ const LightSchema = new mongoose.Schema({
         },
         breatheEffect: {
             type: Boolean,
+            description: 'Performs a breathe effect by fading between colours',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -207,6 +212,7 @@ const LightSchema = new mongoose.Schema({
         },
         pulseEffect: {
             type: Boolean,
+            description: 'Performs a pulse effect by flashing between colours',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',

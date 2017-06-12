@@ -95,6 +95,24 @@ module.exports = (app, drivers) => {
         });
     });
 
+    app.get('/drivers/commands', (req, res, next) => {
+        driverCtrl.getCommandDescriptions()
+        .then((results) => {
+            res.json(results);
+        }).catch((err) => {
+            next(err);
+        });
+    });
+
+    app.get('/drivers/events', (req, res, next) => {
+        driverCtrl.getEventDescriptions()
+        .then((results) => {
+            res.json(results);
+        }).catch((err) => {
+            next(err);
+        });
+    });
+
     app.get('/event/latestCommands', (req, res, next) => {
         eventCtrl.getLatestCommandEvents()
           .then((results) => {

@@ -80,8 +80,8 @@ const socketApi = (httpServer, drivers) => {
             });
         });
 
-        socket.on('discoverDevices', (type, driver, cb) => {
-            driverCtrl.discover(driver, type, drivers).then((results) => {
+        socket.on('discoverDevices', (driver, cb) => {
+            driverCtrl.discover(driver, drivers).then((results) => {
                 cb(results);
             }).catch((err) => {
                 cb(errorHandler(err));
@@ -146,6 +146,22 @@ const socketApi = (httpServer, drivers) => {
 
         socket.on('getLatestCommandEvents', (cb) => {
             eventCtrl.getLatestCommandEvents().then((results) => {
+                cb(results);
+            }).catch((err) => {
+                cb(errorHandler(err));
+            });
+        });
+
+        socket.on('getCommandDescriptions', (cb) => {
+            driverCtrl.getCommandDescriptions().then((results) => {
+                cb(results);
+            }).catch((err) => {
+                cb(errorHandler(err));
+            });
+        });
+
+        socket.on('getEventDescriptions', (cb) => {
+            driverCtrl.getEventDescriptions().then((results) => {
                 cb(results);
             }).catch((err) => {
                 cb(errorHandler(err));
