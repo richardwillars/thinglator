@@ -34,6 +34,17 @@ const controller = {
             return device;
         });
     },
+    getDeviceTypes() {
+        return Promise.resolve().then(() => {
+            const types = {};
+            Object.keys(models)
+              .filter(modelId => models[modelId].DeviceEventEmitter !== undefined)
+              .forEach((modelId) => {
+                  types[modelId] = models[modelId].schema;
+              });
+            return types;
+        });
+    },
     runCommand(deviceId, command, body, drivers) {
         let device;
         let driverObj;

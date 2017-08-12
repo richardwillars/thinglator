@@ -64,16 +64,16 @@ const socketApi = (httpServer, drivers) => {
         io.emit('newEvent', event);
     });
     io.on('connection', (socket) => {
-        socket.on('getAuthenticationProcess', (type, driver, cb) => {
-            authenticateCtrl.getAuthenticationProcess(driver, type, drivers).then((result) => {
+        socket.on('getAuthenticationProcess', (driver, cb) => {
+            authenticateCtrl.getAuthenticationProcess(driver, drivers).then((result) => {
                 cb(result);
             }).catch((err) => {
                 cb(errorHandler(err));
             });
         });
 
-        socket.on('authenticationStep', (type, driver, stepId, body, cb) => {
-            authenticateCtrl.authenticationStep(driver, type, drivers, stepId, body).then((result) => {
+        socket.on('authenticationStep', (driver, stepId, body, cb) => {
+            authenticateCtrl.authenticationStep(driver, drivers, stepId, body).then((result) => {
                 cb(result);
             }).catch((err) => {
                 cb(errorHandler(err));
@@ -162,6 +162,14 @@ const socketApi = (httpServer, drivers) => {
 
         socket.on('getEventDescriptions', (cb) => {
             driverCtrl.getEventDescriptions().then((results) => {
+                cb(results);
+            }).catch((err) => {
+                cb(errorHandler(err));
+            });
+        });
+
+        socket.on('getDeviceTypes', (cb) => {
+            deviceCtrl.getDeviceTypes().then((results) => {
                 cb(results);
             }).catch((err) => {
                 cb(errorHandler(err));
