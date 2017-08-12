@@ -140,7 +140,11 @@ const controller = {
             const descriptions = {};
             Object.keys(events).forEach((eventId) => {
                 if (events[eventId].description) {
-                    descriptions[eventId] = events[eventId].description;
+                    descriptions[eventId] = {
+                        description: events[eventId].description,
+                        friendly: events[eventId].friendly,
+                        fields: events[eventId].responseSchema.properties
+                    };
                 }
             });
 
@@ -159,7 +163,10 @@ const controller = {
                             if (descriptions[modelId] === undefined) {
                                 descriptions[modelId] = {};
                             }
-                            descriptions[modelId][fieldId.substring(9)] = schema[fieldId].options.description;
+                            descriptions[modelId][fieldId.substring(9)] = {
+                                description: schema[fieldId].options.description,
+                                friendly: schema[fieldId].options.friendly
+                            };
                         }
                     });
                 }

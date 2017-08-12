@@ -4,7 +4,7 @@ const events = require('../events');
 const eventUtils = require('../utils/event');
 const EventModel = require('../models/event').Model;
 
-const SensorSchema = new mongoose.Schema({
+const schema = {
     _id: false,
     name: {
         type: String,
@@ -33,12 +33,14 @@ const SensorSchema = new mongoose.Schema({
         uv: events.uv,
         batteryLevel: events.batteryLevel
     }
-});
+};
+const SensorSchema = new mongoose.Schema(schema);
 
 
 const Sensor = mongoose.model('Sensor', SensorSchema);
 
 module.exports = {
     Model: Sensor,
-    DeviceEventEmitter: eventUtils.processIncomingEvents(Sensor.schema, 'sensor', EventModel)
+    DeviceEventEmitter: eventUtils.processIncomingEvents(Sensor.schema, 'sensor', EventModel),
+    schema
 };

@@ -2,6 +2,7 @@ module.exports = {
     addedToQueueBottom: {
         type: Boolean,
         description: 'Fired when an item is added to the bottom of the queue',
+        friendly: 'Added to bottom of queue',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -18,6 +19,7 @@ module.exports = {
     addedToQueueNext: {
         type: Boolean,
         description: 'Fired when an item is added to the top of the queue',
+        friendly: 'Added to top of queue',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -34,6 +36,7 @@ module.exports = {
     audioPlayingState: {
         type: Boolean,
         description: 'Represents the current playing state (playing, paused, stopped)',
+        friendly: 'Playing state',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -56,6 +59,7 @@ module.exports = {
     audioPlayMode: {
         type: Boolean,
         description: 'The current play mode of the audio device (normal, shuffle, repeat etc)',
+        friendly: 'Play mode',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -75,6 +79,7 @@ module.exports = {
     batteryLevel: {
         type: Boolean,
         description: 'The current battery level of the device',
+        friendly: 'Battery level',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -93,6 +98,7 @@ module.exports = {
     breatheLightEffect: {
         type: Boolean,
         description: 'Whether the light is running a breathe effect or not',
+        friendly: 'Breathe effect',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -109,12 +115,13 @@ module.exports = {
     contact: {
         type: Boolean,
         description: 'Whether the contact sensor is closed or open',
+        friendly: 'Contact',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
             properties: {
                 contact: {
-                    type: Boolean
+                    type: 'boolean'
                 }
             },
             required: [
@@ -125,6 +132,7 @@ module.exports = {
     currentAudioTrack: {
         type: Boolean,
         description: 'Information about the current audio',
+        friendly: 'Current track',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -157,12 +165,13 @@ module.exports = {
     energy: {
         type: Boolean,
         description: 'The current energy level in watts',
+        friendly: 'Energy',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
             properties: {
                 energy: {
-                    type: 'number'
+                    type: 'double'
                 }
             },
             required: [
@@ -173,6 +182,7 @@ module.exports = {
     humidity: {
         type: Boolean,
         description: 'The current humidity level',
+        friendly: 'Humidity',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -191,6 +201,7 @@ module.exports = {
     ledState: {
         type: Boolean,
         description: 'The current state of the LED',
+        friendly: 'LED',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -207,6 +218,7 @@ module.exports = {
     light: {
         type: Boolean,
         description: 'The current light level in lux',
+        friendly: 'Light level',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -225,6 +237,7 @@ module.exports = {
     lightState: {
         type: Boolean,
         description: 'The current state of the light (hue, saturation, brightness etc)',
+        friendly: 'Light state',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -262,6 +275,7 @@ module.exports = {
     on: {
         type: Boolean,
         description: 'Whether the device is on or not',
+        friendly: 'On',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -278,6 +292,7 @@ module.exports = {
     motion: {
         type: Boolean,
         description: 'Represents if motion is detected or not',
+        friendly: 'Motion',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -294,6 +309,7 @@ module.exports = {
     mutedAudio: {
         type: Boolean,
         description: 'Whether the audio is muted or not',
+        friendly: 'Muted',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -310,6 +326,7 @@ module.exports = {
     name: {
         type: Boolean,
         description: 'The current name of the device',
+        friendly: 'Name',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -326,6 +343,7 @@ module.exports = {
     nextAudioTrack: {
         type: Boolean,
         description: 'Fired when changing to the next audio track',
+        friendly: 'Next audio track',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -342,6 +360,7 @@ module.exports = {
     previousAudioTrack: {
         type: Boolean,
         description: 'Fired when changing to the previous audio track',
+        friendly: 'Previous audio track',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -358,6 +377,7 @@ module.exports = {
     pulseLightEffect: {
         type: Boolean,
         description: 'Whether the light is running a pulse effect or not',
+        friendly: 'Pulse effect',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -374,6 +394,7 @@ module.exports = {
     queueFlushed: {
         type: Boolean,
         description: 'Fired when the queue has been emptied',
+        friendly: 'Queue flushed',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -390,6 +411,7 @@ module.exports = {
     seek: {
         type: Boolean,
         description: 'Represents the current position',
+        friendly: 'Current position',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -407,6 +429,7 @@ module.exports = {
     tamper: {
         type: Boolean,
         description: 'If the device is being tampered with or not',
+        friendly: 'Tamper',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -423,6 +446,7 @@ module.exports = {
     temperature: {
         type: Boolean,
         description: 'The current temperature in degrees celcius',
+        friendly: 'Temperature',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -441,6 +465,7 @@ module.exports = {
     uv: {
         type: Boolean,
         description: 'The current UV level',
+        friendly: 'UV level',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -459,6 +484,7 @@ module.exports = {
     vibration: {
         type: Boolean,
         description: 'The current vibration level',
+        friendly: 'Vibration level',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',
@@ -477,6 +503,7 @@ module.exports = {
     volume: {
         type: Boolean,
         description: 'The current volume level',
+        friendly: 'Volume level',
         responseSchema: {
             $schema: 'http://json-schema.org/draft-04/schema#',
             type: 'object',

@@ -4,7 +4,7 @@ const events = require('../events');
 const eventUtils = require('../utils/event');
 const EventModel = require('../models/event').Model;
 
-const SpeakerSchema = new mongoose.Schema({
+const schema = {
     _id: false,
     name: {
         type: String,
@@ -22,52 +22,62 @@ const SpeakerSchema = new mongoose.Schema({
     commands: {
         getCurrentTrack: {
             type: Boolean,
-            description: 'Gets the current track from the speaker'
+            description: 'Gets the current track from the speaker',
+            friendly: 'Get current track'
         },
 
         flushQueue: {
             type: Boolean,
-            description: 'Empties the queue on the speaker'
+            description: 'Empties the queue on the speaker',
+            friendly: 'Flush the queue'
         },
 
         getLEDState: {
             type: Boolean,
-            description: 'Gets the state of the LED on the speaker'
+            description: 'Gets the state of the LED on the speaker',
+            friendly: 'Get the LED state'
         },
 
         getMuted: {
             type: Boolean,
-            description: 'Gets whether the speaker is muted or not'
+            description: 'Gets whether the speaker is muted or not',
+            friendly: 'Get muted'
         },
 
         getVolume: {
             type: Boolean,
-            description: 'Gets the volume level of the speaker'
+            description: 'Gets the volume level of the speaker',
+            friendly: 'Get volume'
         },
 
         next: {
             type: Boolean,
-            description: 'Plays the next track in the queue'
+            description: 'Plays the next track in the queue',
+            friendly: 'Play next track'
         },
 
         pause: {
             type: Boolean,
-            description: 'Pauses the currently playing audio'
+            description: 'Pauses the currently playing audio',
+            friendly: 'Pause audio'
         },
 
         play: {
             type: Boolean,
-            description: 'Plays the current audio'
+            description: 'Plays the current audio',
+            friendly: 'Play audio'
         },
 
         previous: {
             type: Boolean,
-            description: 'Plays the previous track in the queue'
+            description: 'Plays the previous track in the queue',
+            friendly: 'Play previous track'
         },
 
         addToQueueBottom: {
             type: Boolean,
             description: 'Adds audio to the bottom of the queue',
+            friendly: 'Add track to bottom of queue',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -85,6 +95,7 @@ const SpeakerSchema = new mongoose.Schema({
         addToQueueNext: {
             type: Boolean,
             description: 'Adds audio to the top of the queue so that it plays next',
+            friendly: 'Add track to top of queue',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -102,6 +113,7 @@ const SpeakerSchema = new mongoose.Schema({
         seek: {
             type: Boolean,
             description: 'Seeks to the specified position within the current audio',
+            friendly: 'Jump to position within track',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -120,6 +132,7 @@ const SpeakerSchema = new mongoose.Schema({
         setLEDState: {
             type: Boolean,
             description: 'Sets the state of the LED on the speaker',
+            friendly: 'Turn LED on',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -137,6 +150,7 @@ const SpeakerSchema = new mongoose.Schema({
         setMuted: {
             type: Boolean,
             description: 'Sets whether the speaker is muted or not',
+            friendly: 'Mute',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -154,6 +168,7 @@ const SpeakerSchema = new mongoose.Schema({
         setName: {
             type: Boolean,
             description: 'Sets the name of the speaker',
+            friendly: 'Set the name of the speaker',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -171,6 +186,7 @@ const SpeakerSchema = new mongoose.Schema({
         setPlayMode: {
             type: Boolean,
             description: 'Sets the play mode of the speaker',
+            friendly: 'Set play mode',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -191,6 +207,7 @@ const SpeakerSchema = new mongoose.Schema({
         setVolume: {
             type: Boolean,
             description: 'Sets the volume of the speaker',
+            friendly: 'Set volume',
             requestSchema: {
                 $schema: 'http://json-schema.org/draft-04/schema#',
                 type: 'object',
@@ -209,6 +226,7 @@ const SpeakerSchema = new mongoose.Schema({
 
         stop: {
             type: Boolean,
+            friendly: 'Stop the audio',
             description: 'Stops the currently playing audio'
         }
     },
@@ -227,11 +245,13 @@ const SpeakerSchema = new mongoose.Schema({
         name: events.name,
         audioPlayMode: events.audioPlayMode
     }
-});
+};
+const SpeakerSchema = new mongoose.Schema(schema);
 
 const Speaker = mongoose.model('Speaker', SpeakerSchema);
 
 module.exports = {
     Model: Speaker,
-    DeviceEventEmitter: eventUtils.processIncomingEvents(Speaker.schema, 'speaker', EventModel)
+    DeviceEventEmitter: eventUtils.processIncomingEvents(Speaker.schema, 'speaker', EventModel),
+    schema
 };
