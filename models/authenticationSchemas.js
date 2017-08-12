@@ -32,8 +32,7 @@ const AuthenticationSchemas = {
             required: [
                 'type',
                 'message',
-                'dataLabel',
-                'next'
+                'dataLabel'
             ]
         },
         ManualAction: {
@@ -49,8 +48,7 @@ const AuthenticationSchemas = {
             },
             required: [
                 'type',
-                'message',
-                'next'
+                'message'
             ]
         }
     },
