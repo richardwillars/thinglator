@@ -1,0 +1,7 @@
+{
+    "port": 3000,
+    "mongodb": {
+        "host": "mongo",
+        "db": "thinglator-docker"
+    }
+}

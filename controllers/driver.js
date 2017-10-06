@@ -58,10 +58,13 @@ const controller = {
         })
         .then((driver) => {
             type = driver.getType();
-            return driver.discover();
+            return driver.discover().catch((e) => {
+                e.type = 'Driver';
+                console.error(e);
+            });
         }) // call the discover method on the driver and wait for it to return devices
         .then((devices) => {
-            foundDevices = devices;
+            foundDevices = devices || [];
             // get a list of existing devices from the db
             return models.device.Model.find({
                 type,

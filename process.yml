@@ -1,0 +1,5 @@
+apps:
+  - script   : 'app.js'
+    name     : 'THINGLATOR'
+    exec_mode: 'fork'
+    instances: 1

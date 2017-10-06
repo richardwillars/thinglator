@@ -15,7 +15,7 @@ const app = express();
 
 // connect to the database
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/thinglator');
+mongoose.connect(`mongodb://${config.get('mongodb.host')}/${config.get('mongodb.db')}`);
 
 
 // get a list of all potential interfaces (one for each communication protocol)
