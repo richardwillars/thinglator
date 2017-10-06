@@ -9,5 +9,8 @@
         "hardwareLocation": "/dev/cu.usbmodem1421",
         "debug": true
     }
+  },
+  "management": {
+    "port": 3004
   }
 }

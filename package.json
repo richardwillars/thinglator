@@ -23,6 +23,8 @@
     "jsonschema": "^1.1.0",
     "md5": "^2.1.0",
     "mongoose": "^4.5.1",
+    "npm-programmatic": "0.0.8",
+    "pm2": "^2.7.1",
     "socket.io": "^1.4.8",
     "underscore": "^1.8.3"
   },
