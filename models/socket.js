@@ -1,48 +1,45 @@
-const mongoose = require('mongoose');
-
-const events = require('../events');
-const eventUtils = require('../utils/event');
-const EventModel = require('../models/event').Model;
-
-const schema = {
+module.exports = (mongoose, events, constants) => {
+  const schema = {
     _id: false,
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    deviceId: {
-        type: String,
-        required: true
+    originalId: {
+      type: String,
+      required: true,
     },
     additionalInfo: {
-        type: Object,
-        required: false,
-        default: {}
+      type: Object,
+      required: false,
+      default: {},
     },
     commands: {
-        on: {
-            type: Boolean,
-            description: 'Turns the socket on',
-            friendly: 'Turn on'
-        },
-        off: {
-            type: Boolean,
-            description: 'Turns the socket off',
-            friendly: 'Turn off'
-        }
+      on: {
+        type: Boolean,
+        description: 'Turns the socket on',
+        friendly: 'Turn on',
+      },
+      off: {
+        type: Boolean,
+        description: 'Turns the socket off',
+        friendly: 'Turn off',
+      },
     },
-    events: {
-        energy: events.energy,
-        on: events.on
-    }
+    events: {},
+  };
+
+  Object.keys(constants.socket).forEach((key) => {
+    schema.events[key] = events[key];
+  });
+
+  return {
+    model: mongoose.model('Socket', new mongoose.Schema(schema)),
+    schema,
+  };
 };
-const SocketSchema = new mongoose.Schema(schema);
-
-
-const Socket = mongoose.model('Socket', SocketSchema);
-
-module.exports = {
-    Model: Socket,
-    DeviceEventEmitter: eventUtils.processIncomingEvents(Socket.schema, 'socket', EventModel),
-    schema
-};
+// module.exports = {
+//   Model: Socket,
+//   DeviceEventEmitter: eventUtils.processIncomingEvents(Socket.schema, 'socket', EventModel),
+//   schema,
+// };

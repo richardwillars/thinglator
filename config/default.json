@@ -6,11 +6,14 @@
   },
   "interfaces": {
     "zwave": {
-        "hardwareLocation": "/dev/cu.usbmodem1421",
+        "hardwareLocation": "/dev/cu.usbmodem1411",
         "debug": true
     }
   },
   "management": {
     "port": 3004
+  },
+  "pm2": {
+    "thinglatorId": "THINGLATOR"
   }
 }

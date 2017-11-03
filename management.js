@@ -22,6 +22,7 @@ const pm2Restart = packageId => new Promise((resolve, reject) => {
     pm2.restart(packageId, (err, apps) => {
         if (err) {
             reject(err);
+            return;
         }
         resolve(apps);
     });
@@ -31,6 +32,7 @@ const pm2GetInfo = packageId => new Promise((resolve, reject) => {
     pm2.describe(packageId, (err, describeInfo) => {
         if (err) {
             reject(err);
+            return;
         }
         resolve(describeInfo);
     });
@@ -41,9 +43,9 @@ const installDriver = async (driverId) => {
         cwd: './',
         save: true
     });
-    await pm2Restart('thinglator');
+    await pm2Restart(config.get('pm2.thinglatorId'));
     await delay(3000);
-    const info = await pm2GetInfo('thinglator');
+    const info = await pm2GetInfo(config.get('pm2.thinglatorId'));
 
     if (info[0].pm2_env.unstable_restarts > 0) {
         throw new Error('Install failed');
@@ -55,9 +57,9 @@ const uninstallDriver = async (driverId) => {
         cwd: './',
         save: true
     })
-    await pm2Restart('thinglator');
+    await pm2Restart(config.get('pm2.thinglatorId'));
     await delay(3000);
-    const info = await pm2GetInfo('thinglator');
+    const info = await pm2GetInfo(config.get('pm2.thinglatorId'));
 
     if (info[0].pm2_env.unstable_restarts > 0) {
         throw new Error('Install failed');
@@ -87,7 +89,6 @@ app.post('/install', jsonParser, async (req, res) => {
         res.json({
             message: err.message
         });
-        await uninstallDriver(bodyParser.driverId)
     }
 });
 

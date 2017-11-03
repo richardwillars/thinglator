@@ -1,46 +1,37 @@
-const mongoose = require('mongoose');
-
-const events = require('../events');
-const eventUtils = require('../utils/event');
-const EventModel = require('../models/event').Model;
-
-const schema = {
+module.exports = (mongoose, events, constants) => {
+  const schema = {
     _id: false,
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    deviceId: {
-        type: String,
-        required: true
+    originalId: {
+      type: String,
+      required: true,
     },
     additionalInfo: {
-        type: Object,
-        required: false,
-        default: {}
+      type: Object,
+      required: false,
+      default: {},
     },
     commands: {
 
     },
-    events: {
-        motion: events.motion,
-        tamper: events.tamper,
-        vibration: events.vibration,
-        temperature: events.temperature,
-        humidity: events.humidity,
-        light: events.light,
-        contact: events.contact,
-        uv: events.uv,
-        batteryLevel: events.batteryLevel
-    }
+    events: {},
+  };
+
+  Object.keys(constants.sensor).forEach((key) => {
+    schema.events[key] = events[key];
+  });
+
+  return {
+    model: mongoose.model('Sensor', new mongoose.Schema(schema)),
+    schema,
+  };
 };
-const SensorSchema = new mongoose.Schema(schema);
 
-
-const Sensor = mongoose.model('Sensor', SensorSchema);
-
-module.exports = {
-    Model: Sensor,
-    DeviceEventEmitter: eventUtils.processIncomingEvents(Sensor.schema, 'sensor', EventModel),
-    schema
-};
+// module.exports = {
+//   Model: Sensor,
+//   DeviceEventEmitter: eventUtils.processIncomingEvents(Sensor.schema, 'sensor', EventModel),
+//   schema,
+// };

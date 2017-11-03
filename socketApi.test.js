@@ -4,18 +4,18 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const mockery = require('mockery');
+const socketApi = require('./socketApi');
 
 describe('socketApi', () => {
-    let moduleToBeTested,
-        httpServer,
-        drivers;
+    let httpServer;
+    let drivers;
     const paths = {};
-    let authenticateCtrlMock,
-        deviceCtrlMock,
-        driverCtrlMock,
-        eventCtrlMock;
-    let eventUtilsOnSpy,
-        ioEmitSpy;
+    let authenticateCtrlMock;
+    let deviceCtrlMock;
+    let driverCtrlMock;
+    let eventCtrlMock;
+    let eventUtilsOnSpy;
+    let ioEmitSpy;
     beforeEach((done) => {
 		// mock out httpServer
         httpServer = {};
@@ -139,7 +139,7 @@ describe('socketApi', () => {
 
     describe('newEvent', () => {
         it('should take new events from the eventUtils event emitter and emit them on the socket', () => {
-            moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+            moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
             expect(eventUtilsOnSpy).to.have.been.calledOnce;
             expect(eventUtilsOnSpy.firstCall.args[0]).to.equal('newEvent');
@@ -159,14 +159,14 @@ describe('socketApi', () => {
     describe('errorHandler', () => {
         it('should setup an error handler', () => {
 			// call the module to be tested
-            moduleToBeTested = require('../socketApi');
+            moduleToBeTested = socketApi;
             expect(moduleToBeTested.errorHandler).to.be.a.function;
 			// expect(cb).to.have.been.calledOnce;
         });
 
 
         it('the error listener should handle different types of errors correctly', () => {
-            moduleToBeTested = require('../socketApi');
+            moduleToBeTested = socketApi;
             var error = new Error('This is an error');
             var result = moduleToBeTested.errorHandler(error);
             expect(result).to.be.an.object;
@@ -250,7 +250,7 @@ describe('socketApi', () => {
 
             it('it should setup a route', () => {
                 getAuthenticationProcessSpy = sinon.spy(authenticateCtrlMock, 'getAuthenticationProcess');
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getAuthenticationProcess).to.equal('function');
             });
 
@@ -285,7 +285,7 @@ describe('socketApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const type = 'foo';
                 const driver = 'bar';
@@ -311,7 +311,7 @@ describe('socketApi', () => {
             let authenticationStepSpy;
             it('it should setup a route', () => {
                 authenticationStepSpy = sinon.spy(authenticateCtrlMock, 'authenticationStep');
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.authenticationStep).to.equal('function');
             });
 
@@ -351,7 +351,7 @@ describe('socketApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/authenticate', authenticateCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const type = 'foo';
                 const driver = 'bar';
@@ -381,7 +381,7 @@ describe('socketApi', () => {
             let discoverSpy;
             it('it should setup a route', () => {
                 discoverSpy = sinon.spy(driverCtrlMock, 'discover');
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.discoverDevices).to.equal('function');
             });
 
@@ -418,7 +418,7 @@ describe('socketApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/driver', driverCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const type = 'foo';
                 const driver = 'bar';
@@ -445,7 +445,7 @@ describe('socketApi', () => {
             it('it should setup a route', () => {
                 getAllDevicesSpy = sinon.spy(deviceCtrlMock, 'getAllDevices');
 
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getDevices).to.equal('function');
             });
 
@@ -479,7 +479,7 @@ describe('socketApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const callback = sinon.spy();
 
@@ -504,7 +504,7 @@ describe('socketApi', () => {
 
             it('it should setup a route', () => {
                 getDevicesByTypeSpy = sinon.spy(deviceCtrlMock, 'getDevicesByType');
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getDevicesByType).to.equal('function');
             });
 
@@ -541,7 +541,7 @@ describe('socketApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const type = 'foo';
                 const callback = sinon.spy();
@@ -568,7 +568,7 @@ describe('socketApi', () => {
             it('it should setup a route', () => {
                 getDevicesByTypeAndDriverSpy = sinon.spy(deviceCtrlMock, 'getDevicesByTypeAndDriver');
 
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getDevicesByTypeAndDriver).to.equal('function');
             });
 
@@ -607,7 +607,7 @@ describe('socketApi', () => {
                     }
                 };
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const type = 'foo';
                 const driver = 'bar';
@@ -633,7 +633,7 @@ describe('socketApi', () => {
             let getDeviceByIdSpy;
             it('it should setup a route', () => {
                 getDeviceByIdSpy = sinon.spy(deviceCtrlMock, 'getDeviceById');
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getDeviceById).to.equal('function');
             });
 
@@ -671,7 +671,7 @@ describe('socketApi', () => {
                 };
 
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const deviceId = 'foo';
                 const callback = sinon.spy();
@@ -697,7 +697,7 @@ describe('socketApi', () => {
             it('it should setup a route', () => {
                 runCommandSpy = sinon.spy(deviceCtrlMock, 'runCommand');
 
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.runCommand).to.equal('function');
             });
 
@@ -736,7 +736,7 @@ describe('socketApi', () => {
                 };
 
                 mockery.registerMock('./controllers/device', deviceCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const deviceId = 'foo';
                 const command = 'bar';
@@ -766,7 +766,7 @@ describe('socketApi', () => {
             it('it should setup a route', () => {
                 getDriversWithStatsSpy = sinon.spy(driverCtrlMock, 'getDriversWithStats');
 
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getDrivers).to.equal('function');
             });
 
@@ -802,7 +802,7 @@ describe('socketApi', () => {
                 };
 
                 mockery.registerMock('./controllers/driver', driverCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const callback = sinon.spy();
 
@@ -827,7 +827,7 @@ describe('socketApi', () => {
             it('it should setup a route', () => {
                 getEventsByTypeSpy = sinon.spy(eventCtrlMock, 'getEventsByType');
 
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
                 expect(typeof paths.getEventsByType).to.equal('function');
             });
 
@@ -866,7 +866,7 @@ describe('socketApi', () => {
                 };
 
                 mockery.registerMock('./controllers/event', eventCtrlMock);
-                moduleToBeTested = require('../socketApi').socketApi(httpServer, drivers);
+                moduleToBeTested = socketApi.socketApi(httpServer, drivers);
 
                 const eventType = 'foo';
                 const from = 'bar';

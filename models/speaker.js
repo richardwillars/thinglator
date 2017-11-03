@@ -1,257 +1,281 @@
-const mongoose = require('mongoose');
-
-const events = require('../events');
-const eventUtils = require('../utils/event');
-const EventModel = require('../models/event').Model;
-
-const schema = {
+// const EventModel = require('../models/event').Model;
+module.exports = (mongoose, events, constants) => {
+  const schema = {
     _id: false,
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    deviceId: {
-        type: String,
-        required: true
+    originalId: {
+      type: String,
+      required: true,
     },
     additionalInfo: {
-        type: Object,
-        required: false,
-        default: {}
+      type: Object,
+      required: false,
+      default: {},
     },
     commands: {
-        getCurrentTrack: {
-            type: Boolean,
-            description: 'Gets the current track from the speaker',
-            friendly: 'Get current track'
-        },
+      getCurrentTrack: {
+        type: Boolean,
+        description: 'Gets the current track from the speaker',
+        friendly: 'Get current track',
+      },
 
-        flushQueue: {
-            type: Boolean,
-            description: 'Empties the queue on the speaker',
-            friendly: 'Flush the queue'
-        },
+      flushQueue: {
+        type: Boolean,
+        description: 'Empties the queue on the speaker',
+        friendly: 'Flush the queue',
+      },
 
-        getLEDState: {
-            type: Boolean,
-            description: 'Gets the state of the LED on the speaker',
-            friendly: 'Get the LED state'
-        },
+      getLEDState: {
+        type: Boolean,
+        description: 'Gets the state of the LED on the speaker',
+        friendly: 'Get the LED state',
+      },
 
-        getMuted: {
-            type: Boolean,
-            description: 'Gets whether the speaker is muted or not',
-            friendly: 'Get muted'
-        },
+      getMuted: {
+        type: Boolean,
+        description: 'Gets whether the speaker is muted or not',
+        friendly: 'Get muted',
+      },
 
-        getVolume: {
-            type: Boolean,
-            description: 'Gets the volume level of the speaker',
-            friendly: 'Get volume'
-        },
+      getVolume: {
+        type: Boolean,
+        description: 'Gets the volume level of the speaker',
+        friendly: 'Get volume',
+      },
 
-        next: {
-            type: Boolean,
-            description: 'Plays the next track in the queue',
-            friendly: 'Play next track'
-        },
+      next: {
+        type: Boolean,
+        description: 'Plays the next track in the queue',
+        friendly: 'Play next track',
+      },
 
-        pause: {
-            type: Boolean,
-            description: 'Pauses the currently playing audio',
-            friendly: 'Pause audio'
-        },
+      pause: {
+        type: Boolean,
+        description: 'Pauses the currently playing audio',
+        friendly: 'Pause audio',
+      },
 
-        play: {
-            type: Boolean,
-            description: 'Plays the current audio',
-            friendly: 'Play audio'
-        },
+      play: {
+        type: Boolean,
+        description: 'Plays the current audio',
+        friendly: 'Play audio',
+      },
 
-        previous: {
-            type: Boolean,
-            description: 'Plays the previous track in the queue',
-            friendly: 'Play previous track'
-        },
+      previous: {
+        type: Boolean,
+        description: 'Plays the previous track in the queue',
+        friendly: 'Play previous track',
+      },
 
-        addToQueueBottom: {
-            type: Boolean,
-            description: 'Adds audio to the bottom of the queue',
-            friendly: 'Add track to bottom of queue',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    uri: {
-                        type: 'string'
-                    }
-                },
-                required: [
-                    'uri'
-                ]
-            }
+      addUrlToQueueBottom: {
+        type: Boolean,
+        description: 'Adds audio to the bottom of the queue',
+        friendly: 'Add track to bottom of queue',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            uri: {
+              type: 'string',
+            },
+          },
+          required: [
+            'uri',
+          ],
         },
+      },
 
-        addToQueueNext: {
-            type: Boolean,
-            description: 'Adds audio to the top of the queue so that it plays next',
-            friendly: 'Add track to top of queue',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    uri: {
-                        type: 'string'
-                    }
-                },
-                required: [
-                    'uri'
-                ]
-            }
+      addUrlToQueueNext: {
+        type: Boolean,
+        description: 'Adds audio to the top of the queue so that it plays next',
+        friendly: 'Add track to top of queue',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            uri: {
+              type: 'string',
+            },
+          },
+          required: [
+            'uri',
+          ],
         },
+      },
 
-        seek: {
-            type: Boolean,
-            description: 'Seeks to the specified position within the current audio',
-            friendly: 'Jump to position within track',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    position: {
-                        type: 'integer',
-                        minimum: 0
-                    }
-                },
-                required: [
-                    'position'
-                ]
-            }
+      addSpotifyToQueueBottom: {
+        type: Boolean,
+        description: 'Adds a spotify track to the bottom of the queue',
+        friendly: 'Add spotify track to bottom of queue',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            uri: {
+              type: 'string',
+            },
+          },
+          required: [
+            'uri',
+          ],
         },
+      },
 
-        setLEDState: {
-            type: Boolean,
-            description: 'Sets the state of the LED on the speaker',
-            friendly: 'Turn LED on',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    on: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'on'
-                ]
-            }
+      addSpotifyToQueueNext: {
+        type: Boolean,
+        description: 'Adds spotify track to the top of the queue so that it plays next',
+        friendly: 'Add spotify track to top of queue',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            uri: {
+              type: 'string',
+            },
+          },
+          required: [
+            'uri',
+          ],
         },
+      },
 
-        setMuted: {
-            type: Boolean,
-            description: 'Sets whether the speaker is muted or not',
-            friendly: 'Mute',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    muted: {
-                        type: 'boolean'
-                    }
-                },
-                required: [
-                    'muted'
-                ]
-            }
+      seek: {
+        type: Boolean,
+        description: 'Seeks to the specified position within the current audio',
+        friendly: 'Jump to position within track',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            position: {
+              type: 'integer',
+              minimum: 0,
+            },
+          },
+          required: [
+            'position',
+          ],
         },
+      },
 
-        setName: {
-            type: Boolean,
-            description: 'Sets the name of the speaker',
-            friendly: 'Set the name of the speaker',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    name: {
-                        type: 'string'
-                    }
-                },
-                required: [
-                    'name'
-                ]
-            }
+      setLEDState: {
+        type: Boolean,
+        description: 'Sets the state of the LED on the speaker',
+        friendly: 'Turn LED on',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            on: {
+              type: 'boolean',
+            },
+          },
+          required: [
+            'on',
+          ],
         },
+      },
 
-        setPlayMode: {
-            type: Boolean,
-            description: 'Sets the play mode of the speaker',
-            friendly: 'Set play mode',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    playMode: {
-                        type: 'string',
-                        enum: [
-                            'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat'
-                        ]
-                    }
-                },
-                required: [
-                    'playMode'
-                ]
-            }
+      setMuted: {
+        type: Boolean,
+        description: 'Sets whether the speaker is muted or not',
+        friendly: 'Mute',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            muted: {
+              type: 'boolean',
+            },
+          },
+          required: [
+            'muted',
+          ],
         },
+      },
 
-        setVolume: {
-            type: Boolean,
-            description: 'Sets the volume of the speaker',
-            friendly: 'Set volume',
-            requestSchema: {
-                $schema: 'http://json-schema.org/draft-04/schema#',
-                type: 'object',
-                properties: {
-                    volume: {
-                        type: 'integer',
-                        minimum: 0,
-                        maximum: 100
-                    }
-                },
-                required: [
-                    'volume'
-                ]
-            }
+      setName: {
+        type: Boolean,
+        description: 'Sets the name of the speaker',
+        friendly: 'Set the name of the speaker',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+          },
+          required: [
+            'name',
+          ],
         },
+      },
 
-        stop: {
-            type: Boolean,
-            friendly: 'Stop the audio',
-            description: 'Stops the currently playing audio'
-        }
+      setPlayMode: {
+        type: Boolean,
+        description: 'Sets the play mode of the speaker',
+        friendly: 'Set play mode',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            playMode: {
+              type: 'string',
+              enum: [
+                'normal', 'repeat_all', 'shuffle', 'shuffle_norepeat',
+              ],
+            },
+          },
+          required: [
+            'playMode',
+          ],
+        },
+      },
+
+      setVolume: {
+        type: Boolean,
+        description: 'Sets the volume of the speaker',
+        friendly: 'Set volume',
+        requestSchema: {
+          $schema: 'http://json-schema.org/draft-04/schema#',
+          type: 'object',
+          properties: {
+            volume: {
+              type: 'integer',
+              minimum: 0,
+              maximum: 100,
+            },
+          },
+          required: [
+            'volume',
+          ],
+        },
+      },
+
+      stop: {
+        type: Boolean,
+        friendly: 'Stop the audio',
+        description: 'Stops the currently playing audio',
+      },
     },
-    events: {
-        currentAudioTrack: events.currentAudioTrack,
-        queueFlushed: events.queueFlushed,
-        ledState: events.ledState,
-        mutedAudio: events.mutedAudio,
-        volume: events.volume,
-        nextAudioTrack: events.nextAudioTrack,
-        audioPlayingState: events.audioPlayingState,
-        previousAudioTrack: events.previousAudioTrack,
-        addedToQueueBottom: events.addedToQueueBottom,
-        addedToQueueNext: events.addedToQueueNext,
-        seek: events.seek,
-        name: events.name,
-        audioPlayMode: events.audioPlayMode
-    }
-};
-const SpeakerSchema = new mongoose.Schema(schema);
+    events: {},
+  };
 
-const Speaker = mongoose.model('Speaker', SpeakerSchema);
+  Object.keys(constants.speaker).forEach((key) => {
+    schema.events[key] = events[key];
+  });
 
-module.exports = {
-    Model: Speaker,
-    DeviceEventEmitter: eventUtils.processIncomingEvents(Speaker.schema, 'speaker', EventModel),
-    schema
+  return {
+    model: mongoose.model('Speaker', new mongoose.Schema(schema)),
+    schema,
+  };
 };
+// module.exports = {
+//   Model: Speaker,
+//   DeviceEventEmitter: eventUtils.processIncomingEvents(Speaker.schema, 'speaker', EventModel),
+//   schema,
+// };

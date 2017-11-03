@@ -1,182 +1,232 @@
-const _ = require('underscore');
-const models = require('../models');
-const md5 = require('md5');
-const driverUtils = require('../utils/driver');
-const deviceUtils = require('../utils/device');
-const events = require('../events');
-
-const controller = {
-    getDriversWithStats(drivers) {
-        let devicesGroupedByDrivers = [];
-        return models.device.Model.aggregate([{
-            $group: {
-                _id: '$driver',
-                type: {
-                    $first: '$type'
-                },
-                deviceCount: {
-                    $sum: 1
-                }
-            }
-        }]).exec()
-        .then((results) => {
-            devicesGroupedByDrivers = results;
-
-            const driversWithStats = [];
-            Object.keys(drivers).forEach((driverId) => {
-                const obj = {
-                    _id: drivers[driverId].getName(),
-                    type: drivers[driverId].getType(),
-                    deviceCount: 0
-                };
-                const foundStats = _.findWhere(devicesGroupedByDrivers, {
-                    _id: drivers[driverId].getName()
-                });
-                if (foundStats) {
-                    obj.deviceCount = foundStats.deviceCount;
-                }
-                driversWithStats.push(obj);
-            });
-            return driversWithStats;
-        });
+const getDriversWithStats = async (models, _, driverList) => {
+  const devicesGroupedByDrivers = await models.device.model.aggregate([{
+    $group: {
+      _id: '$driver',
+      type: {
+        $first: '$type',
+      },
+      deviceCount: {
+        $sum: 1,
+      },
     },
-    discover(driverId, drivers) {
-      // check that the driver exists and that it matches the specified type
-        let foundDevices = [];
-        let existingDevices = [];
-        let finalDevices = [];
-        let type = '';
-        return driverUtils.doesDriverExist(driverId, drivers)
-        .then((foundDriver) => {
-          // if found, load it
-            if (foundDriver === false) {
-                const e = new Error('driver not found');
-                e.type = 'NotFound';
-                throw e;
-            }
-            return drivers[driverId];
-        })
-        .then((driver) => {
-            type = driver.getType();
-            return driver.discover().catch((e) => {
-                e.type = 'Driver';
-                console.error(e);
-            });
-        }) // call the discover method on the driver and wait for it to return devices
-        .then((devices) => {
-            foundDevices = devices || [];
-            // get a list of existing devices from the db
-            return models.device.Model.find({
-                type,
-                driver: driverId
-            }).exec();
-        })
-        .then((existingDevicesArr) => {
-            existingDevices = existingDevicesArr;
+  }]).exec();
 
-            // loop through existingDevices and determine if they exist in the discovery list
-            const toUpdate = [];
-            _.filter(existingDevices, obj => _.find(foundDevices, (obj2) => {
-                if (obj._id === md5(type + driverId + obj2.deviceId)) {
-                    toUpdate.push({
-                        device: obj,
-                        specs: obj2
-                    });
-                    return true;
-                }
-                return false;
-            }));
-            // if they do exist in the discovery list, update them
-            const promises = [];
-            toUpdate.forEach((r) => {
-                promises.push(deviceUtils.updateDevice(r.device, r.specs));
-            });
-            return Promise.all(promises);
-        })
-        .then(() => {
-          // loop through existingDevices and determine if they don't exist in the discovery list
-            const noLongerExists = _.filter(existingDevices, obj =>
-              !_.find(foundDevices, obj2 => obj._id === md5(type + driverId + obj2.deviceId))
-            );
-            // if they don't exist in the discovery list, delete them
-            if (noLongerExists.length === 0) {
-                return false;
-            }
-            const noLongerExistsIds = _.pluck(noLongerExists, '_id');
-            return models.device.Model.remove({
-                _id: {
-                    $in: noLongerExistsIds
-                }
-            }).exec();
-        })
-        .then(() => {
-          // loop through foundDevices and determine if they don't exist in the discovery list
-            const newDevices = _.filter(foundDevices, obj =>
-              !_.find(existingDevices, obj2 => obj2._id === md5(type + driverId + obj.deviceId))
-            );
-            // if there are any other devices in discovery list, create them
-            const promises = [];
-            newDevices.forEach((r) => {
-                promises.push(deviceUtils.createDevice(type, driverId, r));
-            });
-            return Promise.all(promises);
-        })
-        .then(() => models.device.Model.find({ // get the entire list of devices from the db
-            type,
-            driver: driverId
-        }).exec())
-        .then((devices) => {
-            finalDevices = devices;
-            drivers[driverId].initDevices(finalDevices);
-        }).then(() => finalDevices)
-        .catch((e) => {
-            if (e.type) {
-                if (e.type === 'Driver') {
-                    e.driver = driverId;
-                }
-            }
-            throw e;
-        });
-    },
-    getEventDescriptions() {
-        return Promise.resolve().then(() => {
-            const descriptions = {};
-            Object.keys(events).forEach((eventId) => {
-                if (events[eventId].description) {
-                    descriptions[eventId] = {
-                        description: events[eventId].description,
-                        friendly: events[eventId].friendly,
-                        fields: events[eventId].responseSchema.properties
-                    };
-                }
-            });
-
-            return descriptions;
-        });
-    },
-    getCommandDescriptions() {
-        return Promise.resolve().then(() => {
-            // loop through each model
-            const descriptions = {};
-            Object.keys(models).forEach((modelId) => {
-                if (models[modelId].Model) {
-                    const schema = models[modelId].Model.schema.paths;
-                    Object.keys(schema).forEach((fieldId) => {
-                        if (fieldId.startsWith('commands.') && schema[fieldId].options && schema[fieldId].options.description) {
-                            if (descriptions[modelId] === undefined) {
-                                descriptions[modelId] = {};
-                            }
-                            descriptions[modelId][fieldId.substring(9)] = {
-                                description: schema[fieldId].options.description,
-                                friendly: schema[fieldId].options.friendly
-                            };
-                        }
-                    });
-                }
-            });
-            return descriptions;
-        });
+  const driversWithStats = [];
+  Object.keys(driverList).forEach((driverId) => {
+    const obj = {
+      _id: driverList[driverId].driverId,
+      type: driverList[driverId].driverType,
+      deviceCount: 0,
+    };
+    const foundStats = _.findWhere(devicesGroupedByDrivers, {
+      _id: driverList[driverId].driverId,
+    });
+    if (foundStats) {
+      obj.deviceCount = foundStats.deviceCount;
     }
+    driversWithStats.push(obj);
+  });
+  return driversWithStats;
 };
 
-module.exports = controller;
+const discover = async (driverId, driverUtils, models, md5, deviceUtils, driverList) => {
+  try {
+  // check that the driver exists and that it matches the specified type
+    const foundDriver = await driverUtils.doesDriverExist(driverId, driverList);
+
+    // if found, load it
+    if (foundDriver === false) {
+      const e = new Error('driver not found');
+      e.type = 'NotFound';
+      throw e;
+    }
+    const driver = driverList[driverId];
+    const type = driver.driverType;
+
+    console.log('driverId', driverId);
+    console.log('driver', driver);
+    console.log('type', type);
+    // call the discover method on the driver and wait for it to return devices
+    const foundDevices = await driver.api.discover() || [];
+
+    // get a list of existing devices from the db
+    const existingDevices = await models.device.model.find({
+      type,
+      driver: driverId,
+    }).exec();
+
+    console.log('existingDevices', existingDevices);
+    console.log('foundDevices', foundDevices);
+
+    // loop through existingDevices and determine if they exist in the foundDevices list
+    const toUpdate = [];
+    existingDevices.forEach((existingDevice) => {
+      foundDevices.find((foundDevice) => {
+        if (existingDevice._id === md5(`${type}${driverId}${foundDevice.originalId}`)) {
+          if ((typeof foundDevice.name === 'undefined') || (foundDevice.name === '')) {
+            foundDevice.name = existingDevice.specs.name;
+          }
+          toUpdate.push({
+            device: existingDevice,
+            specs: foundDevice,
+          });
+          return true;
+        }
+        return false;
+      });
+    });
+
+    // if they do exist in the foundDevices list, update them
+    const promises = [];
+    console.log('toUpdate', toUpdate);
+    toUpdate.forEach((r) => {
+      promises.push(deviceUtils.updateDevice(r.device, r.specs));
+    });
+    await Promise.all(promises);
+
+    // loop through foundDevices and determine if they don't exist in the existing devices list
+    const newDevices = foundDevices.filter(foundDevice => existingDevices.find(existingDevice => existingDevice._id === md5(`${type}${driverId}${foundDevice.originalId}`)) === undefined);
+    console.log('new devices', newDevices);
+    // if there are any other devices in foundDevices, create them
+    await Promise.all(newDevices.map(async (r) => {
+      await deviceUtils.createDevice(type, driverId, r);
+    }));
+
+    const finalDevices = await models.device.model.find({ // get the entire list of devices from the db
+      type,
+      driver: driverId,
+    }).lean().exec();
+
+    await driverList[driverId].api.initDevices(finalDevices);
+    return finalDevices;
+  } catch (e) {
+    if (e.type) {
+      if (e.type === 'Driver') {
+        e.driver = driverId;
+      }
+    }
+    throw e;
+  }
+};
+
+const getEventDescriptions = async (events) => {
+  const descriptions = {};
+  Object.keys(events).forEach((eventId) => {
+    if (events[eventId].description) {
+      descriptions[eventId] = {
+        description: events[eventId].description,
+        friendly: events[eventId].friendly,
+        fields: events[eventId].responseSchema.properties,
+      };
+    }
+  });
+  return descriptions;
+};
+
+const getCommandDescriptions = async (models) => {
+  // loop through each model
+  const descriptions = {};
+  Object.keys(models).forEach((modelId) => {
+    if (models[modelId].schema) {
+      const { schema } = models[modelId];
+
+      if (typeof schema.commands !== 'undefined') {
+        Object.keys(schema.commands).forEach((commandId) => {
+          if (typeof descriptions[modelId] === 'undefined') {
+            descriptions[modelId] = {};
+          }
+          descriptions[modelId][commandId] = {
+            description: schema.commands[commandId].description,
+            friendly: schema.commands[commandId].friendly,
+          };
+        });
+      }
+    }
+  });
+  return descriptions;
+};
+
+const getAllDevices = async models => models.device.model.find().lean().exec();
+
+const getDevicesByType = async (driverType, models) => models.device.model.find({
+  type: driverType,
+}).lean().exec();
+
+const getDevicesByDriver = async (driverId, models) => models.device.model.find({
+  driver: driverId,
+}).lean().exec();
+
+const getDeviceById = async (deviceId, models) => {
+  const device = await models.device.model.findOne({
+    _id: deviceId,
+  }).lean().exec();
+
+  if (!device) {
+    const e = new Error('device not found');
+    e.type = 'NotFound';
+    throw e;
+  }
+  return device;
+};
+
+const getDeviceTypes = async (models) => {
+  const types = {};
+  Object.keys(models)
+    .filter(modelId => models[modelId].DeviceEventEmitter !== undefined)
+    .forEach((modelId) => {
+      types[modelId] = models[modelId].schema;
+    });
+  return types;
+};
+
+const runCommand = async (deviceId, command, body, driverList, models, jsonValidator) => {
+  const device = await models.device.model.findOne({
+    _id: deviceId,
+  }).lean().exec();
+
+  if (!device) {
+    const e = new Error('device not found');
+    e.type = 'NotFound';
+    throw e;
+  }
+  if (typeof device.specs.commands[command] === 'undefined') {
+    const e = new Error('command not found');
+    e.type = 'BadRequest';
+    throw e;
+  }
+  if (device.specs.commands[command] === false) {
+    const e = new Error('command not supported');
+    e.type = 'BadRequest';
+    throw e;
+  }
+  const driverObj = driverList[device.driver];
+
+  const fnName = `command_${command}`;
+  // if a schema is specified, confirm that the request body matches it
+
+  const commandRequestSchema = models[device.type].schema.commands[command].requestSchema;
+  if (commandRequestSchema) {
+    const validated = jsonValidator.validate(body, commandRequestSchema);
+    if (validated.errors.length !== 0) {
+      const e = new Error('the supplied json is invalid');
+      e.type = 'Validation';
+      e.errors = validated.errors;
+      throw e;
+    }
+  }
+  return driverObj.api[fnName](device, body);
+};
+
+
+module.exports = (_, models, md5, driverUtils, deviceUtils, driverList, jsonValidator) => ({
+  getDriversWithStats: () => getDriversWithStats(models, _, driverList),
+  discover: driverId => discover(driverId, driverUtils, models, md5, deviceUtils, driverList),
+  getEventDescriptions: () => getEventDescriptions(models.events),
+  getCommandDescriptions: () => getCommandDescriptions(models),
+  getAllDevices: () => getAllDevices(models),
+  getDevicesByType: driverType => getDevicesByType(driverType, models),
+  getDevicesByDriver: driverId => getDevicesByDriver(driverId, models),
+  getDeviceById: deviceId => getDeviceById(deviceId, models),
+  getDeviceTypes: () => getDeviceTypes(models),
+  runCommand: (deviceId, command, body) => runCommand(deviceId, command, body, driverList, models, jsonValidator),
+});
