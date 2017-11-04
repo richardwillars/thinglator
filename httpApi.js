@@ -7,121 +7,121 @@ module.exports = (bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, driv
     });
   });
 
-  app.get('/authenticate/:driver', (req, res, next) => {
-    authenticateCtrl.getAuthenticationProcess(req.params.driver, drivers)
-      .then((result) => {
-        res.json(result);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/authenticate/:driver', async (req, res, next) => {
+    try {
+      const result = await authenticateCtrl.getAuthenticationProcess(req.params.driver, drivers);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.post('/authenticate/:driver/:stepId', jsonParser, (req, res, next) => {
-    authenticateCtrl.authenticationStep(req.params.driver, req.params.stepId, req.body)
-      .then((result) => {
-        res.json(result);
-      }).catch((err) => {
-        next(err);
-      });
+  app.post('/authenticate/:driver/:stepId', jsonParser, async (req, res, next) => {
+    try {
+      const result = await authenticateCtrl.authenticationStep(req.params.driver, req.params.stepId, req.body);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/discover/:driver', (req, res, next) => {
-    driverCtrl.discover(req.params.driver, drivers)
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/discover/:driver', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.discover(req.params.driver, drivers);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/devices', (req, res, next) => {
-    driverCtrl.getAllDevices()
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/devices', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getAllDevices();
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/devices/type/:type', (req, res, next) => {
-    driverCtrl.getDevicesByType(req.params.type)
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/devices/type/:type', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getDevicesByType(req.params.type);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/devices/driver/:driver', (req, res, next) => {
-    driverCtrl.getDevicesByDriver(req.params.driver)
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/devices/driver/:driver', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getDevicesByDriver(req.params.driver);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/device/:deviceId', (req, res, next) => {
-    driverCtrl.getDeviceById(req.params.deviceId)
-      .then((result) => {
-        res.json(result);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/device/:deviceId', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getDeviceById(req.params.deviceId);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.post('/device/:deviceId/:command', jsonParser, (req, res, next) => {
-    driverCtrl.runCommand(req.params.deviceId, req.params.command, req.body, drivers)
-      .then(() => {
-        res.send();
-      }).catch((err) => {
-        next(err);
-      });
+  app.post('/device/:deviceId/:command', jsonParser, async (req, res, next) => {
+    try {
+      await driverCtrl.runCommand(req.params.deviceId, req.params.command, req.body, drivers);
+      res.send();
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/drivers', (req, res, next) => {
-    driverCtrl.getDriversWithStats(drivers)
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/drivers', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getDriversWithStats(drivers);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/drivers/commands', (req, res, next) => {
-    driverCtrl.getCommandDescriptions()
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/drivers/commands', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getCommandDescriptions();
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/drivers/events', (req, res, next) => {
-    driverCtrl.getEventDescriptions()
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/drivers/events', async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getEventDescriptions();
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/event/latestCommands', (req, res, next) => {
-    eventCtrl.getLatestCommandEvents()
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/event/latestCommands', async (req, res, next) => {
+    try {
+      const result = await eventCtrl.getLatestCommandEvents();
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
-  app.get('/event/:eventType', (req, res, next) => {
-    eventCtrl.getEventsByType(req.params.eventType, req.query.from)
-      .then((results) => {
-        res.json(results);
-      }).catch((err) => {
-        next(err);
-      });
+  app.get('/event/:eventType', async (req, res, next) => {
+    try {
+      const result = await eventCtrl.getEventsByType(req.params.eventType, req.query.from);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
   });
 
   // Error handling middleware
