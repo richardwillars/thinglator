@@ -44,5 +44,9 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "main": "app.js"
+  "main": "app.js",
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom" : ["**/*.js"]
+  }
 }
