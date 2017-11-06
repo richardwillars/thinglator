@@ -1,6 +1,3 @@
-// const md5 = require('md5');
-// const models = require('../models');
-
 module.exports = (md5, models) => ({
   createDevice: async (type, driverId, deviceSpecs) => {
     const deviceSpecsObj = new models[type].model(deviceSpecs);

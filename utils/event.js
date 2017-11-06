@@ -1,4 +1,3 @@
-
 const eventValidator = (input, schema, jsonValidator) => {
   const validated = jsonValidator.validate(input, schema);
   if (validated.errors.length !== 0) {

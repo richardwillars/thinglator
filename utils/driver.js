@@ -1,4 +1,3 @@
-
 const getDriverSettings = (driverId, models) => new Promise((resolve, reject) => {
   models.driver.model.findOne({
     _id: driverId,

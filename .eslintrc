@@ -1,8 +1,12 @@
 {
     "root": true,
     "extends": "airbnb-base",
+    "plugins": ["jest"],
     "rules": {
         "no-underscore-dangle": ["error", { "allow": ["_id"] }],
         "max-len": ['error', 120]
+    },
+    "env": {
+        "jest/globals": true
     }
 }

@@ -8,7 +8,7 @@ describe('comms/http', () => {
     const interfaceConfig = {
       foo: 'bar',
     };
-    const httpComms = await httpCommsModule(interfaceObj, interfaceConfig);
+    await httpCommsModule(interfaceObj, interfaceConfig);
     expect(interfaceObj.initialise).toHaveBeenCalledTimes(1);
     expect(interfaceObj.initialise).toHaveBeenCalledWith(interfaceConfig);
   });
