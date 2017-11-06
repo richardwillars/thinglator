@@ -1,4 +1,4 @@
-module.exports = async (interfaceObj, interfaceConfig, eventEmitter) => {
+module.exports = async (interfaceObj, interfaceConfig /* eventEmitter */) => {
   const initialisedInterface = interfaceObj.initialise(interfaceConfig);
 
   return {
