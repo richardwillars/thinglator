@@ -47,6 +47,6 @@
   "main": "app.js",
   "jest": {
     "testEnvironment": "node",
-    "collectCoverageFrom" : ["**/*.js"]
+    "collectCoverageFrom" : ["**/*.js", "!**/node_modules/**", "!**/coverage/**"]
   }
 }
