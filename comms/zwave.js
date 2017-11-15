@@ -1,4 +1,4 @@
-const nodes = {};
+let nodes = {};
 
 const getNode = nodeId => nodes[nodeId];
 
@@ -88,14 +88,13 @@ const getNodesClaimedByDriver = async driverId => Object.keys(nodes)
 const claimNode = async (driverId, nodeId) => {
   console.log('claimNode', driverId, nodeId);
   if (nodes[nodeId]) {
-    if (nodes[nodeId].driverId !== driverId) {
-      nodes[nodeId].driverId = driverId;
-    }
+    nodes[nodeId].driverId = driverId;
   }
   console.log('claimed', nodes[nodeId]);
 };
 
 module.exports = async (interfaceObj, interfaceConfig, eventEmitter) => {
+  nodes = {};
   const onValueChanged = (driverId, nodeId, comClass, index, value) => {
     eventEmitter.emit(driverId, {
       nodeId,
