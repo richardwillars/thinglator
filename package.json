@@ -2,7 +2,7 @@
   "name": "thinglator",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "maintainers": [
     {
       "name": "Richard Willars",
@@ -26,7 +26,6 @@
     "npm-programmatic": "0.0.8",
     "pm2": "^2.7.1",
     "socket.io": "^1.4.8",
-    "thinglator-driver-hue-light": "^1.2.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
