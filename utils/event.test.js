@@ -18,7 +18,7 @@ describe('utils/event', () => {
         validate: jest.fn().mockReturnValue({}),
       };
 
-      eventModule(EventEmitter, constants, models, jsonValidator);
+      const event = eventModule(EventEmitter, constants, models, jsonValidator);
       expect(onMock).toHaveBeenCalledTimes(4);
       expect(onMock.mock.calls[0][0]).toEqual('DEVICE_LIGHT_EVENT');
       expect(typeof onMock.mock.calls[0][1]).toEqual('function');
@@ -31,6 +31,8 @@ describe('utils/event', () => {
 
       expect(onMock.mock.calls[3][0]).toEqual('DEVICE_SENSOR_EVENT');
       expect(typeof onMock.mock.calls[3][1]).toEqual('function');
+
+      expect(event.eventEmitter instanceof EventEmitter).toEqual(true);
     });
 
     it('should save the event into the database when the event emitter receives an event', () => {
