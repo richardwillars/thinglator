@@ -44,8 +44,6 @@ module.exports = (EventEmitter, constants, models, jsonValidator) => {
   });
 
   return {
-    processDeviceEvent,
-    eventValidator,
     eventEmitter,
   };
 };
