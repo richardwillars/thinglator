@@ -1,17 +1,12 @@
 {
     "root": true,
-    "extends": "airbnb",
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module"
-    },
+    "extends": "airbnb-base",
+    "plugins": ["jest"],
     "rules": {
-        "indent": [2, 4],
-        "semi": 2,
-        "no-restricted-syntax": 2,
         "no-underscore-dangle": ["error", { "allow": ["_id"] }],
-        "newline-per-chained-call": 0,
-        "comma-dangle": ['error','never'],
-        "max-len": ['error',120]
+        "max-len": ['error', 120]
+    },
+    "env": {
+        "jest/globals": true
     }
 }

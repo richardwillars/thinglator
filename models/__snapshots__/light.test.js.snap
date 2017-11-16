@@ -1,0 +1,599 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/light should export the model 1`] = `
+Object {
+  "_id": false,
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {
+    "breatheEffect": Object {
+      "description": "Performs a breathe effect by fading between colours",
+      "friendly": "Breathe effect",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "cycles": Object {
+            "duration": "double",
+            "maximum": 99999,
+            "minimum": 0.01,
+          },
+          "fromColour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "peak": Object {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "double",
+          },
+          "period": Object {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "double",
+          },
+          "persist": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "period",
+          "cycles",
+          "persist",
+          "peak",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "pulseEffect": Object {
+      "description": "Performs a pulse effect by flashing between colours",
+      "friendly": "Pulse effect",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "cycles": Object {
+            "duration": "double",
+            "maximum": 99999,
+            "minimum": 0.01,
+          },
+          "fromColour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "period": Object {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "double",
+          },
+          "persist": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "period",
+          "cycles",
+          "persist",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "setBooleanState": Object {
+      "description": "Turns the light on or off",
+      "friendly": "Turn on or off",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "setBrightnessState": Object {
+      "description": "Sets the brightness of the light",
+      "friendly": "Set the brightness",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0.01,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "colour",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "setHSBState": Object {
+      "description": "Sets the hue, saturation and brightness, allowing you to change the colour of the light",
+      "friendly": "Set colour and brightness",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0.01,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "colour",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "toggle": Object {
+      "description": "Toggles the light on and off",
+      "friendly": "Toggle",
+      "type": [Function],
+    },
+  },
+  "events": Object {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;
+
+exports[`models/light should export the schema 1`] = `
+Object {
+  "_id": false,
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {
+    "breatheEffect": Object {
+      "description": "Performs a breathe effect by fading between colours",
+      "friendly": "Breathe effect",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "cycles": Object {
+            "duration": "double",
+            "maximum": 99999,
+            "minimum": 0.01,
+          },
+          "fromColour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "peak": Object {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "double",
+          },
+          "period": Object {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "double",
+          },
+          "persist": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "period",
+          "cycles",
+          "persist",
+          "peak",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "pulseEffect": Object {
+      "description": "Performs a pulse effect by flashing between colours",
+      "friendly": "Pulse effect",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "cycles": Object {
+            "duration": "double",
+            "maximum": 99999,
+            "minimum": 0.01,
+          },
+          "fromColour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "period": Object {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "double",
+          },
+          "persist": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "period",
+          "cycles",
+          "persist",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "setBooleanState": Object {
+      "description": "Turns the light on or off",
+      "friendly": "Turn on or off",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "setBrightnessState": Object {
+      "description": "Sets the brightness of the light",
+      "friendly": "Set the brightness",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0.01,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "colour",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "setHSBState": Object {
+      "description": "Sets the hue, saturation and brightness, allowing you to change the colour of the light",
+      "friendly": "Set colour and brightness",
+      "requestSchema": Object {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0.01,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "colour",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": [Function],
+    },
+    "toggle": Object {
+      "description": "Toggles the light on and off",
+      "friendly": "Toggle",
+      "type": [Function],
+    },
+  },
+  "events": Object {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;

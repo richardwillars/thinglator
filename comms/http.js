@@ -1,23 +1,15 @@
-/* eslint-disable class-methods-use-this */
-const commsClass = class HttpComms {
-    constructor(interfaceId, config) {
-        this.interfaceId = interfaceId;
-        this.config = config;
-        return this;
-    }
+module.exports = async (interfaceObj, interfaceConfig /* eventEmitter */) => {
+  const initialisedInterface = interfaceObj.initialise(interfaceConfig);
 
-    getType() {
-        return 'http';
-    }
+  return {
+    getType: () => 'http',
 
-    connect() {
-        return Promise.resolve();
-    }
+    disconnect: async () => {
+      await initialisedInterface.disconnect();
+    },
 
-    disconnect() {
-        return Promise.resolve();
-    }
-
+    methodsAvailableToDriver: {
+      execute: params => initialisedInterface.execute(params),
+    },
+  };
 };
-
-module.exports = commsClass;

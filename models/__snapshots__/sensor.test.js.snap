@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/sensor should export the model 1`] = `
+Object {
+  "_id": false,
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {},
+  "events": Object {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;
+
+exports[`models/sensor should export the schema 1`] = `
+Object {
+  "_id": false,
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {},
+  "events": Object {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;

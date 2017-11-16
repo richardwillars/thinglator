@@ -1,161 +1,189 @@
-const ioLib = require('socket.io');
-
-const authenticateCtrl = require('./controllers/authenticate');
-const deviceCtrl = require('./controllers/device');
-const eventCtrl = require('./controllers/event');
-const driverCtrl = require('./controllers/driver');
-const eventUtils = require('./utils/event');
-
-
 const errorHandler = (err) => {
-    switch (err.type) {
+  switch (err.type) {
     case 'Driver':
-        console.log('Driver Error', err); // eslint-disable-line no-console
-        return {
-            code: 500,
-            type: err.type,
-            driver: err.driver,
-            message: err.message
-        };
+      console.error('Driver Error', err); // eslint-disable-line no-console
+      return {
+        code: 500,
+        type: err.type,
+        driver: err.driver,
+        message: err.message,
+      };
     case 'BadRequest':
-        return {
-            code: 400,
-            type: err.type,
-            message: err.message
-        };
+      return {
+        code: 400,
+        type: err.type,
+        message: err.message,
+      };
     case 'NotFound':
-        return {
-            code: 404,
-            type: err.type,
-            message: err.message
-        };
+      return {
+        code: 404,
+        type: err.type,
+        message: err.message,
+      };
     case 'Validation':
-        return {
-            code: 400,
-            type: err.type,
-            message: err.message,
-            errors: err.errors
-        };
+      return {
+        code: 400,
+        type: err.type,
+        message: err.message,
+        errors: err.errors,
+      };
     case 'Connection':
-        return {
-            code: 503,
-            type: err.type,
-            message: err.message
-        };
+      return {
+        code: 503,
+        type: err.type,
+        message: err.message,
+      };
     case 'Authentication':
-        return {
-            code: 401,
-            type: err.type,
-            message: err.message
-        };
+      return {
+        code: 401,
+        type: err.type,
+        message: err.message,
+      };
     default:
-        console.error(err); // eslint-disable-line no-console
-        return {
-            type: 'Internal',
-            code: 500,
-            stack: err.stack
-        };
-    }
+      console.error(err); // eslint-disable-line no-console
+      return {
+        type: 'Internal',
+        code: 500,
+      };
+  }
 };
 
-const socketApi = (httpServer, drivers) => {
-    const io = ioLib(httpServer);
-    eventUtils.getEventEmitter().on('newEvent', (event) => {
-        io.emit('newEvent', event);
+const initialise = (ioLib, authenticateCtrl, eventCtrl, driverCtrl, eventUtils, httpServer, drivers, constants) => {
+  const io = ioLib(httpServer);
+  eventUtils.eventEmitter.on(constants.DEVICE_EVENT, (event) => {
+    io.emit('newEvent', event);
+  });
+  io.on('connection', (socket) => {
+    socket.on('getAuthenticationProcess', async (driver, cb) => {
+      try {
+        const result = await authenticateCtrl.getAuthenticationProcess(driver, drivers);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
     });
-    io.on('connection', (socket) => {
-        socket.on('getAuthenticationProcess', (type, driver, cb) => {
-            authenticateCtrl.getAuthenticationProcess(driver, type, drivers).then((result) => {
-                cb(result);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
 
-        socket.on('authenticationStep', (type, driver, stepId, body, cb) => {
-            authenticateCtrl.authenticationStep(driver, type, drivers, stepId, body).then((result) => {
-                cb(result);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('discoverDevices', (type, driver, cb) => {
-            driverCtrl.discover(driver, type, drivers).then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getDevices', (cb) => {
-            deviceCtrl.getAllDevices().then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getDevicesByType', (type, cb) => {
-            deviceCtrl.getDevicesByType(type).then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getDevicesByTypeAndDriver', (type, driver, cb) => {
-            deviceCtrl.getDevicesByTypeAndDriver(type, driver).then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getDeviceById', (deviceId, cb) => {
-            deviceCtrl.getDeviceById(deviceId).then((result) => {
-                cb(result);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('runCommand', (deviceId, command, body, cb) => {
-            deviceCtrl.runCommand(deviceId, command, body, drivers).then(() => {
-                cb();
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getDrivers', (cb) => {
-            driverCtrl.getDriversWithStats(drivers).then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getEventsByType', (eventType, from, cb) => {
-            eventCtrl.getEventsByType(eventType, from).then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
-
-        socket.on('getLatestCommandEvents', (cb) => {
-            eventCtrl.getLatestCommandEvents().then((results) => {
-                cb(results);
-            }).catch((err) => {
-                cb(errorHandler(err));
-            });
-        });
+    socket.on('authenticationStep', async (driver, stepId, body, cb) => {
+      try {
+        const result = await authenticateCtrl.authenticationStep(driver, stepId, body);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
     });
-    return io;
+
+    socket.on('discoverDevices', async (driver, cb) => {
+      try {
+        const result = await driverCtrl.discover(driver, drivers);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getDevices', async (cb) => {
+      try {
+        const result = await driverCtrl.getAllDevices();
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getDevicesByType', async (type, cb) => {
+      try {
+        const result = await driverCtrl.getDevicesByType(type);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getDevicesByDriver', async (driver, cb) => {
+      try {
+        const result = await driverCtrl.getDevicesByDriver(driver);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getDeviceById', async (deviceId, cb) => {
+      try {
+        const result = await driverCtrl.getDeviceById(deviceId);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('runCommand', async (deviceId, command, body, cb) => {
+      try {
+        await driverCtrl.runCommand(deviceId, command, body, drivers);
+        cb();
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getDrivers', async (cb) => {
+      try {
+        const result = await driverCtrl.getDriversWithStats(drivers);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getEventsByType', async (eventType, from, cb) => {
+      try {
+        const result = await eventCtrl.getEventsByType(eventType, from);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getLatestCommandEvents', async (cb) => {
+      try {
+        const result = await eventCtrl.getLatestCommandEvents();
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getCommandDescriptions', async (cb) => {
+      try {
+        const result = await driverCtrl.getCommandDescriptions();
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getEventDescriptions', async (cb) => {
+      try {
+        const result = await driverCtrl.getEventDescriptions();
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on('getDeviceTypes', async (cb) => {
+      try {
+        const result = await driverCtrl.getDeviceTypes();
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+  });
+  return io;
 };
 
 module.exports = {
-    socketApi,
-    errorHandler
+  initialise,
+  errorHandler,
 };

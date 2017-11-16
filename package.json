@@ -2,7 +2,7 @@
   "name": "thinglator",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "maintainers": [
     {
       "name": "Richard Willars",
@@ -23,28 +23,34 @@
     "jsonschema": "^1.1.0",
     "md5": "^2.1.0",
     "mongoose": "^4.5.1",
+    "npm-programmatic": "0.0.8",
+    "pm2": "^2.7.1",
     "socket.io": "^1.4.8",
+    "thinglator-driver-hue-light": "^1.2.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^5.0.3",
-    "eslint-plugin-react": "^6.10.3",
-    "mocha": "^3.0.2",
-    "mockery": "^1.7.0",
-    "sinon": "^1.17.5",
-    "sinon-chai": "^2.8.0"
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.2.0",
+    "jest": "^21.2.1"
   },
   "scripts": {
     "start": "node app.js",
-    "test": "istanbul cover node_modules/.bin/_mocha --recursive",
-    "test:watch": "node_modules/.bin/_mocha --recursive --watch"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "engines": {
-    "node": ">=6.10.0"
+    "node": ">=8.0.0"
   },
-  "main": "app.js"
+  "main": "app.js",
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ]
+  }
 }

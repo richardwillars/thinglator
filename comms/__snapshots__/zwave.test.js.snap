@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`comms/zwave methodsAvailableToDriver claimNode should claim the node if the node exists 1`] = `
+Array [
+  Object {
+    "classes": Object {},
+    "driverId": "driver1",
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node1",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+]
+`;
+
+exports[`comms/zwave methodsAvailableToDriver claimNode should not claim the node if the node does not exist 1`] = `
+Array [
+  Object {
+    "classes": Object {},
+    "driverId": null,
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node1",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+]
+`;
+
+exports[`comms/zwave methodsAvailableToDriver getAllNodes should return a list of all the nodes 1`] = `
+Array [
+  Object {
+    "classes": Object {},
+    "driverId": null,
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node1",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+  Object {
+    "classes": Object {},
+    "driverId": null,
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node2",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+  Object {
+    "classes": Object {},
+    "driverId": null,
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node3",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+]
+`;
+
+exports[`comms/zwave methodsAvailableToDriver getNodesClaimedByDriver should return a list of all the nodes claimed by the specified driver 1`] = `
+Array [
+  Object {
+    "classes": Object {},
+    "driverId": "driver1",
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node2",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+  Object {
+    "classes": Object {},
+    "driverId": "driver1",
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node3",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+]
+`;
+
+exports[`comms/zwave methodsAvailableToDriver getUnclaimedNodes should return a list of all the nodes not claimed by drivers 1`] = `
+Array [
+  Object {
+    "classes": Object {},
+    "driverId": null,
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node1",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+  Object {
+    "classes": Object {},
+    "driverId": null,
+    "loc": "",
+    "manufacturer": "",
+    "manufacturerId": "",
+    "name": "",
+    "nodeId": "node3",
+    "product": "",
+    "productId": "",
+    "productType": "",
+    "ready": false,
+    "type": "",
+  },
+]
+`;

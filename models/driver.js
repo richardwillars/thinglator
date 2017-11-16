@@ -1,19 +1,19 @@
-const mongoose = require('mongoose');
-
-const DriverSchema = new mongoose.Schema({
+module.exports = (mongoose) => {
+  const schema = {
     _id: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     settings: {
-        type: Object,
-        required: true,
-        default: {}
-    }
-});
+      type: Object,
+      required: true,
+      default: {},
+    },
+  };
 
-
-const Driver = mongoose.model('Driver', DriverSchema);
-
-module.exports.Model = Driver;
+  return {
+    model: mongoose.model('Driver', new mongoose.Schema(schema)),
+    schema,
+  };
+};

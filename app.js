@@ -1,69 +1,90 @@
 /* eslint-disable no-console */
 const config = require('config');
-const express = require('express');
-const mongoose = require('mongoose');
 const chalk = require('chalk');
-const driverUtils = require('./utils/driver');
-const commsUtils = require('./utils/comms');
+const md5 = require('md5');
+const mongoose = require('mongoose');
+const express = require('express');
+const ioLib = require('socket.io');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const jsonschema = require('jsonschema');
+const _ = require('underscore');
+const EventEmitter = require('events');
+const constants = require('./constants');
+const eventCreators = require('./eventCreators');
+
+const driverUtilsModule = require('./utils/driver');
+const eventUtilsModule = require('./utils/event');
+const deviceUtilsModule = require('./utils/device');
+const commsLoader = require('./comms');
 const socketApi = require('./socketApi');
+const authenticateCtrlModule = require('./controllers/authenticate');
+const eventCtrlModule = require('./controllers/event');
+const driverCtrlModule = require('./controllers/driver');
+const modelsModule = require('./models');
 const httpApi = require('./httpApi');
 
 console.log(chalk.yellow('Starting Thinglator'));
 
-// load and initialise express
-const app = express();
+const comms = commsLoader(fs, chalk);
 
-// connect to the database
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/thinglator');
+process.on('SIGINT', async () => {
+  try {
+    await comms.disconnectAll();
+  } catch (err) {
+    console.log('ERROR2', err);
+  }
 
-
-// get a list of all potential interfaces (one for each communication protocol)
-const availableInterfaces = commsUtils.loadInterfaces();
-
-// load the comms using the available interfaces and their configs
-const comms = commsUtils.loadComms(availableInterfaces, config.get('interfaces'));
-// loop through the comms and connect them
-const commsConnectPromises = [];
-Object.keys(comms).forEach((i) => {
-    commsConnectPromises.push(comms[i].connect());
+  console.log(chalk.yellow('Stopping Thinglator'));
+  process.exit();
 });
 
-Promise.all(commsConnectPromises).then(() => {
-    console.log(chalk.blue('All comms connected!'));
+const jsonValidator = new jsonschema.Validator();
 
-    // Get the drivers and initialise them
-    const drivers = driverUtils.loadDrivers(comms);
-    console.log(chalk.blue('All drivers connected!'));
-    // setup the HTTP API
-    httpApi(app, drivers);
+const models = modelsModule(mongoose, constants);
+const eventUtils = eventUtilsModule(EventEmitter, constants, models, jsonValidator);
+const deviceUtils = deviceUtilsModule(md5, models);
+const driverUtils = driverUtilsModule(fs, chalk, models, constants, eventCreators, eventUtils.eventEmitter);
 
-    // Initialise the webserver
-    const httpServer = app.listen(config.get('port'), () => {
-        console.log(chalk.blue(`REST API server listening on port ${config.get('port')}`));
-    });
 
-    // setup the websocket API
-    socketApi.socketApi(httpServer, drivers);
-    console.log(chalk.blue(`WebSocket server listening on port ${config.get('port')}`));
-}).catch((err) => {
-    console.log(err);
-    process.emit('SIGINT');
-});
+const launch = async () => {
+  // connect to the database
+  mongoose.Promise = global.Promise;
+  mongoose.connect(`mongodb://${config.get('mongodb.host')}/${config.get('mongodb.db')}`);
 
-process.on('SIGINT', () => {
-    const commsDisconnectPromises = [];
-    Object.keys(comms).forEach((i) => {
-        console.log(chalk.blue(`Disconnecting from comms: ${chalk.white(i)}`));
-        commsDisconnectPromises.push(comms[i].disconnect());
-    });
+  // get a list of all potential interfaces (one for each communication protocol)
+  const availableInterfaces = comms.installInterfaces();
+  // load the comms using the available interfaces and their configs
+  await comms.initialise(availableInterfaces, config.get('interfaces'), eventUtils.eventEmitter);
+  console.log(chalk.blue('All comms connected!'));
 
-    Promise.all(commsDisconnectPromises).then(() => {
-        console.log(chalk.blue('All comms disconnected!'));
-    }).catch((err) => {
-        console.log(err);
-    }).then(() => {
-        console.log(chalk.yellow('Stopping Thinglator'));
-        process.exit();
-    });
-});
+  // Get the drivers and initialise them
+  const driverList = await driverUtils.load(comms);
+  console.log(chalk.blue('All drivers connected!'));
+
+  const driverCtrl = driverCtrlModule(_, models, md5, driverUtils, deviceUtils, driverList, jsonValidator);
+  const authenticateCtrl = authenticateCtrlModule(jsonValidator, models, driverUtils, driverList);
+  const eventCtrl = eventCtrlModule(models);
+
+  // load and initialise express
+  const app = express();
+
+  // setup the HTTP API
+  httpApi(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, driverList);
+
+  // Initialise the webserver
+  const httpServer = app.listen(config.get('port'), () => {
+    console.log(chalk.blue(`REST API server listening on port ${config.get('port')}`));
+  });
+
+  // setup the websocket API
+  socketApi.initialise(ioLib, authenticateCtrl, eventCtrl, driverCtrl, eventUtils, httpServer, driverList, constants);
+  console.log(chalk.blue(`WebSocket server listening on port ${config.get('port')}`));
+};
+
+try {
+  launch();
+} catch (err) {
+  console.log('ERROR', err);
+  process.emit('SIGINT');
+}

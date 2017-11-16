@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/socket should export the model 1`] = `
+Object {
+  "_id": false,
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {
+    "off": Object {
+      "description": "Turns the socket off",
+      "friendly": "Turn off",
+      "type": [Function],
+    },
+    "on": Object {
+      "description": "Turns the socket on",
+      "friendly": "Turn on",
+      "type": [Function],
+    },
+  },
+  "events": Object {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;
+
+exports[`models/socket should export the schema 1`] = `
+Object {
+  "_id": false,
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {
+    "off": Object {
+      "description": "Turns the socket off",
+      "friendly": "Turn off",
+      "type": [Function],
+    },
+    "on": Object {
+      "description": "Turns the socket on",
+      "friendly": "Turn on",
+      "type": [Function],
+    },
+  },
+  "events": Object {
+    "a": "A",
+    "b": "B",
+    "c": "C",
+    "d": "D",
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;
