@@ -2,7 +2,7 @@
   "name": "thinglator",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "maintainers": [
     {
       "name": "Richard Willars",
@@ -47,6 +47,10 @@
   "main": "app.js",
   "jest": {
     "testEnvironment": "node",
-    "collectCoverageFrom" : ["**/*.js", "!**/node_modules/**", "!**/coverage/**"]
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ]
   }
 }
