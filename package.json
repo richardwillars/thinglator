@@ -2,7 +2,7 @@
   "name": "thinglator",
   "license": "MIT",
   "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "maintainers": [
     {
       "name": "Richard Willars",
