@@ -172,7 +172,7 @@ const getDeviceById = async (deviceId, models) => {
 const getDeviceTypes = async (models) => {
   const types = {};
   Object.keys(models)
-    .filter(modelId => models[modelId].DeviceEventEmitter !== undefined)
+    .filter(modelId => models[modelId].schema && models[modelId].schema.commands !== undefined && models[modelId].schema.events !== undefined)
     .forEach((modelId) => {
       types[modelId] = models[modelId].schema;
     });
