@@ -49,9 +49,11 @@ module.exports = (md5, devicesCollection, schemas, jsonValidator) => ({
       e.errors = validated.errors;
       throw e;
     }
+    /* eslint-disable no-param-reassign */
     device.commands = specs.commands;
     device.events = specs.events;
     device.name = specs.name;
+    /* eslint-enable no-param-reassign */
     devicesCollection.update(device);
   }
 });

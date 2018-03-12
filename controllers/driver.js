@@ -1,6 +1,6 @@
 const groupBy = (xs, key) =>
   xs.reduce((rv, x) => {
-    (rv[x[key]] = rv[x[key]] || []).push(x);
+    (rv[x[key]] = rv[x[key]] || []).push(x); // eslint-disable-line no-param-reassign
     return rv;
   }, {});
 
@@ -50,9 +50,6 @@ const discover = async (
       driverId
     });
 
-    console.log("existingDevices", existingDevices);
-    console.log("foundDevices", foundDevices);
-
     // loop through existingDevices and determine if they exist in the foundDevices list
     const toUpdate = [];
     existingDevices.forEach(existingDevice => {
@@ -63,9 +60,9 @@ const discover = async (
         ) {
           if (
             typeof foundDevice.name === "undefined" ||
-            foundDevice.name === ""
+            foundDevice.name === "" // eslint-disable-line no-param-reassign
           ) {
-            foundDevice.name = existingDevice.name;
+            foundDevice.name = existingDevice.name; // eslint-disable-line no-param-reassign
           }
           toUpdate.push({
             device: existingDevice,
@@ -79,7 +76,6 @@ const discover = async (
 
     // if they do exist in the foundDevices list, update them
     const promises = [];
-    console.log("toUpdate", toUpdate);
     toUpdate.forEach(r => {
       promises.push(deviceUtils.updateDevice(r.device, r.specs));
     });
@@ -94,7 +90,6 @@ const discover = async (
             md5(`${type}${driverId}${foundDevice.originalId}`)
         ) === undefined
     );
-    console.log("new devices", newDevices);
     // if there are any other devices in foundDevices, create them
     await Promise.all(
       newDevices.map(async r => {

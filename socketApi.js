@@ -53,6 +53,7 @@ const initialise = (
   authenticateCtrl,
   eventCtrl,
   driverCtrl,
+  interfaceCtrl,
   eventUtils,
   httpServer,
   drivers,
@@ -190,6 +191,15 @@ const initialise = (
     socket.on("getDeviceTypes", async cb => {
       try {
         const result = await driverCtrl.getDeviceTypes();
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on("pairingMode", async cb => {
+      try {
+        const result = await interfaceCtrl.pairingMode();
         cb(result);
       } catch (err) {
         cb(errorHandler(err));

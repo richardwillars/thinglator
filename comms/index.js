@@ -14,7 +14,9 @@ module.exports = (fs, chalk) => ({
     fs.readdirSync("./node_modules").forEach(file => {
       if (file.match(/thinglator-interface-/) !== null) {
         const name = file.replace("thinglator-interface-", "");
+        /* eslint-disable global-require, import/no-dynamic-require */
         const interfaceObj = require(`thinglator-interface-${name}`);
+        /* eslint-enable global-require, import/no-dynamic-require */
         if (!interfacesArr[interfaceObj.commsType]) {
           interfacesArr[interfaceObj.commsType] = interfaceObj;
         }
@@ -27,8 +29,9 @@ module.exports = (fs, chalk) => ({
     const newInterfaceConfig = Object.assign(interfaceConfig, {});
 
     const commIds = Object.keys(comms);
-    for (const commsId of commIds) {
+    commIds.forEach(async commsId => {
       if (availableInterfaces[commsId]) {
+        /* eslint-disable no-console */
         console.log(
           chalk.blue(
             `Connecting to comms: ${chalk.white(
@@ -38,6 +41,7 @@ module.exports = (fs, chalk) => ({
             )}`
           )
         );
+        /* eslint-enable no-console */
         if (typeof interfaceConfig[commsId] === "undefined") {
           newInterfaceConfig[commsId] = {};
         }
@@ -47,10 +51,11 @@ module.exports = (fs, chalk) => ({
           eventEmitter
         );
       }
-    }
+    });
   },
 
   disconnectAll: async () => {
+    /* eslint-disable no-console */
     Object.keys(activeComms).forEach(async commId => {
       console.log(
         chalk.blue(
@@ -62,7 +67,8 @@ module.exports = (fs, chalk) => ({
       await activeComms[commId].disconnect();
     });
     console.log(chalk.blue("All comms disconnected!"));
+    /* eslint-enable no-console */
   },
-
+  getActiveComms: () => activeComms,
   getActiveCommsById: commId => activeComms[commId]
 });

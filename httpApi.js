@@ -3,6 +3,7 @@ module.exports = (
   authenticateCtrl,
   eventCtrl,
   driverCtrl,
+  interfaceCtrl,
   app,
   drivers
 ) => {
@@ -144,6 +145,15 @@ module.exports = (
         req.params.eventType,
         req.query.from
       );
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get("/pairingMode", async (req, res, next) => {
+    try {
+      const result = await interfaceCtrl.pairingMode();
       res.json(result);
     } catch (err) {
       next(err);

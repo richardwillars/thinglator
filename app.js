@@ -21,6 +21,7 @@ const socketApi = require("./socketApi");
 const authenticateCtrlModule = require("./controllers/authenticate");
 const eventCtrlModule = require("./controllers/event");
 const driverCtrlModule = require("./controllers/driver");
+const interfaceCtrlModule = require("./controllers/interface");
 const schemasModule = require("./schemas");
 const httpApi = require("./httpApi");
 
@@ -145,11 +146,21 @@ const launch = async () => {
   );
   const eventCtrl = eventCtrlModule(eventsCollection);
 
+  const interfaceCtrl = interfaceCtrlModule(comms);
+
   // load and initialise express
   const app = express();
 
   // setup the HTTP API
-  httpApi(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, driverList);
+  httpApi(
+    bodyParser,
+    authenticateCtrl,
+    eventCtrl,
+    driverCtrl,
+    interfaceCtrl,
+    app,
+    driverList
+  );
 
   // Initialise the webserver
   const httpServer = app.listen(config.get("port"), () => {
@@ -164,6 +175,7 @@ const launch = async () => {
     authenticateCtrl,
     eventCtrl,
     driverCtrl,
+    interfaceCtrl,
     eventUtils,
     httpServer,
     driverList,

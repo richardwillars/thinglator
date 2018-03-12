@@ -45,15 +45,16 @@
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "test": "jest --coverage",
+    "test": "jest --coverage && yarn lint",
     "test:watch": "jest --watch",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "lint": "eslint **/*.js"
   },
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.9.0"
   },
   "main": "app.js",
   "jest": {

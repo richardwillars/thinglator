@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 const eventModule = require("./event");
 const constants = require("../constants");
 

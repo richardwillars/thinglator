@@ -54,4 +54,16 @@ describe("comms/http", () => {
       "function"
     );
   });
+
+  it("should return a pairing mode function that resolves to 0", async () => {
+    const interfaceObj = {
+      initialise: jest.fn().mockReturnValue({})
+    };
+    const interfaceConfig = {
+      foo: "bar"
+    };
+    const httpComms = await httpCommsModule(interfaceObj, interfaceConfig);
+    const result = await httpComms.pairingMode();
+    expect(result).toEqual(0);
+  });
 });

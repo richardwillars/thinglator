@@ -8,6 +8,7 @@ describe("httpApi", () => {
     const authenticateCtrl = {};
     const eventCtrl = {};
     const driverCtrl = {};
+    const interfaceCtrl = {};
     const app = {
       get: jest.fn(),
       post: jest.fn(),
@@ -19,6 +20,7 @@ describe("httpApi", () => {
       authenticateCtrl,
       eventCtrl,
       driverCtrl,
+      interfaceCtrl,
       app,
       drivers
     );
@@ -33,6 +35,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -44,6 +47,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -59,6 +63,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -70,6 +75,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -103,6 +109,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -114,6 +121,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -145,6 +153,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -156,6 +165,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -187,6 +197,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -198,6 +209,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -233,6 +245,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -244,6 +257,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -275,6 +289,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -286,6 +301,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -317,6 +333,7 @@ describe("httpApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
@@ -328,6 +345,7 @@ describe("httpApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         app,
         drivers
       );
@@ -361,6 +379,7 @@ describe("httpApi", () => {
         const authenticateCtrl = {};
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -372,6 +391,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -399,6 +419,7 @@ describe("httpApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -410,6 +431,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -445,6 +467,7 @@ describe("httpApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -456,6 +479,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -490,6 +514,7 @@ describe("httpApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -501,6 +526,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -541,6 +567,7 @@ describe("httpApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -552,6 +579,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -587,6 +615,7 @@ describe("httpApi", () => {
         const driverCtrl = {
           discover: jest.fn().mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -599,6 +628,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -630,6 +660,7 @@ describe("httpApi", () => {
         const driverCtrl = {
           discover: jest.fn().mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -643,6 +674,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -676,6 +708,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -688,6 +721,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -714,6 +748,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -727,6 +762,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -756,6 +792,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -768,6 +805,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -798,6 +836,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -811,6 +850,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -844,6 +884,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -856,6 +897,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -886,6 +928,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -899,6 +942,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -932,6 +976,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -944,6 +989,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -974,6 +1020,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -987,6 +1034,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1018,6 +1066,7 @@ describe("httpApi", () => {
         const driverCtrl = {
           runCommand: jest.fn().mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -1030,6 +1079,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1065,6 +1115,7 @@ describe("httpApi", () => {
         const driverCtrl = {
           runCommand: jest.fn().mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -1078,6 +1129,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1113,6 +1165,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -1125,6 +1178,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1151,6 +1205,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -1164,6 +1219,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1193,6 +1249,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -1205,6 +1262,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1229,6 +1287,7 @@ describe("httpApi", () => {
         const driverCtrl = {
           getCommands: jest.fn().mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -1242,6 +1301,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1271,6 +1331,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
@@ -1283,6 +1344,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1309,6 +1371,7 @@ describe("httpApi", () => {
             .fn()
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
@@ -1322,6 +1385,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1352,6 +1416,7 @@ describe("httpApi", () => {
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -1363,6 +1428,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1390,6 +1456,7 @@ describe("httpApi", () => {
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
@@ -1402,6 +1469,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1432,6 +1500,7 @@ describe("httpApi", () => {
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
@@ -1443,6 +1512,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1480,6 +1550,7 @@ describe("httpApi", () => {
             .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
@@ -1492,6 +1563,7 @@ describe("httpApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           app,
           drivers
         );
@@ -1514,6 +1586,86 @@ describe("httpApi", () => {
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenCalledWith({ foo: "bar" });
+      });
+    });
+
+    describe("/pairingMode", () => {
+      it("should return json from interfaceCtrl.pairingMode", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const authenticateCtrl = {};
+        const eventCtrl = {};
+        const driverCtrl = {};
+        const interfaceCtrl = {
+          pairingMode: jest.fn().mockReturnValue(Promise.resolve(4))
+        };
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[12][0]).toEqual("/pairingMode");
+        const callback = app.get.mock.calls[12][1];
+        expect(typeof callback).toEqual("function");
+        const req = {};
+        const res = {
+          json: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(interfaceCtrl.pairingMode).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledWith(4);
+        expect(next).toHaveBeenCalledTimes(0);
+      });
+
+      it("should catch any errors and pass them to the next callback", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const eventCtrl = {};
+        const driverCtrl = {};
+        const interfaceCtrl = {
+          pairingMode: jest.fn().mockReturnValue(Promise.reject(0))
+        };
+        const authenticateCtrl = {};
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[12][0]).toEqual("/pairingMode");
+        const callback = app.get.mock.calls[12][1];
+        expect(typeof callback).toEqual("function");
+        const req = {};
+        const res = {
+          json: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(res.json).toHaveBeenCalledTimes(0);
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenCalledWith(0);
       });
     });
   });

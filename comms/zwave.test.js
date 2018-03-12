@@ -49,6 +49,24 @@ describe("comms/zwave", () => {
     expect(disconnect).toHaveBeenCalledTimes(1);
   });
 
+  it("should enter pairing mode", async () => {
+    const connect = jest.fn().mockReturnValue(Promise.resolve());
+    const pairingMode = jest.fn().mockReturnValue(Promise.resolve(2));
+    const interfaceObj = {
+      initialise: jest.fn().mockReturnValue({
+        connect,
+        pairingMode
+      })
+    };
+    const interfaceConfig = {
+      foo: "bar"
+    };
+    const zwaveComms = await zwaveCommsModule(interfaceObj, interfaceConfig);
+    const result = await zwaveComms.pairingMode();
+    expect(pairingMode).toHaveBeenCalledTimes(1);
+    expect(result).toEqual(2);
+  });
+
   describe("methodsAvailableToDriver", () => {
     it("should return a list of methods to make available to drivers that require the zwave comms", async () => {
       const connect = jest.fn().mockReturnValue(Promise.resolve());

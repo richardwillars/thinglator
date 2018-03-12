@@ -55,7 +55,7 @@ const getListOfEventsForDeviceType = (deviceType, schemas, constants) => {
   return Object.keys(constants.events)
     .filter(key => allowed.includes(key))
     .reduce((obj, key) => {
-      obj[key] = constants.events[key];
+      obj[key] = constants.events[key]; // eslint-disable-line no-param-reassign
       return obj;
     }, {});
 };

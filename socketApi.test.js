@@ -17,6 +17,8 @@ describe("socketApi", () => {
     };
     const eventCtrl = {};
     const driverCtrl = {};
+    const interfaceCtrl = {};
+
     const eventUtils = {
       eventEmitter: {
         on: jest.fn()
@@ -30,6 +32,7 @@ describe("socketApi", () => {
       authenticateCtrl,
       eventCtrl,
       driverCtrl,
+      interfaceCtrl,
       eventUtils,
       httpServer,
       drivers,
@@ -135,6 +138,7 @@ describe("socketApi", () => {
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const eventUtils = {
         eventEmitter: {
           on: jest.fn()
@@ -150,6 +154,7 @@ describe("socketApi", () => {
         authenticateCtrl,
         eventCtrl,
         driverCtrl,
+        interfaceCtrl,
         eventUtils,
         httpServer,
         drivers,
@@ -185,6 +190,7 @@ describe("socketApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const eventUtils = {
           eventEmitter: {
             on: jest.fn()
@@ -198,6 +204,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -234,6 +241,7 @@ describe("socketApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const eventUtils = {
           eventEmitter: {
             on: jest.fn()
@@ -247,6 +255,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -287,6 +296,7 @@ describe("socketApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const eventUtils = {
           eventEmitter: {
             on: jest.fn()
@@ -300,6 +310,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -334,6 +345,7 @@ describe("socketApi", () => {
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const eventUtils = {
           eventEmitter: {
             on: jest.fn()
@@ -347,6 +359,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -383,6 +396,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           discover: jest.fn().mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -398,6 +412,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -430,6 +445,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           discover: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -445,6 +461,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -483,6 +500,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -498,6 +516,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -530,6 +549,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getAllDevices: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -545,6 +565,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -583,6 +604,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -598,6 +620,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -631,6 +654,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getDevicesByType: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -646,6 +670,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -684,6 +709,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -699,6 +725,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -731,6 +758,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getDevicesByDriver: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -746,6 +774,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -784,6 +813,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -799,6 +829,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -831,6 +862,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getDeviceById: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -846,6 +878,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -882,6 +915,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           runCommand: jest.fn().mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -897,6 +931,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -929,6 +964,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           runCommand: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -944,6 +980,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -982,6 +1019,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -997,6 +1035,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1029,6 +1068,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getDriversWithStats: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1044,6 +1084,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1083,6 +1124,7 @@ describe("socketApi", () => {
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
           eventEmitter: {
@@ -1097,6 +1139,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1130,6 +1173,7 @@ describe("socketApi", () => {
           getEventsByType: jest.fn().mockReturnValue(Promise.reject(err))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
           eventEmitter: {
@@ -1144,6 +1188,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1183,6 +1228,7 @@ describe("socketApi", () => {
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
           eventEmitter: {
@@ -1197,6 +1243,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1230,6 +1277,7 @@ describe("socketApi", () => {
           getLatestCommandEvents: jest.fn().mockReturnValue(Promise.reject(err))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
           eventEmitter: {
@@ -1244,6 +1292,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1282,6 +1331,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1297,6 +1347,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1329,6 +1380,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getCommands: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1344,6 +1396,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1382,6 +1435,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1397,6 +1451,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1429,6 +1484,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getEventDescriptions: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1444,6 +1500,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1482,6 +1539,7 @@ describe("socketApi", () => {
             .fn()
             .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1497,6 +1555,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,
@@ -1529,6 +1588,7 @@ describe("socketApi", () => {
         const driverCtrl = {
           getDeviceTypes: jest.fn().mockReturnValue(Promise.reject(err))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const eventUtils = {
@@ -1544,6 +1604,7 @@ describe("socketApi", () => {
           authenticateCtrl,
           eventCtrl,
           driverCtrl,
+          interfaceCtrl,
           eventUtils,
           httpServer,
           drivers,

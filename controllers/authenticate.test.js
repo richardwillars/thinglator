@@ -132,7 +132,8 @@ describe("controllers/authenticate", () => {
       }
     });
 
-    it("should throw an error if the authentication process does not match the json authentication schema ", async () => {
+    it(`should throw an error if the authentication process does not match the json
+     authentication schema`, async () => {
       const jsonValidator = {
         validate: jest
           .fn()
