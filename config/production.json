@@ -1,6 +1,6 @@
 {
-    "port": 4002,
-    "management": {
-        "port": 4003
-    }
+  "port": 4002,
+  "management": {
+    "port": 4003
+  }
 }

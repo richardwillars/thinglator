@@ -6,8 +6,8 @@
   },
   "interfaces": {
     "zwave": {
-        "hardwareLocation": "/dev/cu.usbmodem1411",
-        "debug": true
+      "hardwareLocation": "/dev/cu.usbmodem1411",
+      "debug": true
     }
   },
   "management": {

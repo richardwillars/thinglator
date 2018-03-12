@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schemas/driver should export the schema 1`] = `
+Object {
+  "_id": Object {
+    "required": true,
+    "type": [Function],
+    "unique": true,
+  },
+  "settings": Object {
+    "default": Object {},
+    "required": true,
+    "type": [Function],
+  },
+}
+`;

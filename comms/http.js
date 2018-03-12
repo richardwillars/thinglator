@@ -2,14 +2,14 @@ module.exports = async (interfaceObj, interfaceConfig /* eventEmitter */) => {
   const initialisedInterface = interfaceObj.initialise(interfaceConfig);
 
   return {
-    getType: () => 'http',
+    getType: () => "http",
 
     disconnect: async () => {
       await initialisedInterface.disconnect();
     },
 
     methodsAvailableToDriver: {
-      execute: params => initialisedInterface.execute(params),
-    },
+      execute: params => initialisedInterface.execute(params)
+    }
   };
 };
