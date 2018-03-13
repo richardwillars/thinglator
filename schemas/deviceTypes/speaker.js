@@ -225,10 +225,30 @@ module.exports = (events, constants) => {
       description: "Stops the currently playing audio"
     }
   };
-  const deviceEvents = {};
 
-  Object.keys(constants.sensor).forEach(key => {
-    deviceEvents[key] = events[key];
+  const deviceEvents = [
+    constants.events.AUDIO_PLAYING_STATE,
+    constants.events.PREVIOUS_AUDIO_TRACK,
+    constants.events.NEXT_AUDIO_TRACK,
+    constants.events.MUTED_AUDIO,
+    constants.events.QUEUE_FLUSHED,
+    constants.events.VOLUME,
+    constants.events.SEEK,
+    constants.events.NAME,
+    constants.events.LED_STATE,
+    constants.events.CURRENT_AUDIO_TRACK,
+    constants.events.ADDED_TO_QUEUE_NEXT,
+    constants.events.ADDED_TO_QUEUE_BOTTOM
+  ];
+
+  const eventSchema = {
+    type: "object",
+    properties: {}
+  };
+
+  deviceEvents.forEach(eventId => {
+    eventSchema.properties[eventId] = events[eventId];
+    eventSchema.properties[eventId].constant = eventId;
   });
 
   return {

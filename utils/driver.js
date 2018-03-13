@@ -49,9 +49,7 @@ const determineEventType = (driverType, constants) => {
 };
 
 const getListOfEventsForDeviceType = (deviceType, schemas, constants) => {
-  const allowed = Object.keys(
-    schemas.deviceTypes[deviceType].events.properties
-  );
+  const allowed = Object.values(schemas.deviceTypes[deviceType].events);
   return Object.keys(constants.events)
     .filter(key => allowed.includes(key))
     .reduce((obj, key) => {
@@ -77,7 +75,6 @@ const load = async (
     if (file.match(/thinglator-driver-/) !== null) {
       const driverId = file;
       const driverModule = loadModule(driverId);
-
       console.log(chalk.blue(`Loading driver: ${chalk.white(driverId)}`)); // eslint-disable-line no-console
 
       const interfaceRequired = driverModule.interface;
@@ -126,8 +123,7 @@ const load = async (
 
       // get a list of devices for this particular driver
       const devices = devicesCollection.find({
-        type: driversArr[driverId].driverType,
-        driver: driverId
+        driverId
       });
       await driversArr[driverId].api.initDevices(devices);
     }

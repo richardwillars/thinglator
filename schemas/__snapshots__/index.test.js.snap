@@ -504,390 +504,40 @@ Object {
     },
     "sensor": Object {
       "commands": Object {},
-      "events": Object {
-        "BATTERY_LEVEL": Object {
-          "description": "The current battery level of the device",
-          "friendly": "Battery level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "CONTACT": Object {
-          "description": "Whether the contact sensor is closed or open",
-          "friendly": "Contact",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "contact": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "contact",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "HUMIDITY": Object {
-          "description": "The current humidity level",
-          "friendly": "Humidity",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "LIGHT": Object {
-          "description": "The current light level in lux",
-          "friendly": "Light level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 30000,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "MOTION": Object {
-          "description": "Represents if motion is detected or not",
-          "friendly": "Motion",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "detected": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "detected",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "NAME": Object {
-          "constant": "NAME",
-          "description": "The current name of the device",
-          "friendly": "Name",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "name": Object {
-                "type": "string",
-              },
-            },
-            "required": Array [
-              "name",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "TAMPER": Object {
-          "description": "If the device is being tampered with or not",
-          "friendly": "Tamper",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "detected": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "detected",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "TEMPERATURE": Object {
-          "description": "The current temperature in degrees celcius",
-          "friendly": "Temperature",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": -50,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "UV": Object {
-          "description": "The current UV level",
-          "friendly": "UV level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 15,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "VIBRATION": Object {
-          "description": "The current vibration level",
-          "friendly": "Vibration level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-      },
+      "events": Array [
+        "CONTACT",
+        "TEMPERATURE",
+        "HUMIDITY",
+        "LIGHT",
+        "UV",
+        "BATTERY_LEVEL",
+        "MOTION",
+        "NAME",
+        "VIBRATION",
+        "TAMPER",
+      ],
     },
     "socket": Object {
       "commands": Object {
-        "off": Object {
-          "description": "Turns the socket off",
-          "friendly": "Turn off",
-          "type": [Function],
+        "properties": Object {
+          "off": Object {
+            "description": "Turns the socket off",
+            "friendly": "Turn off",
+            "type": "boolean",
+          },
+          "on": Object {
+            "description": "Turns the socket on",
+            "friendly": "Turn on",
+            "type": "boolean",
+          },
         },
-        "on": Object {
-          "description": "Turns the socket on",
-          "friendly": "Turn on",
-          "type": [Function],
-        },
+        "type": "object",
       },
-      "events": Object {
-        "BATTERY_LEVEL": Object {
-          "description": "The current battery level of the device",
-          "friendly": "Battery level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "CONTACT": Object {
-          "description": "Whether the contact sensor is closed or open",
-          "friendly": "Contact",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "contact": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "contact",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "HUMIDITY": Object {
-          "description": "The current humidity level",
-          "friendly": "Humidity",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "LIGHT": Object {
-          "description": "The current light level in lux",
-          "friendly": "Light level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 30000,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "MOTION": Object {
-          "description": "Represents if motion is detected or not",
-          "friendly": "Motion",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "detected": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "detected",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "NAME": Object {
-          "constant": "NAME",
-          "description": "The current name of the device",
-          "friendly": "Name",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "name": Object {
-                "type": "string",
-              },
-            },
-            "required": Array [
-              "name",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "TAMPER": Object {
-          "description": "If the device is being tampered with or not",
-          "friendly": "Tamper",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "detected": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "detected",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "TEMPERATURE": Object {
-          "description": "The current temperature in degrees celcius",
-          "friendly": "Temperature",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": -50,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "UV": Object {
-          "description": "The current UV level",
-          "friendly": "UV level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 15,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "VIBRATION": Object {
-          "description": "The current vibration level",
-          "friendly": "Vibration level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-      },
+      "events": Array [
+        "ON",
+        "ENERGY",
+        "NAME",
+      ],
     },
     "speaker": Object {
       "commands": Object {
@@ -1121,191 +771,20 @@ Object {
           "type": [Function],
         },
       },
-      "events": Object {
-        "BATTERY_LEVEL": Object {
-          "description": "The current battery level of the device",
-          "friendly": "Battery level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "CONTACT": Object {
-          "description": "Whether the contact sensor is closed or open",
-          "friendly": "Contact",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "contact": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "contact",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "HUMIDITY": Object {
-          "description": "The current humidity level",
-          "friendly": "Humidity",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "LIGHT": Object {
-          "description": "The current light level in lux",
-          "friendly": "Light level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 30000,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "MOTION": Object {
-          "description": "Represents if motion is detected or not",
-          "friendly": "Motion",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "detected": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "detected",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "NAME": Object {
-          "constant": "NAME",
-          "description": "The current name of the device",
-          "friendly": "Name",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "name": Object {
-                "type": "string",
-              },
-            },
-            "required": Array [
-              "name",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "TAMPER": Object {
-          "description": "If the device is being tampered with or not",
-          "friendly": "Tamper",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "detected": Object {
-                "type": "boolean",
-              },
-            },
-            "required": Array [
-              "detected",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "TEMPERATURE": Object {
-          "description": "The current temperature in degrees celcius",
-          "friendly": "Temperature",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": -50,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "UV": Object {
-          "description": "The current UV level",
-          "friendly": "UV level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 15,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-        "VIBRATION": Object {
-          "description": "The current vibration level",
-          "friendly": "Vibration level",
-          "responseSchema": Object {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "properties": Object {
-              "level": Object {
-                "maxiumum": 100,
-                "minimum": 0,
-                "type": "double",
-              },
-            },
-            "required": Array [
-              "level",
-            ],
-            "type": "object",
-          },
-          "type": [Function],
-        },
-      },
+      "events": Array [
+        "AUDIO_PLAYING_STATE",
+        "PREVIOUS_AUDIO_TRACK",
+        "NEXT_AUDIO_TRACK",
+        "MUTED_AUDIO",
+        "QUEUE_FLUSHED",
+        "VOLUME",
+        "SEEK",
+        "NAME",
+        "LED_STATE",
+        "CURRENT_AUDIO_TRACK",
+        "ADDED_TO_QUEUE_NEXT",
+        "ADDED_TO_QUEUE_BOTTOM",
+      ],
     },
   },
   "driver": Object {
@@ -1353,6 +832,7 @@ Object {
   },
   "events": Object {
     "ADDED_TO_QUEUE_BOTTOM": Object {
+      "constant": "ADDED_TO_QUEUE_BOTTOM",
       "description": "Fired when an item is added to the bottom of the queue",
       "friendly": "Added to bottom of queue",
       "responseSchema": Object {
@@ -1370,6 +850,7 @@ Object {
       "type": [Function],
     },
     "ADDED_TO_QUEUE_NEXT": Object {
+      "constant": "ADDED_TO_QUEUE_NEXT",
       "description": "Fired when an item is added to the top of the queue",
       "friendly": "Added to top of queue",
       "responseSchema": Object {
@@ -1387,6 +868,7 @@ Object {
       "type": [Function],
     },
     "AUDIO_PLAYING_STATE": Object {
+      "constant": "AUDIO_PLAYING_STATE",
       "description": "Represents the current playing state (playing, paused, stopped)",
       "friendly": "Playing state",
       "responseSchema": Object {
@@ -1412,6 +894,7 @@ Object {
       "type": [Function],
     },
     "BATTERY_LEVEL": Object {
+      "constant": "BATTERY_LEVEL",
       "description": "The current battery level of the device",
       "friendly": "Battery level",
       "responseSchema": Object {
@@ -1449,6 +932,7 @@ Object {
       "type": [Function],
     },
     "CONTACT": Object {
+      "constant": "CONTACT",
       "description": "Whether the contact sensor is closed or open",
       "friendly": "Contact",
       "responseSchema": Object {
@@ -1466,6 +950,7 @@ Object {
       "type": [Function],
     },
     "CURRENT_AUDIO_TRACK": Object {
+      "constant": "CURRENT_AUDIO_TRACK",
       "description": "Information about the current audio",
       "friendly": "Current track",
       "responseSchema": Object {
@@ -1499,6 +984,7 @@ Object {
       "type": [Function],
     },
     "ENERGY": Object {
+      "constant": "ENERGY",
       "description": "The current energy level in watts",
       "friendly": "Energy",
       "responseSchema": Object {
@@ -1516,6 +1002,7 @@ Object {
       "type": [Function],
     },
     "HUMIDITY": Object {
+      "constant": "HUMIDITY",
       "description": "The current humidity level",
       "friendly": "Humidity",
       "responseSchema": Object {
@@ -1535,6 +1022,7 @@ Object {
       "type": [Function],
     },
     "LED_STATE": Object {
+      "constant": "LED_STATE",
       "description": "The current state of the LED",
       "friendly": "LED",
       "responseSchema": Object {
@@ -1552,6 +1040,7 @@ Object {
       "type": [Function],
     },
     "LIGHT": Object {
+      "constant": "LIGHT",
       "description": "The current light level in lux",
       "friendly": "Light level",
       "responseSchema": Object {
@@ -1610,6 +1099,7 @@ Object {
       "type": [Function],
     },
     "MOTION": Object {
+      "constant": "MOTION",
       "description": "Represents if motion is detected or not",
       "friendly": "Motion",
       "responseSchema": Object {
@@ -1627,6 +1117,7 @@ Object {
       "type": [Function],
     },
     "MUTED_AUDIO": Object {
+      "constant": "MUTED_AUDIO",
       "description": "Whether the audio is muted or not",
       "friendly": "Muted",
       "responseSchema": Object {
@@ -1662,6 +1153,7 @@ Object {
       "type": [Function],
     },
     "NEXT_AUDIO_TRACK": Object {
+      "constant": "NEXT_AUDIO_TRACK",
       "description": "Fired when changing to the next audio track",
       "friendly": "Next audio track",
       "responseSchema": Object {
@@ -1679,6 +1171,7 @@ Object {
       "type": [Function],
     },
     "ON": Object {
+      "constant": "ON",
       "description": "Whether the device is on or not",
       "friendly": "On",
       "responseSchema": Object {
@@ -1696,6 +1189,7 @@ Object {
       "type": [Function],
     },
     "PREVIOUS_AUDIO_TRACK": Object {
+      "constant": "PREVIOUS_AUDIO_TRACK",
       "description": "Fired when changing to the previous audio track",
       "friendly": "Previous audio track",
       "responseSchema": Object {
@@ -1731,6 +1225,7 @@ Object {
       "type": [Function],
     },
     "QUEUE_FLUSHED": Object {
+      "constant": "QUEUE_FLUSHED",
       "description": "Fired when the queue has been emptied",
       "friendly": "Queue flushed",
       "responseSchema": Object {
@@ -1748,6 +1243,7 @@ Object {
       "type": [Function],
     },
     "SEEK": Object {
+      "constant": "SEEK",
       "description": "Represents the current position",
       "friendly": "Current position",
       "responseSchema": Object {
@@ -1766,6 +1262,7 @@ Object {
       "type": [Function],
     },
     "TAMPER": Object {
+      "constant": "TAMPER",
       "description": "If the device is being tampered with or not",
       "friendly": "Tamper",
       "responseSchema": Object {
@@ -1783,6 +1280,7 @@ Object {
       "type": [Function],
     },
     "TEMPERATURE": Object {
+      "constant": "TEMPERATURE",
       "description": "The current temperature in degrees celcius",
       "friendly": "Temperature",
       "responseSchema": Object {
@@ -1802,6 +1300,7 @@ Object {
       "type": [Function],
     },
     "UV": Object {
+      "constant": "UV",
       "description": "The current UV level",
       "friendly": "UV level",
       "responseSchema": Object {
@@ -1821,6 +1320,7 @@ Object {
       "type": [Function],
     },
     "VIBRATION": Object {
+      "constant": "VIBRATION",
       "description": "The current vibration level",
       "friendly": "Vibration level",
       "responseSchema": Object {
@@ -1840,6 +1340,7 @@ Object {
       "type": [Function],
     },
     "VOLUME": Object {
+      "constant": "VOLUME",
       "description": "The current volume level",
       "friendly": "Volume level",
       "responseSchema": Object {

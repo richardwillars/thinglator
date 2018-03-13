@@ -4,7 +4,7 @@ let nodes = {};
 const getNode = nodeId => nodes[nodeId];
 
 const addNode = (nodeId, nodeInfo) => {
-  // console.log("addNode", nodeId, nodeInfo);
+  console.log("addNode", nodeId, nodeInfo);
   nodes[nodeId] = {
     nodeId,
     driverId: nodeInfo.driverId || null,
@@ -22,7 +22,7 @@ const addNode = (nodeId, nodeInfo) => {
 };
 
 const nodeEvent = (nodeId, comClass, index, value, onValueChanged) => {
-  // console.log("nodeEvent", nodeId, comClass, index, value);
+  console.log("nodeEvent", nodeId, comClass, index, value);
   const node = getNode(nodeId);
   if (typeof node !== "undefined") {
     if (node.driverId !== null) {
@@ -32,14 +32,14 @@ const nodeEvent = (nodeId, comClass, index, value, onValueChanged) => {
 };
 
 const updateNode = (nodeId, nodeInfo) => {
-  // console.log("updateNode", nodeId, nodeInfo);
-  // console.log("updated from", nodes[nodeId]);
+  console.log("updateNode", nodeId, nodeInfo);
+  console.log("updated from", nodes[nodeId]);
   nodes[nodeId] = Object.assign(nodes[nodeId], nodeInfo);
-  // console.log("updated to", JSON.stringify(nodes[nodeId]));
+  console.log("updated to", JSON.stringify(nodes[nodeId]));
 };
 
 const valueAdded = (nodeId, comClass, index, value) => {
-  // console.log("valueAdded", nodeId, comClass, index, value);
+  console.log("valueAdded", nodeId, comClass, index, value);
   const node = getNode(nodeId);
   if (typeof node !== "undefined") {
     if (!node.classes[comClass]) {
@@ -51,7 +51,7 @@ const valueAdded = (nodeId, comClass, index, value) => {
 };
 
 const valueChanged = (nodeId, comClass, index, value, onValueChanged) => {
-  // console.log("valueChanged", nodeId, comClass, index, value);
+  console.log("valueChanged", nodeId, comClass, index, value);
   const node = getNode(nodeId);
   if (typeof node !== "undefined") {
     if (typeof node.classes[comClass] === "undefined") {
@@ -68,7 +68,7 @@ const valueChanged = (nodeId, comClass, index, value, onValueChanged) => {
 };
 
 const valueRemoved = (nodeId, comClass, index) => {
-  // console.log("valueRemoved", nodeId, comClass, index);
+  console.log("valueRemoved", nodeId, comClass, index);
   const node = getNode(nodeId);
   if (typeof node !== "undefined") {
     if (node.classes[comClass] && node.classes[comClass][index]) {
@@ -91,11 +91,11 @@ const getNodesClaimedByDriver = async driverId =>
     .filter(node => node.driverId === driverId);
 
 const claimNode = async (driverId, nodeId) => {
-  console.log("claimNode", driverId, nodeId);
+  // console.log("claimNode", driverId, nodeId);
   if (nodes[nodeId]) {
     nodes[nodeId].driverId = driverId;
   }
-  console.log("claimed", nodes[nodeId]);
+  // console.log("claimed", nodes[nodeId]);
 };
 
 module.exports = async (interfaceObj, interfaceConfig, eventEmitter) => {

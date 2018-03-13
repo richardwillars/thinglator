@@ -29,29 +29,30 @@ module.exports = (fs, chalk) => ({
     const newInterfaceConfig = Object.assign(interfaceConfig, {});
 
     const commIds = Object.keys(comms);
-    commIds.forEach(async commsId => {
-      if (availableInterfaces[commsId]) {
-        /* eslint-disable no-console */
+    /* eslint-disable no-restricted-syntax, no-console, no-await-in-loop */
+    for (const commId of commIds) {
+      if (availableInterfaces[commId]) {
         console.log(
           chalk.blue(
             `Connecting to comms: ${chalk.white(
-              `${commsId} using ${
-                availableInterfaces[commsId].interfaceId
+              `${commId} using ${
+                availableInterfaces[commId].interfaceId
               } interface`
             )}`
           )
         );
-        /* eslint-enable no-console */
-        if (typeof interfaceConfig[commsId] === "undefined") {
-          newInterfaceConfig[commsId] = {};
+
+        if (typeof interfaceConfig[commId] === "undefined") {
+          newInterfaceConfig[commId] = {};
         }
-        activeComms[commsId] = await comms[commsId](
-          availableInterfaces[commsId],
-          newInterfaceConfig[commsId],
+        activeComms[commId] = await comms[commId](
+          availableInterfaces[commId],
+          newInterfaceConfig[commId],
           eventEmitter
         );
       }
-    });
+    }
+    /* eslint-enable no-restricted-syntax, no-console, no-await-in-loop */
   },
 
   disconnectAll: async () => {

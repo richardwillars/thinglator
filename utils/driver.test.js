@@ -32,12 +32,10 @@ describe("utils/driver", () => {
       const schemas = {
         deviceTypes: {
           light: {
-            events: {
-              properties: {
-                [constants.events.LIGHT_STATE]: {},
-                [constants.events.BREATHE_LIGHT_EFFECT]: {}
-              }
-            }
+            events: [
+              constants.events.LIGHT_STATE,
+              constants.events.BREATHE_LIGHT_EFFECT
+            ]
           }
         }
       };

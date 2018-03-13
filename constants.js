@@ -58,36 +58,5 @@ module.exports = {
     ADDED_TO_QUEUE_NEXT,
     ADDED_TO_QUEUE_BOTTOM,
     TAMPER
-  },
-  socket: {
-    ON,
-    ENERGY,
-    NAME
-  },
-  sensor: {
-    CONTACT,
-    TEMPERATURE,
-    HUMIDITY,
-    LIGHT,
-    UV,
-    BATTERY_LEVEL,
-    MOTION,
-    NAME,
-    VIBRATION,
-    TAMPER
-  },
-  speaker: {
-    AUDIO_PLAYING_STATE,
-    PREVIOUS_AUDIO_TRACK,
-    NEXT_AUDIO_TRACK,
-    MUTED_AUDIO,
-    QUEUE_FLUSHED,
-    VOLUME,
-    SEEK,
-    NAME,
-    LED_STATE,
-    CURRENT_AUDIO_TRACK,
-    ADDED_TO_QUEUE_NEXT,
-    ADDED_TO_QUEUE_BOTTOM
   }
 };
