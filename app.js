@@ -68,7 +68,7 @@ const setupDb = () =>
       resolve();
     };
 
-    db = new Loki("thinglator.db", {
+    db = new Loki(`${config.get("db.path")}/thinglator.db`, {
       autoload: true,
       autoloadCallback: databaseInitialize,
       autosave: true,

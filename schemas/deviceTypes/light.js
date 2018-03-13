@@ -36,7 +36,6 @@ module.exports = (events, constants) => {
               },
               required: ["hue", "saturation", "brightness"]
             },
-
             duration: {
               type: "integer",
               minimum: 0,

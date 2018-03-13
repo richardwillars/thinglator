@@ -2,235 +2,228 @@
 
 exports[`models/speaker should export the commands 1`] = `
 Object {
-  "addSpotifyToQueueBottom": Object {
-    "description": "Adds a spotify track to the bottom of the queue",
-    "friendly": "Add spotify track to bottom of queue",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "uri": Object {
-          "type": "string",
+  "properties": Object {
+    "addSpotifyToQueueBottom": Object {
+      "description": "Adds a spotify track to the bottom of the queue",
+      "friendly": "Add spotify track to bottom of queue",
+      "requestSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
         },
+        "required": Array [
+          "uri",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "uri",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "addSpotifyToQueueNext": Object {
-    "description": "Adds spotify track to the top of the queue so that it plays next",
-    "friendly": "Add spotify track to top of queue",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "uri": Object {
-          "type": "string",
+    "addSpotifyToQueueNext": Object {
+      "description": "Adds spotify track to the top of the queue so that it plays next",
+      "friendly": "Add spotify track to top of queue",
+      "requestSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
         },
+        "required": Array [
+          "uri",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "uri",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "addUrlToQueueBottom": Object {
-    "description": "Adds audio to the bottom of the queue",
-    "friendly": "Add track to bottom of queue",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "uri": Object {
-          "type": "string",
+    "addUrlToQueueBottom": Object {
+      "description": "Adds audio to the bottom of the queue",
+      "friendly": "Add track to bottom of queue",
+      "requestSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
         },
+        "required": Array [
+          "uri",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "uri",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "addUrlToQueueNext": Object {
-    "description": "Adds audio to the top of the queue so that it plays next",
-    "friendly": "Add track to top of queue",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "uri": Object {
-          "type": "string",
+    "addUrlToQueueNext": Object {
+      "description": "Adds audio to the top of the queue so that it plays next",
+      "friendly": "Add track to top of queue",
+      "requestSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
         },
+        "required": Array [
+          "uri",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "uri",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "flushQueue": Object {
-    "description": "Empties the queue on the speaker",
-    "friendly": "Flush the queue",
-    "type": [Function],
-  },
-  "getCurrentTrack": Object {
-    "description": "Gets the current track from the speaker",
-    "friendly": "Get current track",
-    "type": [Function],
-  },
-  "getLEDState": Object {
-    "description": "Gets the state of the LED on the speaker",
-    "friendly": "Get the LED state",
-    "type": [Function],
-  },
-  "getMuted": Object {
-    "description": "Gets whether the speaker is muted or not",
-    "friendly": "Get muted",
-    "type": [Function],
-  },
-  "getVolume": Object {
-    "description": "Gets the volume level of the speaker",
-    "friendly": "Get volume",
-    "type": [Function],
-  },
-  "next": Object {
-    "description": "Plays the next track in the queue",
-    "friendly": "Play next track",
-    "type": [Function],
-  },
-  "pause": Object {
-    "description": "Pauses the currently playing audio",
-    "friendly": "Pause audio",
-    "type": [Function],
-  },
-  "play": Object {
-    "description": "Plays the current audio",
-    "friendly": "Play audio",
-    "type": [Function],
-  },
-  "previous": Object {
-    "description": "Plays the previous track in the queue",
-    "friendly": "Play previous track",
-    "type": [Function],
-  },
-  "seek": Object {
-    "description": "Seeks to the specified position within the current audio",
-    "friendly": "Jump to position within track",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "position": Object {
-          "minimum": 0,
-          "type": "integer",
+    "flushQueue": Object {
+      "description": "Empties the queue on the speaker",
+      "friendly": "Flush the queue",
+      "type": "boolean",
+    },
+    "getCurrentTrack": Object {
+      "description": "Gets the current track from the speaker",
+      "friendly": "Get current track",
+      "type": "boolean",
+    },
+    "getLEDState": Object {
+      "description": "Gets the state of the LED on the speaker",
+      "friendly": "Get the LED state",
+      "type": "boolean",
+    },
+    "getMuted": Object {
+      "description": "Gets whether the speaker is muted or not",
+      "friendly": "Get muted",
+      "type": "boolean",
+    },
+    "getVolume": Object {
+      "description": "Gets the volume level of the speaker",
+      "friendly": "Get volume",
+      "type": "boolean",
+    },
+    "next": Object {
+      "description": "Plays the next track in the queue",
+      "friendly": "Play next track",
+      "type": "boolean",
+    },
+    "pause": Object {
+      "description": "Pauses the currently playing audio",
+      "friendly": "Pause audio",
+      "type": "boolean",
+    },
+    "play": Object {
+      "description": "Plays the current audio",
+      "friendly": "Play audio",
+      "type": "boolean",
+    },
+    "previous": Object {
+      "description": "Plays the previous track in the queue",
+      "friendly": "Play previous track",
+      "type": "boolean",
+    },
+    "seek": Object {
+      "description": "Seeks to the specified position within the current audio",
+      "friendly": "Jump to position within track",
+      "requestSchema": Object {
+        "properties": Object {
+          "position": Object {
+            "minimum": 0,
+            "type": "integer",
+          },
         },
+        "required": Array [
+          "position",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "position",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "setLEDState": Object {
-    "description": "Sets the state of the LED on the speaker",
-    "friendly": "Turn LED on",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "on": Object {
-          "type": "boolean",
+    "setLEDState": Object {
+      "description": "Sets the state of the LED on the speaker",
+      "friendly": "Turn LED on",
+      "requestSchema": Object {
+        "properties": Object {
+          "on": Object {
+            "type": "boolean",
+          },
         },
+        "required": Array [
+          "on",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "on",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "setMuted": Object {
-    "description": "Sets whether the speaker is muted or not",
-    "friendly": "Mute",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "muted": Object {
-          "type": "boolean",
+    "setMuted": Object {
+      "description": "Sets whether the speaker is muted or not",
+      "friendly": "Mute",
+      "requestSchema": Object {
+        "properties": Object {
+          "muted": Object {
+            "type": "boolean",
+          },
         },
+        "required": Array [
+          "muted",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "muted",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "setName": Object {
-    "description": "Sets the name of the speaker",
-    "friendly": "Set the name of the speaker",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "name": Object {
-          "type": "string",
+    "setName": Object {
+      "description": "Sets the name of the speaker",
+      "friendly": "Set the name of the speaker",
+      "requestSchema": Object {
+        "properties": Object {
+          "name": Object {
+            "type": "string",
+          },
         },
+        "required": Array [
+          "name",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "name",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "setPlayMode": Object {
-    "description": "Sets the play mode of the speaker",
-    "friendly": "Set play mode",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "playMode": Object {
-          "enum": Array [
-            "normal",
-            "repeat_all",
-            "shuffle",
-            "shuffle_norepeat",
-          ],
-          "type": "string",
+    "setPlayMode": Object {
+      "description": "Sets the play mode of the speaker",
+      "friendly": "Set play mode",
+      "requestSchema": Object {
+        "properties": Object {
+          "playMode": Object {
+            "enum": Array [
+              "normal",
+              "repeat_all",
+              "shuffle",
+              "shuffle_norepeat",
+            ],
+            "type": "string",
+          },
         },
+        "required": Array [
+          "playMode",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "playMode",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
-  },
-  "setVolume": Object {
-    "description": "Sets the volume of the speaker",
-    "friendly": "Set volume",
-    "requestSchema": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "properties": Object {
-        "volume": Object {
-          "maximum": 100,
-          "minimum": 0,
-          "type": "integer",
+    "setVolume": Object {
+      "description": "Sets the volume of the speaker",
+      "friendly": "Set volume",
+      "requestSchema": Object {
+        "properties": Object {
+          "volume": Object {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer",
+          },
         },
+        "required": Array [
+          "volume",
+        ],
+        "type": "object",
       },
-      "required": Array [
-        "volume",
-      ],
-      "type": "object",
+      "type": "boolean",
     },
-    "type": [Function],
+    "stop": Object {
+      "description": "Stops the currently playing audio",
+      "friendly": "Stop the audio",
+      "type": "boolean",
+    },
   },
-  "stop": Object {
-    "description": "Stops the currently playing audio",
-    "friendly": "Stop the audio",
-    "type": [Function],
-  },
+  "type": "object",
 }
 `;
 

@@ -1,8 +1,7 @@
 {
   "port": 3003,
-  "mongodb": {
-    "host": "localhost",
-    "db": "thinglator"
+  "db": {
+    "path": "./"
   },
   "interfaces": {
     "zwave": {
