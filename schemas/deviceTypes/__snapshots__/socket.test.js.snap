@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/socket should export the commands 1`] = `
+Object {
+  "properties": Object {
+    "off": Object {
+      "description": "Turns the socket off",
+      "friendly": "Turn off",
+      "type": "boolean",
+    },
+    "on": Object {
+      "description": "Turns the socket on",
+      "friendly": "Turn on",
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`models/socket should export the events 1`] = `
+Object {
+  "properties": Object {
+    "ENERGY": Object {
+      "constant": "ENERGY",
+      "description": "The current energy level in watts",
+      "friendly": "Energy",
+      "responseSchema": Object {
+        "properties": Object {
+          "energy": Object {
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "energy",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NAME": Object {
+      "constant": "NAME",
+      "description": "The current name of the device",
+      "friendly": "Name",
+      "responseSchema": Object {
+        "properties": Object {
+          "name": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "name",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "ON": Object {
+      "constant": "ON",
+      "description": "Whether the device is on or not",
+      "friendly": "On",
+      "responseSchema": Object {
+        "properties": Object {
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
+`;

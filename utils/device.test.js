@@ -1,132 +1,201 @@
-const deviceModule = require('./device');
+const deviceModule = require("./device");
 
-describe('utils/device', () => {
-  describe('createDevice', () => {
-    it('should create a device in the database', async () => {
-      const md5 = jest.fn().mockReturnValue('md5Id');
-      const lightModelMock = jest.fn();
-      const deviceModelMock = jest.fn();
-      const validateMock = jest.fn().mockReturnValue(Promise.resolve());
-      const saveMock = jest.fn().mockReturnValue(Promise.resolve);
-      const models = {
-        light: {
-          model: class model {
-            constructor(props) {
-              lightModelMock(props);
-            }
-            validate(args) { return validateMock(args); }
-          },
-        },
-        device: {
-          model: class model {
-            constructor(props) {
-              deviceModelMock(props);
-            }
-            save(args) { return saveMock(args); }
-          },
-        },
+describe("utils/device", () => {
+  describe("createDevice", () => {
+    it("should create a device in the database", async () => {
+      const md5 = jest.fn().mockReturnValue("md5Id");
+      const devicesCollection = {
+        insert: jest.fn()
       };
-      const deviceUtils = deviceModule(md5, models);
+      const schemas = {
+        deviceTypes: {
+          light: {
+            commands: { foo: "bar" },
+            events: { moo: "boo" }
+          }
+        }
+      };
+      const jsonValidator = {
+        validate: jest.fn().mockReturnValue({ errors: [] })
+      };
 
-      await deviceUtils.createDevice('light', 'driverId', { foo: 'bar' });
-      expect(lightModelMock).toHaveBeenCalledWith({ foo: 'bar' });
-      expect(deviceModelMock).toHaveBeenCalledWith({
-        _id: 'md5Id', driver: 'driverId', specs: {}, type: 'light',
+      const deviceUtils = deviceModule(
+        md5,
+        devicesCollection,
+        schemas,
+        jsonValidator
+      );
+
+      await deviceUtils.createDevice("light", "driverId", {
+        foo: "bar",
+        commands: {},
+        events: {},
+        originalId: "originalId",
+        name: "foo"
       });
-      expect(validateMock).toHaveBeenCalledTimes(1);
-      expect(saveMock).toHaveBeenCalledTimes(1);
+      expect(jsonValidator.validate).toHaveBeenCalledTimes(1);
+      expect(jsonValidator.validate).toHaveBeenCalledWith(
+        {
+          commands: {},
+          events: {},
+          foo: "bar",
+          name: "foo",
+          originalId: "originalId"
+        },
+        {
+          properties: { commands: { foo: "bar" }, events: { moo: "boo" } },
+          required: ["commands", "events"],
+          type: "object"
+        }
+      );
+
+      expect(devicesCollection.insert).toHaveBeenCalledTimes(1);
+      expect(devicesCollection.insert).toHaveBeenCalledWith({
+        additionalInfo: {},
+        commands: {},
+        deviceId: "md5Id",
+        driverId: "driverId",
+        events: {},
+        name: "foo",
+        originalId: "originalId",
+        type: "light"
+      });
     });
 
-    it('should catch validation errors and throw them', async () => {
-      const md5 = jest.fn().mockReturnValue('md5Id');
-      const lightModelMock = jest.fn();
-      const deviceModelMock = jest.fn();
-      const validateMock = jest.fn().mockReturnValue(Promise.resolve('validation error'));
-      const saveMock = jest.fn().mockReturnValue(Promise.resolve);
-      const models = {
-        light: {
-          model: class model {
-            constructor(props) {
-              lightModelMock(props);
-            }
-            validate(args) { return validateMock(args); }
-          },
-        },
-        device: {
-          model: class model {
-            constructor(props) {
-              deviceModelMock(props);
-            }
-            save(args) { return saveMock(args); }
-          },
-        },
+    it("should catch validation errors and throw them", async () => {
+      const md5 = jest.fn().mockReturnValue("md5Id");
+      const devicesCollection = {
+        insert: jest.fn()
       };
-      const deviceUtils = deviceModule(md5, models);
+      const schemas = {
+        deviceTypes: {
+          light: {
+            commands: { foo: "bar" },
+            events: { moo: "boo" }
+          }
+        }
+      };
+      const jsonValidator = {
+        validate: jest.fn().mockReturnValue({ errors: ["some error"] })
+      };
+
+      const deviceUtils = deviceModule(
+        md5,
+        devicesCollection,
+        schemas,
+        jsonValidator
+      );
       try {
-        await deviceUtils.createDevice('light', 'driverId', { foo: 'bar' });
-        expect(1).toEqual(2); // ensure we don't hit this and we actually go in the catch
-      } catch (err) {
-        expect(err.message).toEqual('validation error');
+        await deviceUtils.createDevice("light", "driverId", {
+          foo: "bar",
+          commands: {},
+          events: {},
+          originalId: "originalId",
+          name: "foo"
+        });
+      } catch (e) {
+        expect(e.message).toEqual(
+          "the spec of the device is not a valid light"
+        );
       }
+      expect(devicesCollection.insert).toHaveBeenCalledTimes(0);
     });
   });
 
-  describe('updateDevice', () => {
-    it('update a device in the database', async () => {
-      const md5 = jest.fn().mockReturnValue('md5Id');
-      const lightModelMock = jest.fn();
-      const validateMock = jest.fn().mockReturnValue(Promise.resolve());
-      const saveMock = jest.fn().mockReturnValue(Promise.resolve);
-      const models = {
-        light: {
-          model: class model {
-            constructor(props) {
-              lightModelMock(props);
-            }
-            validate(args) { return validateMock(args); }
-          },
-        },
+  describe("updateDevice", () => {
+    it("should update a device in the database", async () => {
+      const md5 = jest.fn().mockReturnValue("md5Id");
+      const devicesCollection = {
+        update: jest.fn()
       };
-      const deviceUtils = deviceModule(md5, models);
+      const schemas = {
+        deviceTypes: {
+          light: {
+            commands: { foo: "bar" },
+            events: { moo: "boo" }
+          }
+        }
+      };
+      const jsonValidator = {
+        validate: jest.fn().mockReturnValue({ errors: [] })
+      };
+
+      const deviceUtils = deviceModule(
+        md5,
+        devicesCollection,
+        schemas,
+        jsonValidator
+      );
 
       const device = {
-        type: 'light',
-        specs: {},
-        save: saveMock,
+        type: "light"
       };
-      await deviceUtils.updateDevice(device, { foo: 'bar' });
-      expect(lightModelMock).toHaveBeenCalledWith({ foo: 'bar' });
-      expect(validateMock).toHaveBeenCalledTimes(1);
-      expect(saveMock).toHaveBeenCalledTimes(1);
+      const specs = {
+        commands: {},
+        events: {},
+        name: "foo"
+      };
+
+      await deviceUtils.updateDevice(device, specs);
+      expect(jsonValidator.validate).toHaveBeenCalledTimes(1);
+      expect(jsonValidator.validate).toHaveBeenCalledWith(specs, {
+        type: "object",
+        properties: {
+          commands: schemas.deviceTypes.light.commands,
+          events: schemas.deviceTypes.light.events
+        },
+        required: ["commands", "events"]
+      });
+
+      expect(devicesCollection.update).toHaveBeenCalledTimes(1);
+      expect(devicesCollection.update).toHaveBeenCalledWith({
+        ...device,
+        commands: specs.commands,
+        events: specs.events,
+        name: specs.name
+      });
     });
 
-    it('should catch validation errors and throw them', async () => {
-      const md5 = jest.fn().mockReturnValue('md5Id');
-      const lightModelMock = jest.fn();
-      const validateMock = jest.fn().mockReturnValue(Promise.resolve('validation error'));
-      const models = {
-        light: {
-          model: class model {
-            constructor(props) {
-              lightModelMock(props);
-            }
-            validate(args) { return validateMock(args); }
-          },
-        },
+    it("should catch validation errors and throw them", async () => {
+      const md5 = jest.fn().mockReturnValue("md5Id");
+      const devicesCollection = {
+        update: jest.fn()
       };
-      const deviceUtils = deviceModule(md5, models);
+      const schemas = {
+        deviceTypes: {
+          light: {
+            commands: { foo: "bar" },
+            events: { moo: "boo" }
+          }
+        }
+      };
+      const jsonValidator = {
+        validate: jest.fn().mockReturnValue({ errors: ["some error"] })
+      };
+
+      const deviceUtils = deviceModule(
+        md5,
+        devicesCollection,
+        schemas,
+        jsonValidator
+      );
 
       const device = {
-        type: 'light',
-        specs: {},
+        type: "light"
       };
-
+      const specs = {
+        commands: {},
+        events: {},
+        name: "foo"
+      };
       try {
-        await deviceUtils.updateDevice(device, { foo: 'bar' });
-        expect(1).toEqual(2); // ensure we don't hit this and we actually go in the catch
-      } catch (err) {
-        expect(err.message).toEqual('validation error');
+        await deviceUtils.updateDevice(device, specs);
+      } catch (e) {
+        expect(e.message).toEqual(
+          "the spec of the device is not a valid light"
+        );
       }
+      expect(devicesCollection.update).toHaveBeenCalledTimes(0);
     });
   });
 });

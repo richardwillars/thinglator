@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schemas/device should export the schema 1`] = `
+Object {
+  "_id": Object {
+    "required": true,
+    "type": [Function],
+    "unique": true,
+  },
+  "additionalInfo": Object {
+    "default": Object {},
+    "required": false,
+    "type": [Function],
+  },
+  "commands": Object {
+    "default": Object {},
+    "required": true,
+    "type": [Function],
+  },
+  "created": Object {
+    "default": [Function],
+    "required": false,
+    "type": [Function],
+  },
+  "driver": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "events": Object {
+    "default": Object {},
+    "required": true,
+    "type": [Function],
+  },
+  "name": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "originalId": Object {
+    "required": true,
+    "type": [Function],
+  },
+  "type": Object {
+    "required": true,
+    "type": [Function],
+  },
+}
+`;

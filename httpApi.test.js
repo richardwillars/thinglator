@@ -1,1203 +1,1671 @@
-const httpApiModule = require('./httpApi');
+const httpApiModule = require("./httpApi");
 
-describe('httpApi', () => {
-  it('should return the app object', () => {
+describe("httpApi", () => {
+  it("should return the app object", () => {
     const bodyParser = {
-      json: jest.fn(),
+      json: jest.fn()
     };
     const authenticateCtrl = {};
     const eventCtrl = {};
     const driverCtrl = {};
+    const interfaceCtrl = {};
     const app = {
       get: jest.fn(),
       post: jest.fn(),
-      use: jest.fn(),
+      use: jest.fn()
     };
     const drivers = {};
-    const httpApi = httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+    const httpApi = httpApiModule(
+      bodyParser,
+      authenticateCtrl,
+      eventCtrl,
+      driverCtrl,
+      interfaceCtrl,
+      app,
+      drivers
+    );
 
     expect(httpApi).toEqual(app);
   });
-  describe('error handler', () => {
-    it('should setup an error listener', () => {
+  describe("error handler", () => {
+    it("should setup an error listener", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
-      expect(typeof app.use.mock.calls[0][0]).toEqual('function');
+      expect(typeof app.use.mock.calls[0][0]).toEqual("function");
     });
 
-    it('should handle Driver errors', () => {
+    it("should handle Driver errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'Driver';
-      err.driver = 'DriverId';
+      const err = new Error("Error message");
+      err.type = "Driver";
+      err.driver = "DriverId";
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'Driver',
-        driver: 'DriverId',
-        message: 'Error message',
+        type: "Driver",
+        driver: "DriverId",
+        message: "Error message"
       });
     });
 
-    it('should handle BadRequest errors', () => {
+    it("should handle BadRequest errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'BadRequest';
+      const err = new Error("Error message");
+      err.type = "BadRequest";
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'BadRequest',
-        message: 'Error message',
+        type: "BadRequest",
+        message: "Error message"
       });
     });
 
-    it('should be handle NotFound errors', () => {
+    it("should be handle NotFound errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'NotFound';
+      const err = new Error("Error message");
+      err.type = "NotFound";
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'NotFound',
-        message: 'Error message',
+        type: "NotFound",
+        message: "Error message"
       });
     });
 
-    it('should handle Validation errors', () => {
+    it("should handle Validation errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'Validation';
+      const err = new Error("Error message");
+      err.type = "Validation";
       err.errors = {
-        foo: 'bar',
+        foo: "bar"
       };
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'Validation',
-        errors: { foo: 'bar' },
-        message: 'Error message',
+        type: "Validation",
+        errors: { foo: "bar" },
+        message: "Error message"
       });
     });
 
-    it('should handle Connection errors', () => {
+    it("should handle Connection errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'Connection';
+      const err = new Error("Error message");
+      err.type = "Connection";
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(503);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'Connection',
-        message: 'Error message',
+        type: "Connection",
+        message: "Error message"
       });
     });
 
-    it('should handle Authentication errors', () => {
+    it("should handle Authentication errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'Authentication';
+      const err = new Error("Error message");
+      err.type = "Authentication";
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'Authentication',
-        message: 'Error message',
+        type: "Authentication",
+        message: "Error message"
       });
     });
 
-    it('should handle Internal errors', () => {
+    it("should handle Internal errors", () => {
       const bodyParser = {
-        json: jest.fn(),
+        json: jest.fn()
       };
       const authenticateCtrl = {};
       const eventCtrl = {};
       const driverCtrl = {};
+      const interfaceCtrl = {};
       const app = {
         get: jest.fn(),
         post: jest.fn(),
-        use: jest.fn(),
+        use: jest.fn()
       };
       const drivers = {};
-      httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
+      httpApiModule(
+        bodyParser,
+        authenticateCtrl,
+        eventCtrl,
+        driverCtrl,
+        interfaceCtrl,
+        app,
+        drivers
+      );
 
       expect(app.use).toHaveBeenCalledTimes(1);
       const errorHandler = app.use.mock.calls[0][0];
 
-      const err = new Error('Error message');
-      err.type = 'Unknown';
+      const err = new Error("Error message");
+      err.type = "Unknown";
 
       const req = {};
       const res = {
         status: jest.fn(),
-        json: jest.fn(),
+        json: jest.fn()
       };
       const next = jest.fn();
       errorHandler(err, req, res, next);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
-        type: 'Internal',
+        type: "Internal"
       });
     });
   });
 
-  describe('Endpoints', () => {
-    describe('/', () => {
-      it('should return json', () => {
+  describe("Endpoints", () => {
+    describe("/", () => {
+      it("should return json", () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[0][0]).toEqual('/');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[0][0]).toEqual("/");
         const callback = app.get.mock.calls[0][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         callback(req, res);
-        expect(res.json).toHaveBeenCalledWith({ Thinglator: 'Oh, hi!' });
+        expect(res.json).toHaveBeenCalledWith({ Thinglator: "Oh, hi!" });
       });
     });
 
-    describe('/authenticate/:driver', () => {
-      it('should return json from authenticateCtrl.getAuthenticationProcess', async () => {
+    describe("/authenticate/:driver", () => {
+      it("should return json from authenticateCtrl.getAuthenticationProcess", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {
-          getAuthenticationProcess: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getAuthenticationProcess: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[1][0]).toEqual('/authenticate/:driver');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[1][0]).toEqual("/authenticate/:driver");
         const callback = app.get.mock.calls[1][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-          },
+            driver: "driverId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(authenticateCtrl.getAuthenticationProcess).toHaveBeenCalledWith(req.params.driver, drivers);
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(authenticateCtrl.getAuthenticationProcess).toHaveBeenCalledWith(
+          req.params.driver,
+          drivers
+        );
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {
-          getAuthenticationProcess: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getAuthenticationProcess: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[1][0]).toEqual('/authenticate/:driver');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[1][0]).toEqual("/authenticate/:driver");
         const callback = app.get.mock.calls[1][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-          },
+            driver: "driverId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/authenticate/:driver/:stepId', () => {
-      it('should return json from authenticateCtrl.authenticationStep', async () => {
+    describe("/authenticate/:driver/:stepId", () => {
+      it("should return json from authenticateCtrl.authenticationStep", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {
-          authenticationStep: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          authenticationStep: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.post.mock.calls[0][0]).toEqual('/authenticate/:driver/:stepId');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.post.mock.calls[0][0]).toEqual(
+          "/authenticate/:driver/:stepId"
+        );
         const callback = app.post.mock.calls[0][2];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-            stepId: 'stepId',
+            driver: "driverId",
+            stepId: "stepId"
           },
-          body: 'body',
+          body: "body"
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(authenticateCtrl.authenticationStep).toHaveBeenCalledWith(req.params.driver, req.params.stepId, req.body);
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(authenticateCtrl.authenticationStep).toHaveBeenCalledWith(
+          req.params.driver,
+          req.params.stepId,
+          req.body
+        );
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {
-          authenticationStep: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          authenticationStep: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
         const eventCtrl = {};
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.post.mock.calls[0][0]).toEqual('/authenticate/:driver/:stepId');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.post.mock.calls[0][0]).toEqual(
+          "/authenticate/:driver/:stepId"
+        );
         const callback = app.post.mock.calls[0][2];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-            stepId: 'stepId',
+            driver: "driverId",
+            stepId: "stepId"
           },
-          body: 'body',
+          body: "body"
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/discover/:driver', () => {
-      it('should return json from driverCtrl.discover', async () => {
+    describe("/discover/:driver", () => {
+      it("should return json from driverCtrl.discover", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          discover: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          discover: jest.fn().mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[2][0]).toEqual('/discover/:driver');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[2][0]).toEqual("/discover/:driver");
         const callback = app.get.mock.calls[2][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-          },
+            driver: "driverId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(driverCtrl.discover).toHaveBeenCalledWith(req.params.driver, drivers);
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(driverCtrl.discover).toHaveBeenCalledWith(
+          req.params.driver,
+          drivers
+        );
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          discover: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          discover: jest.fn().mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[2][0]).toEqual('/discover/:driver');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[2][0]).toEqual("/discover/:driver");
         const callback = app.get.mock.calls[2][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-          },
+            driver: "driverId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/devices', () => {
-      it('should return json from driverCtrl.getAllDevices', async () => {
+    describe("/devices", () => {
+      it("should return json from driverCtrl.getAllDevices", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getAllDevices: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getAllDevices: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[3][0]).toEqual('/devices');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[3][0]).toEqual("/devices");
         const callback = app.get.mock.calls[3][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(driverCtrl.getAllDevices).toHaveBeenCalledWith();
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getAllDevices: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getAllDevices: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[3][0]).toEqual('/devices');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[3][0]).toEqual("/devices");
         const callback = app.get.mock.calls[3][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/devices/type/:type', () => {
-      it('should return json from driverCtrl.getDevicesByType', async () => {
+    describe("/devices/type/:type", () => {
+      it("should return json from driverCtrl.getDevicesByType", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getDevicesByType: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getDevicesByType: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[4][0]).toEqual('/devices/type/:type');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[4][0]).toEqual("/devices/type/:type");
         const callback = app.get.mock.calls[4][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            type: 'type',
-          },
+            type: "type"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(driverCtrl.getDevicesByType).toHaveBeenCalledWith('type');
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(driverCtrl.getDevicesByType).toHaveBeenCalledWith("type");
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getDevicesByType: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getDevicesByType: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[4][0]).toEqual('/devices/type/:type');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[4][0]).toEqual("/devices/type/:type");
         const callback = app.get.mock.calls[4][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            type: 'type',
-          },
+            type: "type"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/devices/driver/:driver', () => {
-      it('should return json from driverCtrl.getDevicesByDriver', async () => {
+    describe("/devices/driver/:driver", () => {
+      it("should return json from driverCtrl.getDevicesByDriver", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getDevicesByDriver: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getDevicesByDriver: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[5][0]).toEqual('/devices/driver/:driver');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[5][0]).toEqual("/devices/driver/:driver");
         const callback = app.get.mock.calls[5][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-          },
+            driver: "driverId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(driverCtrl.getDevicesByDriver).toHaveBeenCalledWith('driverId');
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(driverCtrl.getDevicesByDriver).toHaveBeenCalledWith("driverId");
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getDevicesByDriver: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getDevicesByDriver: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[5][0]).toEqual('/devices/driver/:driver');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[5][0]).toEqual("/devices/driver/:driver");
         const callback = app.get.mock.calls[5][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            driver: 'driverId',
-          },
+            driver: "driverId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/device/:deviceId', () => {
-      it('should return json from driverCtrl.getDeviceById', async () => {
+    describe("/device/:deviceId", () => {
+      it("should return json from driverCtrl.getDeviceById", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getDeviceById: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getDeviceById: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[6][0]).toEqual('/device/:deviceId');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[6][0]).toEqual("/device/:deviceId");
         const callback = app.get.mock.calls[6][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            deviceId: 'deviceId',
-          },
+            deviceId: "deviceId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(driverCtrl.getDeviceById).toHaveBeenCalledWith('deviceId');
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(driverCtrl.getDeviceById).toHaveBeenCalledWith("deviceId");
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getDeviceById: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getDeviceById: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[6][0]).toEqual('/device/:deviceId');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[6][0]).toEqual("/device/:deviceId");
         const callback = app.get.mock.calls[6][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            deviceId: 'deviceId',
-          },
+            deviceId: "deviceId"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/device/:deviceId/runCommand', () => {
-      it('should return json from driverCtrl.runCommand', async () => {
+    describe("/device/:deviceId/runCommand", () => {
+      it("should return json from driverCtrl.runCommand", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          runCommand: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          runCommand: jest.fn().mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.post.mock.calls[1][0]).toEqual('/device/:deviceId/:command');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.post.mock.calls[1][0]).toEqual("/device/:deviceId/:command");
         const callback = app.post.mock.calls[1][2];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            deviceId: 'deviceId',
-            command: 'command',
+            deviceId: "deviceId",
+            command: "command"
           },
-          body: 'body',
+          body: "body"
         };
         const res = {
-          send: jest.fn(),
+          send: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(driverCtrl.runCommand).toHaveBeenCalledWith(req.params.deviceId, req.params.command, req.body, drivers);
+        expect(driverCtrl.runCommand).toHaveBeenCalledWith(
+          req.params.deviceId,
+          req.params.command,
+          req.body,
+          drivers
+        );
         expect(res.send).toHaveBeenCalledWith();
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          runCommand: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          runCommand: jest.fn().mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.post.mock.calls[1][0]).toEqual('/device/:deviceId/:command');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.post.mock.calls[1][0]).toEqual("/device/:deviceId/:command");
         const callback = app.post.mock.calls[1][2];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            deviceId: 'deviceId',
-            command: 'command',
+            deviceId: "deviceId",
+            command: "command"
           },
-          body: 'body',
+          body: "body"
         };
         const res = {
-          send: jest.fn(),
+          send: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.send).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/drivers', () => {
-      it('should return json from driverCtrl.getDriversWithStats', async () => {
+    describe("/drivers", () => {
+      it("should return json from driverCtrl.getDriversWithStats", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getDriversWithStats: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getDriversWithStats: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[7][0]).toEqual('/drivers');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[7][0]).toEqual("/drivers");
         const callback = app.get.mock.calls[7][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(driverCtrl.getDriversWithStats).toHaveBeenCalledWith(drivers);
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getDriversWithStats: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getDriversWithStats: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[7][0]).toEqual('/drivers');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[7][0]).toEqual("/drivers");
         const callback = app.get.mock.calls[7][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/drivers/commands', () => {
-      it('should return json from driverCtrl.getCommandDescriptions', async () => {
+    describe("/drivers/commands", () => {
+      it("should return json from driverCtrl.getCommands", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getCommandDescriptions: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getCommands: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[8][0]).toEqual('/drivers/commands');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[8][0]).toEqual("/drivers/commands");
         const callback = app.get.mock.calls[8][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(driverCtrl.getCommandDescriptions).toHaveBeenCalledWith();
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(driverCtrl.getCommands).toHaveBeenCalledWith();
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getCommandDescriptions: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getCommands: jest.fn().mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[8][0]).toEqual('/drivers/commands');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[8][0]).toEqual("/drivers/commands");
         const callback = app.get.mock.calls[8][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/drivers/events', () => {
-      it('should return json from driverCtrl.getEventDescriptions', async () => {
+    describe("/drivers/events", () => {
+      it("should return json from driverCtrl.getEventDescriptions", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const driverCtrl = {
-          getEventDescriptions: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getEventDescriptions: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[9][0]).toEqual('/drivers/events');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[9][0]).toEqual("/drivers/events");
         const callback = app.get.mock.calls[9][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(driverCtrl.getEventDescriptions).toHaveBeenCalledWith();
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const driverCtrl = {
-          getEventDescriptions: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getEventDescriptions: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
+        const interfaceCtrl = {};
         const eventCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[9][0]).toEqual('/drivers/events');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[9][0]).toEqual("/drivers/events");
         const callback = app.get.mock.calls[9][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/event/latestCommands', () => {
-      it('should return json from eventCtrl.getLatestCommandEvents', async () => {
+    describe("/event/latestCommands", () => {
+      it("should return json from eventCtrl.getLatestCommandEvents", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const eventCtrl = {
-          getLatestCommandEvents: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getLatestCommandEvents: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[10][0]).toEqual('/event/latestCommands');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[10][0]).toEqual("/event/latestCommands");
         const callback = app.get.mock.calls[10][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(eventCtrl.getLatestCommandEvents).toHaveBeenCalledWith();
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const eventCtrl = {
-          getLatestCommandEvents: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getLatestCommandEvents: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[10][0]).toEqual('/event/latestCommands');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[10][0]).toEqual("/event/latestCommands");
         const callback = app.get.mock.calls[10][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
       });
     });
 
-    describe('/event/:eventType', () => {
-      it('should return json from eventCtrl.getEventsByType', async () => {
+    describe("/event/:eventType", () => {
+      it("should return json from eventCtrl.getEventsByType", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const authenticateCtrl = {};
         const eventCtrl = {
-          getEventsByType: jest.fn().mockReturnValue(Promise.resolve({ foo: 'bar' })),
+          getEventsByType: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[11][0]).toEqual('/event/:eventType');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[11][0]).toEqual("/event/:eventType");
         const callback = app.get.mock.calls[11][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            eventType: 'eventType',
+            eventType: "eventType"
           },
           query: {
-            from: 'from',
-          },
+            from: "from"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
-        expect(eventCtrl.getEventsByType).toHaveBeenCalledWith(req.params.eventType, req.query.from);
-        expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(eventCtrl.getEventsByType).toHaveBeenCalledWith(
+          req.params.eventType,
+          req.query.from
+        );
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
         expect(next).toHaveBeenCalledTimes(0);
       });
 
-      it('should catch any errors and pass them to the next callback', async () => {
+      it("should catch any errors and pass them to the next callback", async () => {
         const bodyParser = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const eventCtrl = {
-          getEventsByType: jest.fn().mockReturnValue(Promise.reject({ foo: 'bar' })),
+          getEventsByType: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
         };
         const driverCtrl = {};
+        const interfaceCtrl = {};
         const authenticateCtrl = {};
         const app = {
           get: jest.fn(),
           post: jest.fn(),
-          use: jest.fn(),
+          use: jest.fn()
         };
         const drivers = {};
-        httpApiModule(bodyParser, authenticateCtrl, eventCtrl, driverCtrl, app, drivers);
-        expect(app.get.mock.calls[11][0]).toEqual('/event/:eventType');
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[11][0]).toEqual("/event/:eventType");
         const callback = app.get.mock.calls[11][1];
-        expect(typeof callback).toEqual('function');
+        expect(typeof callback).toEqual("function");
         const req = {
           params: {
-            eventType: 'eventType',
+            eventType: "eventType"
           },
           query: {
-            from: 'from',
-          },
+            from: "from"
+          }
         };
         const res = {
-          json: jest.fn(),
+          json: jest.fn()
         };
         const next = jest.fn();
         await callback(req, res, next);
         expect(res.json).toHaveBeenCalledTimes(0);
         expect(next).toHaveBeenCalledTimes(1);
-        expect(next).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
+      });
+    });
+
+    describe("/pairingMode", () => {
+      it("should return json from interfaceCtrl.pairingMode", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const authenticateCtrl = {};
+        const eventCtrl = {};
+        const driverCtrl = {};
+        const interfaceCtrl = {
+          pairingMode: jest.fn().mockReturnValue(Promise.resolve(4))
+        };
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[12][0]).toEqual("/pairingMode");
+        const callback = app.get.mock.calls[12][1];
+        expect(typeof callback).toEqual("function");
+        const req = {};
+        const res = {
+          json: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(interfaceCtrl.pairingMode).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledWith(4);
+        expect(next).toHaveBeenCalledTimes(0);
+      });
+
+      it("should catch any errors and pass them to the next callback", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const eventCtrl = {};
+        const driverCtrl = {};
+        const interfaceCtrl = {
+          pairingMode: jest.fn().mockReturnValue(Promise.reject(0))
+        };
+        const authenticateCtrl = {};
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(app.get.mock.calls[12][0]).toEqual("/pairingMode");
+        const callback = app.get.mock.calls[12][1];
+        expect(typeof callback).toEqual("function");
+        const req = {};
+        const res = {
+          json: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(res.json).toHaveBeenCalledTimes(0);
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenCalledWith(0);
       });
     });
   });

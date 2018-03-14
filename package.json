@@ -1,8 +1,9 @@
 {
   "name": "thinglator",
   "license": "MIT",
-  "description": "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "1.0.2",
+  "description":
+    "An API that provides a uniform interface for interacting with IOT and home automation devices",
+  "version": "2.0.0",
   "maintainers": [
     {
       "name": "Richard Willars",
@@ -14,42 +15,50 @@
     "url": "https://github.com/richardwillars/thinglator.git"
   },
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "chalk": "^1.1.3",
-    "config": "^1.26.1",
-    "eventemitter2": "^1.0.5",
-    "express": "^4.15.3",
-    "istanbul": "^0.4.5",
-    "jsonschema": "^1.1.0",
-    "md5": "^2.1.0",
-    "mongoose": "^4.5.1",
-    "npm-programmatic": "0.0.8",
-    "pm2": "^2.7.1",
-    "socket.io": "^1.4.8",
-    "underscore": "^1.8.3"
+    "body-parser": "^1.18.2",
+    "chalk": "^2.3.2",
+    "config": "^1.30.0",
+    "eventemitter2": "^5.0.1",
+    "express": "^4.16.2",
+    "jsonschema": "^1.2.2",
+    "lodash.groupby": "^4.6.0",
+    "lokijs": "^1.5.3",
+    "md5": "^2.2.1",
+    "node-cron": "^1.2.1",
+    "npm-programmatic": "^0.0.10",
+    "pm2": "^2.10.1",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
-    "eslint": "^4.9.0",
+    "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^21.2.0",
-    "jest": "^21.2.1"
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.12.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "husky": "^0.14.3",
+    "jest": "^22.4.2",
+    "lint-staged": "^7.0.0",
+    "nodemon": "^1.17.1",
+    "prettier": "^1.11.1"
   },
   "scripts": {
+    "dev": "nodemon app.js",
     "start": "node app.js",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test": "jest --coverage && yarn lint",
+    "test:watch": "jest --watch",
+    "precommit": "lint-staged",
+    "lint": "eslint **/*.js"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.9.0"
   },
   "main": "app.js",
   "jest": {
     "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "**/*.js",
-      "!**/node_modules/**",
-      "!**/coverage/**"
-    ]
+    "collectCoverageFrom": ["**/*.js", "!**/node_modules/**", "!**/coverage/**"]
   }
 }

@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schemas/authentication should export the schemas 1`] = `
+Object {
+  "requested": Object {
+    "ManualAction": Object {
+      "properties": Object {
+        "message": Object {
+          "type": "string",
+        },
+        "type": Object {
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "type",
+        "message",
+      ],
+      "type": "object",
+    },
+    "RequestData": Object {
+      "properties": Object {
+        "button": Object {
+          "properties": Object {
+            "label": Object {
+              "type": "string",
+            },
+            "url": Object {
+              "type": "string",
+            },
+          },
+          "required": Array [
+            "url",
+            "label",
+          ],
+          "type": "object",
+        },
+        "dataLabel": Object {
+          "type": "string",
+        },
+        "message": Object {
+          "type": "string",
+        },
+        "type": Object {
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "type",
+        "message",
+        "dataLabel",
+      ],
+      "type": "object",
+    },
+  },
+  "returned": Object {
+    "ManualAction": Object {
+      "properties": Object {
+        "message": Object {
+          "type": "string",
+        },
+        "success": Object {
+          "type": "boolean",
+        },
+      },
+      "required": Array [
+        "success",
+      ],
+      "type": "object",
+    },
+    "RequestData": Object {
+      "properties": Object {
+        "data": Object {
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "data",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;

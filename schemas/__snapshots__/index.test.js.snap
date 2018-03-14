@@ -1,0 +1,1793 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/index should export the list of models 1`] = `
+Object {
+  "authentication": Object {
+    "requested": Object {
+      "ManualAction": Object {
+        "properties": Object {
+          "message": Object {
+            "type": "string",
+          },
+          "type": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "type",
+          "message",
+        ],
+        "type": "object",
+      },
+      "RequestData": Object {
+        "properties": Object {
+          "button": Object {
+            "properties": Object {
+              "label": Object {
+                "type": "string",
+              },
+              "url": Object {
+                "type": "string",
+              },
+            },
+            "required": Array [
+              "url",
+              "label",
+            ],
+            "type": "object",
+          },
+          "dataLabel": Object {
+            "type": "string",
+          },
+          "message": Object {
+            "type": "string",
+          },
+          "type": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "type",
+          "message",
+          "dataLabel",
+        ],
+        "type": "object",
+      },
+    },
+    "returned": Object {
+      "ManualAction": Object {
+        "properties": Object {
+          "message": Object {
+            "type": "string",
+          },
+          "success": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "success",
+        ],
+        "type": "object",
+      },
+      "RequestData": Object {
+        "properties": Object {
+          "data": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "data",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "device": Object {
+    "_id": Object {
+      "required": true,
+      "type": [Function],
+      "unique": true,
+    },
+    "additionalInfo": Object {
+      "default": Object {},
+      "required": false,
+      "type": [Function],
+    },
+    "commands": Object {
+      "default": Object {},
+      "required": true,
+      "type": [Function],
+    },
+    "created": Object {
+      "default": [Function],
+      "required": false,
+      "type": [Function],
+    },
+    "driver": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "events": Object {
+      "default": Object {},
+      "required": true,
+      "type": [Function],
+    },
+    "name": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "originalId": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "type": Object {
+      "required": true,
+      "type": [Function],
+    },
+  },
+  "deviceTypes": Object {
+    "light": Object {
+      "commands": Object {
+        "properties": Object {
+          "breatheEffect": Object {
+            "description": "Performs a breathe effect by fading between colours",
+            "friendly": "Breathe effect",
+            "requestSchema": Object {
+              "properties": Object {
+                "colour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                    "hue": Object {
+                      "maximum": 360,
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "saturation": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                  },
+                  "required": Array [
+                    "hue",
+                    "saturation",
+                    "brightness",
+                  ],
+                  "type": "object",
+                },
+                "cycles": Object {
+                  "duration": "double",
+                  "maximum": 99999,
+                  "minimum": 0.01,
+                },
+                "fromColour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                    "hue": Object {
+                      "maximum": 360,
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "saturation": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                  },
+                  "required": Array [
+                    "hue",
+                    "saturation",
+                    "brightness",
+                  ],
+                  "type": "object",
+                },
+                "peak": Object {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "double",
+                },
+                "period": Object {
+                  "maximum": 100,
+                  "minimum": 0.01,
+                  "type": "double",
+                },
+                "persist": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "colour",
+                "period",
+                "cycles",
+                "persist",
+                "peak",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "pulseEffect": Object {
+            "description": "Performs a pulse effect by flashing between colours",
+            "friendly": "Pulse effect",
+            "requestSchema": Object {
+              "properties": Object {
+                "colour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                    "hue": Object {
+                      "maximum": 360,
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "saturation": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                  },
+                  "required": Array [
+                    "hue",
+                    "saturation",
+                    "brightness",
+                  ],
+                  "type": "object",
+                },
+                "cycles": Object {
+                  "duration": "double",
+                  "maximum": 99999,
+                  "minimum": 0.01,
+                },
+                "fromColour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                    "hue": Object {
+                      "maximum": 360,
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "saturation": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                  },
+                  "required": Array [
+                    "hue",
+                    "saturation",
+                    "brightness",
+                  ],
+                  "type": "object",
+                },
+                "period": Object {
+                  "maximum": 100,
+                  "minimum": 0.01,
+                  "type": "double",
+                },
+                "persist": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "colour",
+                "period",
+                "cycles",
+                "persist",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setBooleanState": Object {
+            "description": "Turns the light on or off",
+            "friendly": "Turn on or off",
+            "requestSchema": Object {
+              "properties": Object {
+                "duration": Object {
+                  "maximum": 99999,
+                  "minimum": 0,
+                  "type": "integer",
+                },
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "on",
+                "duration",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setBrightnessState": Object {
+            "description": "Sets the brightness of the light",
+            "friendly": "Set the brightness",
+            "requestSchema": Object {
+              "properties": Object {
+                "colour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0.01,
+                      "type": "double",
+                    },
+                  },
+                  "required": Array [
+                    "brightness",
+                  ],
+                  "type": "object",
+                },
+                "duration": Object {
+                  "maximum": 99999,
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "colour",
+                "duration",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setHSBState": Object {
+            "description": "Sets the hue, saturation and brightness, allowing you to change the colour of the light",
+            "friendly": "Set colour and brightness",
+            "requestSchema": Object {
+              "properties": Object {
+                "colour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0.01,
+                      "type": "double",
+                    },
+                    "hue": Object {
+                      "maximum": 360,
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "saturation": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                  },
+                  "required": Array [
+                    "hue",
+                    "saturation",
+                    "brightness",
+                  ],
+                  "type": "object",
+                },
+                "duration": Object {
+                  "maximum": 99999,
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "colour",
+                "duration",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "toggle": Object {
+            "description": "Toggles the light on and off",
+            "friendly": "Toggle",
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+      "events": Object {
+        "properties": Object {
+          "BREATHE_LIGHT_EFFECT": Object {
+            "constant": "BREATHE_LIGHT_EFFECT",
+            "description": "Whether the light is running a breathe effect or not",
+            "friendly": "Breathe effect",
+            "responseSchema": Object {
+              "properties": Object {
+                "breatheEffect": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "breatheEffect",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "LIGHT_STATE": Object {
+            "constant": "LIGHT_STATE",
+            "description": "The current state of the light (hue, saturation, brightness etc)",
+            "friendly": "Light state",
+            "responseSchema": Object {
+              "properties": Object {
+                "colour": Object {
+                  "properties": Object {
+                    "brightness": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                    "hue": Object {
+                      "maxiumum": 360,
+                      "minimum": 0,
+                      "type": "integer",
+                    },
+                    "saturation": Object {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "double",
+                    },
+                  },
+                  "type": "object",
+                },
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "colour",
+                "on",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "PULSE_LIGHT_EFFECT": Object {
+            "constant": "PULSE_LIGHT_EFFECT",
+            "description": "Whether the light is running a pulse effect or not",
+            "friendly": "Pulse effect",
+            "responseSchema": Object {
+              "properties": Object {
+                "pulseEffect": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "pulseEffect",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+    },
+    "sensor": Object {
+      "commands": Object {},
+      "events": Object {
+        "properties": Object {
+          "BATTERY_LEVEL": Object {
+            "constant": "BATTERY_LEVEL",
+            "description": "The current battery level of the device",
+            "friendly": "Battery level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "CONTACT": Object {
+            "constant": "CONTACT",
+            "description": "Whether the contact sensor is closed or open",
+            "friendly": "Contact",
+            "responseSchema": Object {
+              "properties": Object {
+                "contact": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "contact",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "HUMIDITY": Object {
+            "constant": "HUMIDITY",
+            "description": "The current humidity level",
+            "friendly": "Humidity",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "LIGHT": Object {
+            "constant": "LIGHT",
+            "description": "The current light level in lux",
+            "friendly": "Light level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 30000,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "MOTION": Object {
+            "constant": "MOTION",
+            "description": "Represents if motion is detected or not",
+            "friendly": "Motion",
+            "responseSchema": Object {
+              "properties": Object {
+                "detected": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "detected",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "TAMPER": Object {
+            "constant": "TAMPER",
+            "description": "If the device is being tampered with or not",
+            "friendly": "Tamper",
+            "responseSchema": Object {
+              "properties": Object {
+                "detected": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "detected",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "TEMPERATURE": Object {
+            "constant": "TEMPERATURE",
+            "description": "The current temperature in degrees celcius",
+            "friendly": "Temperature",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": -50,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "UV": Object {
+            "constant": "UV",
+            "description": "The current UV level",
+            "friendly": "UV level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 15,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "VIBRATION": Object {
+            "constant": "VIBRATION",
+            "description": "The current vibration level",
+            "friendly": "Vibration level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+    },
+    "socket": Object {
+      "commands": Object {
+        "properties": Object {
+          "off": Object {
+            "description": "Turns the socket off",
+            "friendly": "Turn off",
+            "type": "boolean",
+          },
+          "on": Object {
+            "description": "Turns the socket on",
+            "friendly": "Turn on",
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+      "events": Object {
+        "properties": Object {
+          "ENERGY": Object {
+            "constant": "ENERGY",
+            "description": "The current energy level in watts",
+            "friendly": "Energy",
+            "responseSchema": Object {
+              "properties": Object {
+                "energy": Object {
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "energy",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "ON": Object {
+            "constant": "ON",
+            "description": "Whether the device is on or not",
+            "friendly": "On",
+            "responseSchema": Object {
+              "properties": Object {
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "on",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+    },
+    "speaker": Object {
+      "commands": Object {
+        "properties": Object {
+          "addSpotifyToQueueBottom": Object {
+            "description": "Adds a spotify track to the bottom of the queue",
+            "friendly": "Add spotify track to bottom of queue",
+            "requestSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "uri",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "addSpotifyToQueueNext": Object {
+            "description": "Adds spotify track to the top of the queue so that it plays next",
+            "friendly": "Add spotify track to top of queue",
+            "requestSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "uri",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "addUrlToQueueBottom": Object {
+            "description": "Adds audio to the bottom of the queue",
+            "friendly": "Add track to bottom of queue",
+            "requestSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "uri",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "addUrlToQueueNext": Object {
+            "description": "Adds audio to the top of the queue so that it plays next",
+            "friendly": "Add track to top of queue",
+            "requestSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "uri",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "flushQueue": Object {
+            "description": "Empties the queue on the speaker",
+            "friendly": "Flush the queue",
+            "type": "boolean",
+          },
+          "getCurrentTrack": Object {
+            "description": "Gets the current track from the speaker",
+            "friendly": "Get current track",
+            "type": "boolean",
+          },
+          "getLEDState": Object {
+            "description": "Gets the state of the LED on the speaker",
+            "friendly": "Get the LED state",
+            "type": "boolean",
+          },
+          "getMuted": Object {
+            "description": "Gets whether the speaker is muted or not",
+            "friendly": "Get muted",
+            "type": "boolean",
+          },
+          "getVolume": Object {
+            "description": "Gets the volume level of the speaker",
+            "friendly": "Get volume",
+            "type": "boolean",
+          },
+          "next": Object {
+            "description": "Plays the next track in the queue",
+            "friendly": "Play next track",
+            "type": "boolean",
+          },
+          "pause": Object {
+            "description": "Pauses the currently playing audio",
+            "friendly": "Pause audio",
+            "type": "boolean",
+          },
+          "play": Object {
+            "description": "Plays the current audio",
+            "friendly": "Play audio",
+            "type": "boolean",
+          },
+          "previous": Object {
+            "description": "Plays the previous track in the queue",
+            "friendly": "Play previous track",
+            "type": "boolean",
+          },
+          "seek": Object {
+            "description": "Seeks to the specified position within the current audio",
+            "friendly": "Jump to position within track",
+            "requestSchema": Object {
+              "properties": Object {
+                "position": Object {
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "position",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setLEDState": Object {
+            "description": "Sets the state of the LED on the speaker",
+            "friendly": "Turn LED on",
+            "requestSchema": Object {
+              "properties": Object {
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "on",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setMuted": Object {
+            "description": "Sets whether the speaker is muted or not",
+            "friendly": "Mute",
+            "requestSchema": Object {
+              "properties": Object {
+                "muted": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "muted",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setName": Object {
+            "description": "Sets the name of the speaker",
+            "friendly": "Set the name of the speaker",
+            "requestSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setPlayMode": Object {
+            "description": "Sets the play mode of the speaker",
+            "friendly": "Set play mode",
+            "requestSchema": Object {
+              "properties": Object {
+                "playMode": Object {
+                  "enum": Array [
+                    "normal",
+                    "repeat_all",
+                    "shuffle",
+                    "shuffle_norepeat",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "playMode",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "setVolume": Object {
+            "description": "Sets the volume of the speaker",
+            "friendly": "Set volume",
+            "requestSchema": Object {
+              "properties": Object {
+                "volume": Object {
+                  "maximum": 100,
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "volume",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "stop": Object {
+            "description": "Stops the currently playing audio",
+            "friendly": "Stop the audio",
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+      "events": Object {
+        "properties": Object {
+          "ADDED_TO_QUEUE_BOTTOM": Object {
+            "constant": "ADDED_TO_QUEUE_BOTTOM",
+            "description": "Fired when an item is added to the bottom of the queue",
+            "friendly": "Added to bottom of queue",
+            "responseSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "queued",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "ADDED_TO_QUEUE_NEXT": Object {
+            "constant": "ADDED_TO_QUEUE_NEXT",
+            "description": "Fired when an item is added to the top of the queue",
+            "friendly": "Added to top of queue",
+            "responseSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "queued",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "AUDIO_PLAYING_STATE": Object {
+            "constant": "AUDIO_PLAYING_STATE",
+            "description": "Represents the current playing state (playing, paused, stopped)",
+            "friendly": "Playing state",
+            "responseSchema": Object {
+              "properties": Object {
+                "paused": Object {
+                  "paused": "boolean",
+                },
+                "playing": Object {
+                  "paused": "boolean",
+                },
+                "stopped": Object {
+                  "paused": "boolean",
+                },
+              },
+              "required": Array [
+                "paused",
+                "playing",
+                "stopped",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "CURRENT_AUDIO_TRACK": Object {
+            "constant": "CURRENT_AUDIO_TRACK",
+            "description": "Information about the current audio",
+            "friendly": "Current track",
+            "responseSchema": Object {
+              "properties": Object {
+                "album": Object {
+                  "type": "string",
+                },
+                "artUrl": Object {
+                  "type": "string",
+                },
+                "artist": Object {
+                  "type": "string",
+                },
+                "currentPosition": Object {
+                  "type": "integer",
+                },
+                "length": Object {
+                  "type": "integer",
+                },
+                "track": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "artist",
+                "track",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "LED_STATE": Object {
+            "constant": "LED_STATE",
+            "description": "The current state of the LED",
+            "friendly": "LED",
+            "responseSchema": Object {
+              "properties": Object {
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "on",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "MUTED_AUDIO": Object {
+            "constant": "MUTED_AUDIO",
+            "description": "Whether the audio is muted or not",
+            "friendly": "Muted",
+            "responseSchema": Object {
+              "properties": Object {
+                "muted": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "muted",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NEXT_AUDIO_TRACK": Object {
+            "constant": "NEXT_AUDIO_TRACK",
+            "description": "Fired when changing to the next audio track",
+            "friendly": "Next audio track",
+            "responseSchema": Object {
+              "properties": Object {
+                "next": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "next",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "PREVIOUS_AUDIO_TRACK": Object {
+            "constant": "PREVIOUS_AUDIO_TRACK",
+            "description": "Fired when changing to the previous audio track",
+            "friendly": "Previous audio track",
+            "responseSchema": Object {
+              "properties": Object {
+                "previous": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "previous",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "QUEUE_FLUSHED": Object {
+            "constant": "QUEUE_FLUSHED",
+            "description": "Fired when the queue has been emptied",
+            "friendly": "Queue flushed",
+            "responseSchema": Object {
+              "properties": Object {
+                "queueFlushed": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "queueFlushed",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "SEEK": Object {
+            "constant": "SEEK",
+            "description": "Represents the current position",
+            "friendly": "Current position",
+            "responseSchema": Object {
+              "properties": Object {
+                "position": Object {
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "position",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "VOLUME": Object {
+            "constant": "VOLUME",
+            "description": "The current volume level",
+            "friendly": "Volume level",
+            "responseSchema": Object {
+              "properties": Object {
+                "volume": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "volume",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "driver": Object {
+    "_id": Object {
+      "required": true,
+      "type": [Function],
+      "unique": true,
+    },
+    "settings": Object {
+      "default": Object {},
+      "required": true,
+      "type": [Function],
+    },
+  },
+  "event": Object {
+    "deviceId": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "driverId": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "driverType": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "event": Object {
+      "required": true,
+      "type": [Function],
+    },
+    "eventType": Object {
+      "enum": Array [
+        "request",
+        "device",
+      ],
+      "required": true,
+      "type": [Function],
+    },
+    "value": Object {
+      "default": Object {},
+      "required": false,
+      "type": [Function],
+    },
+  },
+  "events": Object {
+    "ADDED_TO_QUEUE_BOTTOM": Object {
+      "constant": "ADDED_TO_QUEUE_BOTTOM",
+      "description": "Fired when an item is added to the bottom of the queue",
+      "friendly": "Added to bottom of queue",
+      "responseSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "queued",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "ADDED_TO_QUEUE_NEXT": Object {
+      "constant": "ADDED_TO_QUEUE_NEXT",
+      "description": "Fired when an item is added to the top of the queue",
+      "friendly": "Added to top of queue",
+      "responseSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "queued",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "AUDIO_PLAYING_STATE": Object {
+      "constant": "AUDIO_PLAYING_STATE",
+      "description": "Represents the current playing state (playing, paused, stopped)",
+      "friendly": "Playing state",
+      "responseSchema": Object {
+        "properties": Object {
+          "paused": Object {
+            "paused": "boolean",
+          },
+          "playing": Object {
+            "paused": "boolean",
+          },
+          "stopped": Object {
+            "paused": "boolean",
+          },
+        },
+        "required": Array [
+          "paused",
+          "playing",
+          "stopped",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "BATTERY_LEVEL": Object {
+      "constant": "BATTERY_LEVEL",
+      "description": "The current battery level of the device",
+      "friendly": "Battery level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "BREATHE_LIGHT_EFFECT": Object {
+      "constant": "BREATHE_LIGHT_EFFECT",
+      "description": "Whether the light is running a breathe effect or not",
+      "friendly": "Breathe effect",
+      "responseSchema": Object {
+        "properties": Object {
+          "breatheEffect": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "breatheEffect",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "CONTACT": Object {
+      "constant": "CONTACT",
+      "description": "Whether the contact sensor is closed or open",
+      "friendly": "Contact",
+      "responseSchema": Object {
+        "properties": Object {
+          "contact": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "contact",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "CURRENT_AUDIO_TRACK": Object {
+      "constant": "CURRENT_AUDIO_TRACK",
+      "description": "Information about the current audio",
+      "friendly": "Current track",
+      "responseSchema": Object {
+        "properties": Object {
+          "album": Object {
+            "type": "string",
+          },
+          "artUrl": Object {
+            "type": "string",
+          },
+          "artist": Object {
+            "type": "string",
+          },
+          "currentPosition": Object {
+            "type": "integer",
+          },
+          "length": Object {
+            "type": "integer",
+          },
+          "track": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "artist",
+          "track",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "ENERGY": Object {
+      "constant": "ENERGY",
+      "description": "The current energy level in watts",
+      "friendly": "Energy",
+      "responseSchema": Object {
+        "properties": Object {
+          "energy": Object {
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "energy",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "HUMIDITY": Object {
+      "constant": "HUMIDITY",
+      "description": "The current humidity level",
+      "friendly": "Humidity",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "LED_STATE": Object {
+      "constant": "LED_STATE",
+      "description": "The current state of the LED",
+      "friendly": "LED",
+      "responseSchema": Object {
+        "properties": Object {
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "LIGHT": Object {
+      "constant": "LIGHT",
+      "description": "The current light level in lux",
+      "friendly": "Light level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 30000,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "LIGHT_STATE": Object {
+      "constant": "LIGHT_STATE",
+      "description": "The current state of the light (hue, saturation, brightness etc)",
+      "friendly": "Light state",
+      "responseSchema": Object {
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maxiumum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "type": "object",
+          },
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "on",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "MOTION": Object {
+      "constant": "MOTION",
+      "description": "Represents if motion is detected or not",
+      "friendly": "Motion",
+      "responseSchema": Object {
+        "properties": Object {
+          "detected": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "detected",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "MUTED_AUDIO": Object {
+      "constant": "MUTED_AUDIO",
+      "description": "Whether the audio is muted or not",
+      "friendly": "Muted",
+      "responseSchema": Object {
+        "properties": Object {
+          "muted": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "muted",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NAME": Object {
+      "constant": "NAME",
+      "description": "The current name of the device",
+      "friendly": "Name",
+      "responseSchema": Object {
+        "properties": Object {
+          "name": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "name",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NEXT_AUDIO_TRACK": Object {
+      "constant": "NEXT_AUDIO_TRACK",
+      "description": "Fired when changing to the next audio track",
+      "friendly": "Next audio track",
+      "responseSchema": Object {
+        "properties": Object {
+          "next": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "next",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "ON": Object {
+      "constant": "ON",
+      "description": "Whether the device is on or not",
+      "friendly": "On",
+      "responseSchema": Object {
+        "properties": Object {
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "PREVIOUS_AUDIO_TRACK": Object {
+      "constant": "PREVIOUS_AUDIO_TRACK",
+      "description": "Fired when changing to the previous audio track",
+      "friendly": "Previous audio track",
+      "responseSchema": Object {
+        "properties": Object {
+          "previous": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "previous",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "PULSE_LIGHT_EFFECT": Object {
+      "constant": "PULSE_LIGHT_EFFECT",
+      "description": "Whether the light is running a pulse effect or not",
+      "friendly": "Pulse effect",
+      "responseSchema": Object {
+        "properties": Object {
+          "pulseEffect": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "pulseEffect",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "QUEUE_FLUSHED": Object {
+      "constant": "QUEUE_FLUSHED",
+      "description": "Fired when the queue has been emptied",
+      "friendly": "Queue flushed",
+      "responseSchema": Object {
+        "properties": Object {
+          "queueFlushed": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "queueFlushed",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "SEEK": Object {
+      "constant": "SEEK",
+      "description": "Represents the current position",
+      "friendly": "Current position",
+      "responseSchema": Object {
+        "properties": Object {
+          "position": Object {
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "position",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "TAMPER": Object {
+      "constant": "TAMPER",
+      "description": "If the device is being tampered with or not",
+      "friendly": "Tamper",
+      "responseSchema": Object {
+        "properties": Object {
+          "detected": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "detected",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "TEMPERATURE": Object {
+      "constant": "TEMPERATURE",
+      "description": "The current temperature in degrees celcius",
+      "friendly": "Temperature",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": -50,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "UV": Object {
+      "constant": "UV",
+      "description": "The current UV level",
+      "friendly": "UV level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 15,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "VIBRATION": Object {
+      "constant": "VIBRATION",
+      "description": "The current vibration level",
+      "friendly": "Vibration level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "VOLUME": Object {
+      "constant": "VOLUME",
+      "description": "The current volume level",
+      "friendly": "Volume level",
+      "responseSchema": Object {
+        "properties": Object {
+          "volume": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "volume",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "audioPlayMode": Object {
+      "description": "The current play mode of the audio device (normal, shuffle, repeat etc)",
+      "friendly": "Play mode",
+      "responseSchema": Object {
+        "properties": Object {
+          "playMode": Object {
+            "enum": Array [
+              "normal",
+              "repeat_all",
+              "shuffle",
+              "shuffle_norepeat",
+            ],
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "playMode",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+  },
+}
+`;

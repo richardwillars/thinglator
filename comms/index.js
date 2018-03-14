@@ -1,9 +1,9 @@
-const http = require('./http');
-const zwave = require('./zwave');
+const http = require("./http");
+const zwave = require("./zwave");
 
 const comms = {
   http,
-  zwave,
+  zwave
 };
 
 const activeComms = {};
@@ -11,10 +11,12 @@ const activeComms = {};
 module.exports = (fs, chalk) => ({
   installInterfaces: () => {
     const interfacesArr = {};
-    fs.readdirSync('./node_modules').forEach((file) => {
+    fs.readdirSync("./node_modules").forEach(file => {
       if (file.match(/thinglator-interface-/) !== null) {
-        const name = file.replace('thinglator-interface-', '');
+        const name = file.replace("thinglator-interface-", "");
+        /* eslint-disable global-require, import/no-dynamic-require */
         const interfaceObj = require(`thinglator-interface-${name}`);
+        /* eslint-enable global-require, import/no-dynamic-require */
         if (!interfacesArr[interfaceObj.commsType]) {
           interfacesArr[interfaceObj.commsType] = interfaceObj;
         }
@@ -27,24 +29,47 @@ module.exports = (fs, chalk) => ({
     const newInterfaceConfig = Object.assign(interfaceConfig, {});
 
     const commIds = Object.keys(comms);
-    for (const commsId of commIds) {
-      if (availableInterfaces[commsId]) {
-        console.log(chalk.blue(`Connecting to comms: ${chalk.white(`${commsId} using ${availableInterfaces[commsId].interfaceId} interface`)}`));
-        if (typeof interfaceConfig[commsId] === 'undefined') {
-          newInterfaceConfig[commsId] = {};
+    /* eslint-disable no-restricted-syntax, no-console, no-await-in-loop */
+    for (const commId of commIds) {
+      if (availableInterfaces[commId]) {
+        console.log(
+          chalk.blue(
+            `Connecting to comms: ${chalk.white(
+              `${commId} using ${
+                availableInterfaces[commId].interfaceId
+              } interface`
+            )}`
+          )
+        );
+
+        if (typeof interfaceConfig[commId] === "undefined") {
+          newInterfaceConfig[commId] = {};
         }
-        activeComms[commsId] = await comms[commsId](availableInterfaces[commsId], newInterfaceConfig[commsId], eventEmitter);
+        activeComms[commId] = await comms[commId](
+          availableInterfaces[commId],
+          newInterfaceConfig[commId],
+          eventEmitter
+        );
       }
     }
+    /* eslint-enable no-restricted-syntax, no-console, no-await-in-loop */
   },
 
   disconnectAll: async () => {
-    Object.keys(activeComms).forEach(async (commId) => {
-      console.log(chalk.blue(`Disconnecting from comms: ${chalk.white(activeComms[commId].getType())}`));
+    /* eslint-disable no-console */
+    Object.keys(activeComms).forEach(async commId => {
+      console.log(
+        chalk.blue(
+          `Disconnecting from comms: ${chalk.white(
+            activeComms[commId].getType()
+          )}`
+        )
+      );
       await activeComms[commId].disconnect();
     });
-    console.log(chalk.blue('All comms disconnected!'));
+    console.log(chalk.blue("All comms disconnected!"));
+    /* eslint-enable no-console */
   },
-
-  getActiveCommsById: commId => activeComms[commId],
+  getActiveComms: () => activeComms,
+  getActiveCommsById: commId => activeComms[commId]
 });

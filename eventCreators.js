@@ -1,10 +1,10 @@
 module.exports = {
   deviceEvent: (eventId, driverType, driverId, deviceId, value) => ({
-    eventType: 'device',
+    eventType: "device",
     driverType,
     driverId,
     deviceId,
     event: eventId,
-    value,
-  }),
+    value
+  })
 };

@@ -1,0 +1,373 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/light should export the commands 1`] = `
+Object {
+  "properties": Object {
+    "breatheEffect": Object {
+      "description": "Performs a breathe effect by fading between colours",
+      "friendly": "Breathe effect",
+      "requestSchema": Object {
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "cycles": Object {
+            "duration": "double",
+            "maximum": 99999,
+            "minimum": 0.01,
+          },
+          "fromColour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "peak": Object {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "double",
+          },
+          "period": Object {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "double",
+          },
+          "persist": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "period",
+          "cycles",
+          "persist",
+          "peak",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "pulseEffect": Object {
+      "description": "Performs a pulse effect by flashing between colours",
+      "friendly": "Pulse effect",
+      "requestSchema": Object {
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "cycles": Object {
+            "duration": "double",
+            "maximum": 99999,
+            "minimum": 0.01,
+          },
+          "fromColour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "period": Object {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "double",
+          },
+          "persist": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "period",
+          "cycles",
+          "persist",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "setBooleanState": Object {
+      "description": "Turns the light on or off",
+      "friendly": "Turn on or off",
+      "requestSchema": Object {
+        "properties": Object {
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "setBrightnessState": Object {
+      "description": "Sets the brightness of the light",
+      "friendly": "Set the brightness",
+      "requestSchema": Object {
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0.01,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "colour",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "setHSBState": Object {
+      "description": "Sets the hue, saturation and brightness, allowing you to change the colour of the light",
+      "friendly": "Set colour and brightness",
+      "requestSchema": Object {
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0.01,
+                "type": "double",
+              },
+              "hue": Object {
+                "maximum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "required": Array [
+              "hue",
+              "saturation",
+              "brightness",
+            ],
+            "type": "object",
+          },
+          "duration": Object {
+            "maximum": 99999,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "colour",
+          "duration",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "toggle": Object {
+      "description": "Toggles the light on and off",
+      "friendly": "Toggle",
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`models/light should export the events 1`] = `
+Object {
+  "properties": Object {
+    "BREATHE_LIGHT_EFFECT": Object {
+      "constant": "BREATHE_LIGHT_EFFECT",
+      "description": "Whether the light is running a breathe effect or not",
+      "friendly": "Breathe effect",
+      "responseSchema": Object {
+        "properties": Object {
+          "breatheEffect": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "breatheEffect",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "LIGHT_STATE": Object {
+      "constant": "LIGHT_STATE",
+      "description": "The current state of the light (hue, saturation, brightness etc)",
+      "friendly": "Light state",
+      "responseSchema": Object {
+        "properties": Object {
+          "colour": Object {
+            "properties": Object {
+              "brightness": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+              "hue": Object {
+                "maxiumum": 360,
+                "minimum": 0,
+                "type": "integer",
+              },
+              "saturation": Object {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "double",
+              },
+            },
+            "type": "object",
+          },
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "colour",
+          "on",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NAME": Object {
+      "constant": "NAME",
+      "description": "The current name of the device",
+      "friendly": "Name",
+      "responseSchema": Object {
+        "properties": Object {
+          "name": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "name",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "PULSE_LIGHT_EFFECT": Object {
+      "constant": "PULSE_LIGHT_EFFECT",
+      "description": "Whether the light is running a pulse effect or not",
+      "friendly": "Pulse effect",
+      "responseSchema": Object {
+        "properties": Object {
+          "pulseEffect": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "pulseEffect",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
+`;

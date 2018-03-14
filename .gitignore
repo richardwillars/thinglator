@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+yarn-error.log
 
 # Runtime data
 pids
@@ -37,3 +38,4 @@ jspm_packages
 .node_repl_history
 
 .DS_Store
+thinglator.db

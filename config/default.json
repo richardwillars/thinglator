@@ -1,13 +1,12 @@
 {
   "port": 3003,
-  "mongodb": {
-    "host": "localhost",
-    "db": "thinglator"
+  "db": {
+    "path": "./"
   },
   "interfaces": {
     "zwave": {
-        "hardwareLocation": "/dev/cu.usbmodem1411",
-        "debug": true
+      "hardwareLocation": "/dev/cu.usbmodem1411",
+      "debug": true
     }
   },
   "management": {
