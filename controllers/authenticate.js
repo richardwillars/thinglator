@@ -91,7 +91,6 @@ const authenticationStep = async (
       e.errors = validated.errors;
       throw e;
     }
-
     // all good - call the correct authentication step method on the driver
     const result = await driver.api[`authentication_step${stepId}`](body);
 

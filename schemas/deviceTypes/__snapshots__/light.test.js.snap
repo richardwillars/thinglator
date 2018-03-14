@@ -283,7 +283,6 @@ Object {
       "description": "Whether the light is running a breathe effect or not",
       "friendly": "Breathe effect",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "breatheEffect": Object {
             "type": "boolean",
@@ -294,14 +293,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "LIGHT_STATE": Object {
       "constant": "LIGHT_STATE",
       "description": "The current state of the light (hue, saturation, brightness etc)",
       "friendly": "Light state",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "colour": Object {
             "properties": Object {
@@ -333,14 +331,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "NAME": Object {
       "constant": "NAME",
       "description": "The current name of the device",
       "friendly": "Name",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "name": Object {
             "type": "string",
@@ -351,14 +348,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "PULSE_LIGHT_EFFECT": Object {
       "constant": "PULSE_LIGHT_EFFECT",
       "description": "Whether the light is running a pulse effect or not",
       "friendly": "Pulse effect",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "pulseEffect": Object {
             "type": "boolean",
@@ -369,7 +365,7 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
   },
   "type": "object",

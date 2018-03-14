@@ -228,18 +228,240 @@ Object {
 `;
 
 exports[`models/speaker should export the events 1`] = `
-Array [
-  "AUDIO_PLAYING_STATE",
-  "PREVIOUS_AUDIO_TRACK",
-  "NEXT_AUDIO_TRACK",
-  "MUTED_AUDIO",
-  "QUEUE_FLUSHED",
-  "VOLUME",
-  "SEEK",
-  "NAME",
-  "LED_STATE",
-  "CURRENT_AUDIO_TRACK",
-  "ADDED_TO_QUEUE_NEXT",
-  "ADDED_TO_QUEUE_BOTTOM",
-]
+Object {
+  "properties": Object {
+    "ADDED_TO_QUEUE_BOTTOM": Object {
+      "constant": "ADDED_TO_QUEUE_BOTTOM",
+      "description": "Fired when an item is added to the bottom of the queue",
+      "friendly": "Added to bottom of queue",
+      "responseSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "queued",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "ADDED_TO_QUEUE_NEXT": Object {
+      "constant": "ADDED_TO_QUEUE_NEXT",
+      "description": "Fired when an item is added to the top of the queue",
+      "friendly": "Added to top of queue",
+      "responseSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "queued",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "AUDIO_PLAYING_STATE": Object {
+      "constant": "AUDIO_PLAYING_STATE",
+      "description": "Represents the current playing state (playing, paused, stopped)",
+      "friendly": "Playing state",
+      "responseSchema": Object {
+        "properties": Object {
+          "paused": Object {
+            "paused": "boolean",
+          },
+          "playing": Object {
+            "paused": "boolean",
+          },
+          "stopped": Object {
+            "paused": "boolean",
+          },
+        },
+        "required": Array [
+          "paused",
+          "playing",
+          "stopped",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "CURRENT_AUDIO_TRACK": Object {
+      "constant": "CURRENT_AUDIO_TRACK",
+      "description": "Information about the current audio",
+      "friendly": "Current track",
+      "responseSchema": Object {
+        "properties": Object {
+          "album": Object {
+            "type": "string",
+          },
+          "artUrl": Object {
+            "type": "string",
+          },
+          "artist": Object {
+            "type": "string",
+          },
+          "currentPosition": Object {
+            "type": "integer",
+          },
+          "length": Object {
+            "type": "integer",
+          },
+          "track": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "artist",
+          "track",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "LED_STATE": Object {
+      "constant": "LED_STATE",
+      "description": "The current state of the LED",
+      "friendly": "LED",
+      "responseSchema": Object {
+        "properties": Object {
+          "on": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "on",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "MUTED_AUDIO": Object {
+      "constant": "MUTED_AUDIO",
+      "description": "Whether the audio is muted or not",
+      "friendly": "Muted",
+      "responseSchema": Object {
+        "properties": Object {
+          "muted": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "muted",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NAME": Object {
+      "constant": "NAME",
+      "description": "The current name of the device",
+      "friendly": "Name",
+      "responseSchema": Object {
+        "properties": Object {
+          "name": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "name",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NEXT_AUDIO_TRACK": Object {
+      "constant": "NEXT_AUDIO_TRACK",
+      "description": "Fired when changing to the next audio track",
+      "friendly": "Next audio track",
+      "responseSchema": Object {
+        "properties": Object {
+          "next": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "next",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "PREVIOUS_AUDIO_TRACK": Object {
+      "constant": "PREVIOUS_AUDIO_TRACK",
+      "description": "Fired when changing to the previous audio track",
+      "friendly": "Previous audio track",
+      "responseSchema": Object {
+        "properties": Object {
+          "previous": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "previous",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "QUEUE_FLUSHED": Object {
+      "constant": "QUEUE_FLUSHED",
+      "description": "Fired when the queue has been emptied",
+      "friendly": "Queue flushed",
+      "responseSchema": Object {
+        "properties": Object {
+          "queueFlushed": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "queueFlushed",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "SEEK": Object {
+      "constant": "SEEK",
+      "description": "Represents the current position",
+      "friendly": "Current position",
+      "responseSchema": Object {
+        "properties": Object {
+          "position": Object {
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "position",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "VOLUME": Object {
+      "constant": "VOLUME",
+      "description": "The current volume level",
+      "friendly": "Volume level",
+      "responseSchema": Object {
+        "properties": Object {
+          "volume": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "integer",
+          },
+        },
+        "required": Array [
+          "volume",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
 `;

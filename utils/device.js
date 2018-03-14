@@ -24,7 +24,8 @@ module.exports = (md5, devicesCollection, schemas, jsonValidator) => ({
       commands: deviceSpecs.commands,
       events: deviceSpecs.events,
       originalId: deviceSpecs.originalId,
-      name: deviceSpecs.name
+      name: deviceSpecs.name,
+      additionalInfo: deviceSpecs.additionalInfo || {}
     };
     return devicesCollection.insert(deviceObj);
   },
@@ -53,6 +54,7 @@ module.exports = (md5, devicesCollection, schemas, jsonValidator) => ({
     device.commands = specs.commands;
     device.events = specs.events;
     device.name = specs.name;
+    device.additionalInfo = specs.additionalInfo || {};
     /* eslint-enable no-param-reassign */
     devicesCollection.update(device);
   }

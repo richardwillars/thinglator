@@ -5,7 +5,6 @@ Object {
   "authentication": Object {
     "requested": Object {
       "ManualAction": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "message": Object {
             "type": "string",
@@ -21,7 +20,6 @@ Object {
         "type": "object",
       },
       "RequestData": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "button": Object {
             "properties": Object {
@@ -58,7 +56,6 @@ Object {
     },
     "returned": Object {
       "ManualAction": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "message": Object {
             "type": "string",
@@ -73,7 +70,6 @@ Object {
         "type": "object",
       },
       "RequestData": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "data": Object {
             "type": "string",
@@ -410,7 +406,6 @@ Object {
             "description": "Whether the light is running a breathe effect or not",
             "friendly": "Breathe effect",
             "responseSchema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
               "properties": Object {
                 "breatheEffect": Object {
                   "type": "boolean",
@@ -421,14 +416,13 @@ Object {
               ],
               "type": "object",
             },
-            "type": [Function],
+            "type": "boolean",
           },
           "LIGHT_STATE": Object {
             "constant": "LIGHT_STATE",
             "description": "The current state of the light (hue, saturation, brightness etc)",
             "friendly": "Light state",
             "responseSchema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
               "properties": Object {
                 "colour": Object {
                   "properties": Object {
@@ -460,14 +454,13 @@ Object {
               ],
               "type": "object",
             },
-            "type": [Function],
+            "type": "boolean",
           },
           "NAME": Object {
             "constant": "NAME",
             "description": "The current name of the device",
             "friendly": "Name",
             "responseSchema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
               "properties": Object {
                 "name": Object {
                   "type": "string",
@@ -478,14 +471,13 @@ Object {
               ],
               "type": "object",
             },
-            "type": [Function],
+            "type": "boolean",
           },
           "PULSE_LIGHT_EFFECT": Object {
             "constant": "PULSE_LIGHT_EFFECT",
             "description": "Whether the light is running a pulse effect or not",
             "friendly": "Pulse effect",
             "responseSchema": Object {
-              "$schema": "http://json-schema.org/draft-04/schema#",
               "properties": Object {
                 "pulseEffect": Object {
                   "type": "boolean",
@@ -496,7 +488,7 @@ Object {
               ],
               "type": "object",
             },
-            "type": [Function],
+            "type": "boolean",
           },
         },
         "type": "object",
@@ -504,18 +496,193 @@ Object {
     },
     "sensor": Object {
       "commands": Object {},
-      "events": Array [
-        "CONTACT",
-        "TEMPERATURE",
-        "HUMIDITY",
-        "LIGHT",
-        "UV",
-        "BATTERY_LEVEL",
-        "MOTION",
-        "NAME",
-        "VIBRATION",
-        "TAMPER",
-      ],
+      "events": Object {
+        "properties": Object {
+          "BATTERY_LEVEL": Object {
+            "constant": "BATTERY_LEVEL",
+            "description": "The current battery level of the device",
+            "friendly": "Battery level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "CONTACT": Object {
+            "constant": "CONTACT",
+            "description": "Whether the contact sensor is closed or open",
+            "friendly": "Contact",
+            "responseSchema": Object {
+              "properties": Object {
+                "contact": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "contact",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "HUMIDITY": Object {
+            "constant": "HUMIDITY",
+            "description": "The current humidity level",
+            "friendly": "Humidity",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "LIGHT": Object {
+            "constant": "LIGHT",
+            "description": "The current light level in lux",
+            "friendly": "Light level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 30000,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "MOTION": Object {
+            "constant": "MOTION",
+            "description": "Represents if motion is detected or not",
+            "friendly": "Motion",
+            "responseSchema": Object {
+              "properties": Object {
+                "detected": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "detected",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "TAMPER": Object {
+            "constant": "TAMPER",
+            "description": "If the device is being tampered with or not",
+            "friendly": "Tamper",
+            "responseSchema": Object {
+              "properties": Object {
+                "detected": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "detected",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "TEMPERATURE": Object {
+            "constant": "TEMPERATURE",
+            "description": "The current temperature in degrees celcius",
+            "friendly": "Temperature",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": -50,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "UV": Object {
+            "constant": "UV",
+            "description": "The current UV level",
+            "friendly": "UV level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 15,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "VIBRATION": Object {
+            "constant": "VIBRATION",
+            "description": "The current vibration level",
+            "friendly": "Vibration level",
+            "responseSchema": Object {
+              "properties": Object {
+                "level": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "level",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
     },
     "socket": Object {
       "commands": Object {
@@ -533,11 +700,62 @@ Object {
         },
         "type": "object",
       },
-      "events": Array [
-        "ON",
-        "ENERGY",
-        "NAME",
-      ],
+      "events": Object {
+        "properties": Object {
+          "ENERGY": Object {
+            "constant": "ENERGY",
+            "description": "The current energy level in watts",
+            "friendly": "Energy",
+            "responseSchema": Object {
+              "properties": Object {
+                "energy": Object {
+                  "type": "double",
+                },
+              },
+              "required": Array [
+                "energy",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "ON": Object {
+            "constant": "ON",
+            "description": "Whether the device is on or not",
+            "friendly": "On",
+            "responseSchema": Object {
+              "properties": Object {
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "on",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
     },
     "speaker": Object {
       "commands": Object {
@@ -764,20 +982,242 @@ Object {
         },
         "type": "object",
       },
-      "events": Array [
-        "AUDIO_PLAYING_STATE",
-        "PREVIOUS_AUDIO_TRACK",
-        "NEXT_AUDIO_TRACK",
-        "MUTED_AUDIO",
-        "QUEUE_FLUSHED",
-        "VOLUME",
-        "SEEK",
-        "NAME",
-        "LED_STATE",
-        "CURRENT_AUDIO_TRACK",
-        "ADDED_TO_QUEUE_NEXT",
-        "ADDED_TO_QUEUE_BOTTOM",
-      ],
+      "events": Object {
+        "properties": Object {
+          "ADDED_TO_QUEUE_BOTTOM": Object {
+            "constant": "ADDED_TO_QUEUE_BOTTOM",
+            "description": "Fired when an item is added to the bottom of the queue",
+            "friendly": "Added to bottom of queue",
+            "responseSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "queued",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "ADDED_TO_QUEUE_NEXT": Object {
+            "constant": "ADDED_TO_QUEUE_NEXT",
+            "description": "Fired when an item is added to the top of the queue",
+            "friendly": "Added to top of queue",
+            "responseSchema": Object {
+              "properties": Object {
+                "uri": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "queued",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "AUDIO_PLAYING_STATE": Object {
+            "constant": "AUDIO_PLAYING_STATE",
+            "description": "Represents the current playing state (playing, paused, stopped)",
+            "friendly": "Playing state",
+            "responseSchema": Object {
+              "properties": Object {
+                "paused": Object {
+                  "paused": "boolean",
+                },
+                "playing": Object {
+                  "paused": "boolean",
+                },
+                "stopped": Object {
+                  "paused": "boolean",
+                },
+              },
+              "required": Array [
+                "paused",
+                "playing",
+                "stopped",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "CURRENT_AUDIO_TRACK": Object {
+            "constant": "CURRENT_AUDIO_TRACK",
+            "description": "Information about the current audio",
+            "friendly": "Current track",
+            "responseSchema": Object {
+              "properties": Object {
+                "album": Object {
+                  "type": "string",
+                },
+                "artUrl": Object {
+                  "type": "string",
+                },
+                "artist": Object {
+                  "type": "string",
+                },
+                "currentPosition": Object {
+                  "type": "integer",
+                },
+                "length": Object {
+                  "type": "integer",
+                },
+                "track": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "artist",
+                "track",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "LED_STATE": Object {
+            "constant": "LED_STATE",
+            "description": "The current state of the LED",
+            "friendly": "LED",
+            "responseSchema": Object {
+              "properties": Object {
+                "on": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "on",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "MUTED_AUDIO": Object {
+            "constant": "MUTED_AUDIO",
+            "description": "Whether the audio is muted or not",
+            "friendly": "Muted",
+            "responseSchema": Object {
+              "properties": Object {
+                "muted": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "muted",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NAME": Object {
+            "constant": "NAME",
+            "description": "The current name of the device",
+            "friendly": "Name",
+            "responseSchema": Object {
+              "properties": Object {
+                "name": Object {
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "name",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "NEXT_AUDIO_TRACK": Object {
+            "constant": "NEXT_AUDIO_TRACK",
+            "description": "Fired when changing to the next audio track",
+            "friendly": "Next audio track",
+            "responseSchema": Object {
+              "properties": Object {
+                "next": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "next",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "PREVIOUS_AUDIO_TRACK": Object {
+            "constant": "PREVIOUS_AUDIO_TRACK",
+            "description": "Fired when changing to the previous audio track",
+            "friendly": "Previous audio track",
+            "responseSchema": Object {
+              "properties": Object {
+                "previous": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "previous",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "QUEUE_FLUSHED": Object {
+            "constant": "QUEUE_FLUSHED",
+            "description": "Fired when the queue has been emptied",
+            "friendly": "Queue flushed",
+            "responseSchema": Object {
+              "properties": Object {
+                "queueFlushed": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "queueFlushed",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "SEEK": Object {
+            "constant": "SEEK",
+            "description": "Represents the current position",
+            "friendly": "Current position",
+            "responseSchema": Object {
+              "properties": Object {
+                "position": Object {
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "position",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "VOLUME": Object {
+            "constant": "VOLUME",
+            "description": "The current volume level",
+            "friendly": "Volume level",
+            "responseSchema": Object {
+              "properties": Object {
+                "volume": Object {
+                  "maxiumum": 100,
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+              "required": Array [
+                "volume",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
     },
   },
   "driver": Object {
@@ -829,7 +1269,6 @@ Object {
       "description": "Fired when an item is added to the bottom of the queue",
       "friendly": "Added to bottom of queue",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "uri": Object {
             "type": "string",
@@ -840,14 +1279,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "ADDED_TO_QUEUE_NEXT": Object {
       "constant": "ADDED_TO_QUEUE_NEXT",
       "description": "Fired when an item is added to the top of the queue",
       "friendly": "Added to top of queue",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "uri": Object {
             "type": "string",
@@ -858,14 +1296,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "AUDIO_PLAYING_STATE": Object {
       "constant": "AUDIO_PLAYING_STATE",
       "description": "Represents the current playing state (playing, paused, stopped)",
       "friendly": "Playing state",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "paused": Object {
             "paused": "boolean",
@@ -884,14 +1321,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "BATTERY_LEVEL": Object {
       "constant": "BATTERY_LEVEL",
       "description": "The current battery level of the device",
       "friendly": "Battery level",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "level": Object {
             "maxiumum": 100,
@@ -904,14 +1340,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "BREATHE_LIGHT_EFFECT": Object {
       "constant": "BREATHE_LIGHT_EFFECT",
       "description": "Whether the light is running a breathe effect or not",
       "friendly": "Breathe effect",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "breatheEffect": Object {
             "type": "boolean",
@@ -922,14 +1357,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "CONTACT": Object {
       "constant": "CONTACT",
       "description": "Whether the contact sensor is closed or open",
       "friendly": "Contact",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "contact": Object {
             "type": "boolean",
@@ -940,14 +1374,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "CURRENT_AUDIO_TRACK": Object {
       "constant": "CURRENT_AUDIO_TRACK",
       "description": "Information about the current audio",
       "friendly": "Current track",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "album": Object {
             "type": "string",
@@ -974,14 +1407,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "ENERGY": Object {
       "constant": "ENERGY",
       "description": "The current energy level in watts",
       "friendly": "Energy",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "energy": Object {
             "type": "double",
@@ -992,14 +1424,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "HUMIDITY": Object {
       "constant": "HUMIDITY",
       "description": "The current humidity level",
       "friendly": "Humidity",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "level": Object {
             "maxiumum": 100,
@@ -1012,14 +1443,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "LED_STATE": Object {
       "constant": "LED_STATE",
       "description": "The current state of the LED",
       "friendly": "LED",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "on": Object {
             "type": "boolean",
@@ -1030,14 +1460,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "LIGHT": Object {
       "constant": "LIGHT",
       "description": "The current light level in lux",
       "friendly": "Light level",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "level": Object {
             "maxiumum": 30000,
@@ -1050,14 +1479,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "LIGHT_STATE": Object {
       "constant": "LIGHT_STATE",
       "description": "The current state of the light (hue, saturation, brightness etc)",
       "friendly": "Light state",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "colour": Object {
             "properties": Object {
@@ -1089,14 +1517,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "MOTION": Object {
       "constant": "MOTION",
       "description": "Represents if motion is detected or not",
       "friendly": "Motion",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "detected": Object {
             "type": "boolean",
@@ -1107,14 +1534,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "MUTED_AUDIO": Object {
       "constant": "MUTED_AUDIO",
       "description": "Whether the audio is muted or not",
       "friendly": "Muted",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "muted": Object {
             "type": "boolean",
@@ -1125,14 +1551,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "NAME": Object {
       "constant": "NAME",
       "description": "The current name of the device",
       "friendly": "Name",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "name": Object {
             "type": "string",
@@ -1143,14 +1568,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "NEXT_AUDIO_TRACK": Object {
       "constant": "NEXT_AUDIO_TRACK",
       "description": "Fired when changing to the next audio track",
       "friendly": "Next audio track",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "next": Object {
             "type": "boolean",
@@ -1161,14 +1585,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "ON": Object {
       "constant": "ON",
       "description": "Whether the device is on or not",
       "friendly": "On",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "on": Object {
             "type": "boolean",
@@ -1179,14 +1602,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "PREVIOUS_AUDIO_TRACK": Object {
       "constant": "PREVIOUS_AUDIO_TRACK",
       "description": "Fired when changing to the previous audio track",
       "friendly": "Previous audio track",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "previous": Object {
             "type": "boolean",
@@ -1197,14 +1619,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "PULSE_LIGHT_EFFECT": Object {
       "constant": "PULSE_LIGHT_EFFECT",
       "description": "Whether the light is running a pulse effect or not",
       "friendly": "Pulse effect",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "pulseEffect": Object {
             "type": "boolean",
@@ -1215,14 +1636,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "QUEUE_FLUSHED": Object {
       "constant": "QUEUE_FLUSHED",
       "description": "Fired when the queue has been emptied",
       "friendly": "Queue flushed",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "queueFlushed": Object {
             "type": "boolean",
@@ -1233,14 +1653,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "SEEK": Object {
       "constant": "SEEK",
       "description": "Represents the current position",
       "friendly": "Current position",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "position": Object {
             "minimum": 0,
@@ -1252,14 +1671,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "TAMPER": Object {
       "constant": "TAMPER",
       "description": "If the device is being tampered with or not",
       "friendly": "Tamper",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "detected": Object {
             "type": "boolean",
@@ -1270,14 +1688,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "TEMPERATURE": Object {
       "constant": "TEMPERATURE",
       "description": "The current temperature in degrees celcius",
       "friendly": "Temperature",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "level": Object {
             "maxiumum": 100,
@@ -1290,14 +1707,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "UV": Object {
       "constant": "UV",
       "description": "The current UV level",
       "friendly": "UV level",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "level": Object {
             "maxiumum": 15,
@@ -1310,14 +1726,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "VIBRATION": Object {
       "constant": "VIBRATION",
       "description": "The current vibration level",
       "friendly": "Vibration level",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "level": Object {
             "maxiumum": 100,
@@ -1330,14 +1745,13 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "VOLUME": Object {
       "constant": "VOLUME",
       "description": "The current volume level",
       "friendly": "Volume level",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "volume": Object {
             "maxiumum": 100,
@@ -1350,13 +1764,12 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
     "audioPlayMode": Object {
       "description": "The current play mode of the audio device (normal, shuffle, repeat etc)",
       "friendly": "Play mode",
       "responseSchema": Object {
-        "$schema": "http://json-schema.org/draft-04/schema#",
         "properties": Object {
           "playMode": Object {
             "enum": Array [
@@ -1373,7 +1786,7 @@ Object {
         ],
         "type": "object",
       },
-      "type": [Function],
+      "type": "boolean",
     },
   },
 }

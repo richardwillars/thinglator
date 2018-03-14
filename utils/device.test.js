@@ -51,6 +51,7 @@ describe("utils/device", () => {
 
       expect(devicesCollection.insert).toHaveBeenCalledTimes(1);
       expect(devicesCollection.insert).toHaveBeenCalledWith({
+        additionalInfo: {},
         commands: {},
         deviceId: "md5Id",
         driverId: "driverId",

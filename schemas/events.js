@@ -1,10 +1,9 @@
 module.exports = constants => ({
   [constants.events.ADDED_TO_QUEUE_BOTTOM]: {
-    type: Boolean,
+    type: "boolean",
     description: "Fired when an item is added to the bottom of the queue",
     friendly: "Added to bottom of queue",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         uri: {
@@ -15,11 +14,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.ADDED_TO_QUEUE_NEXT]: {
-    type: Boolean,
+    type: "boolean",
     description: "Fired when an item is added to the top of the queue",
     friendly: "Added to top of queue",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         uri: {
@@ -30,12 +28,11 @@ module.exports = constants => ({
     }
   },
   [constants.events.AUDIO_PLAYING_STATE]: {
-    type: Boolean,
+    type: "boolean",
     description:
       "Represents the current playing state (playing, paused, stopped)",
     friendly: "Playing state",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         paused: {
@@ -52,12 +49,11 @@ module.exports = constants => ({
     }
   },
   audioPlayMode: {
-    type: Boolean,
+    type: "boolean",
     description:
       "The current play mode of the audio device (normal, shuffle, repeat etc)",
     friendly: "Play mode",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         playMode: {
@@ -69,11 +65,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.BATTERY_LEVEL]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current battery level of the device",
     friendly: "Battery level",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         level: {
@@ -86,11 +81,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.BREATHE_LIGHT_EFFECT]: {
-    type: Boolean,
+    type: "boolean",
     description: "Whether the light is running a breathe effect or not",
     friendly: "Breathe effect",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         breatheEffect: {
@@ -101,11 +95,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.CONTACT]: {
-    type: Boolean,
+    type: "boolean",
     description: "Whether the contact sensor is closed or open",
     friendly: "Contact",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         contact: {
@@ -116,11 +109,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.CURRENT_AUDIO_TRACK]: {
-    type: Boolean,
+    type: "boolean",
     description: "Information about the current audio",
     friendly: "Current track",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         artist: {
@@ -146,11 +138,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.ENERGY]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current energy level in watts",
     friendly: "Energy",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         energy: {
@@ -161,11 +152,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.HUMIDITY]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current humidity level",
     friendly: "Humidity",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         level: {
@@ -178,11 +168,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.LED_STATE]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current state of the LED",
     friendly: "LED",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         on: {
@@ -193,11 +182,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.LIGHT]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current light level in lux",
     friendly: "Light level",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         level: {
@@ -210,12 +198,11 @@ module.exports = constants => ({
     }
   },
   [constants.events.LIGHT_STATE]: {
-    type: Boolean,
+    type: "boolean",
     description:
       "The current state of the light (hue, saturation, brightness etc)",
     friendly: "Light state",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         on: {
@@ -246,11 +233,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.ON]: {
-    type: Boolean,
+    type: "boolean",
     description: "Whether the device is on or not",
     friendly: "On",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         on: {
@@ -261,11 +247,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.MOTION]: {
-    type: Boolean,
+    type: "boolean",
     description: "Represents if motion is detected or not",
     friendly: "Motion",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         detected: {
@@ -276,11 +261,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.MUTED_AUDIO]: {
-    type: Boolean,
+    type: "boolean",
     description: "Whether the audio is muted or not",
     friendly: "Muted",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         muted: {
@@ -291,11 +275,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.NAME]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current name of the device",
     friendly: "Name",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         name: {
@@ -306,11 +289,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.NEXT_AUDIO_TRACK]: {
-    type: Boolean,
+    type: "boolean",
     description: "Fired when changing to the next audio track",
     friendly: "Next audio track",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         next: {
@@ -321,11 +303,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.PREVIOUS_AUDIO_TRACK]: {
-    type: Boolean,
+    type: "boolean",
     description: "Fired when changing to the previous audio track",
     friendly: "Previous audio track",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         previous: {
@@ -336,11 +317,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.PULSE_LIGHT_EFFECT]: {
-    type: Boolean,
+    type: "boolean",
     description: "Whether the light is running a pulse effect or not",
     friendly: "Pulse effect",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         pulseEffect: {
@@ -351,11 +331,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.QUEUE_FLUSHED]: {
-    type: Boolean,
+    type: "boolean",
     description: "Fired when the queue has been emptied",
     friendly: "Queue flushed",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         queueFlushed: {
@@ -366,11 +345,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.SEEK]: {
-    type: Boolean,
+    type: "boolean",
     description: "Represents the current position",
     friendly: "Current position",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         position: {
@@ -382,11 +360,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.TAMPER]: {
-    type: Boolean,
+    type: "boolean",
     description: "If the device is being tampered with or not",
     friendly: "Tamper",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         detected: {
@@ -397,11 +374,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.TEMPERATURE]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current temperature in degrees celcius",
     friendly: "Temperature",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         level: {
@@ -414,11 +390,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.UV]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current UV level",
     friendly: "UV level",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         level: {
@@ -431,11 +406,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.VIBRATION]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current vibration level",
     friendly: "Vibration level",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         level: {
@@ -448,11 +422,10 @@ module.exports = constants => ({
     }
   },
   [constants.events.VOLUME]: {
-    type: Boolean,
+    type: "boolean",
     description: "The current volume level",
     friendly: "Volume level",
     responseSchema: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         volume: {

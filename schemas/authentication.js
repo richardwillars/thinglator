@@ -1,7 +1,6 @@
 const AuthenticationSchemas = {
   requested: {
     RequestData: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         type: {
@@ -29,7 +28,6 @@ const AuthenticationSchemas = {
       required: ["type", "message", "dataLabel"]
     },
     ManualAction: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         type: {
@@ -44,7 +42,6 @@ const AuthenticationSchemas = {
   },
   returned: {
     RequestData: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         data: {
@@ -54,7 +51,6 @@ const AuthenticationSchemas = {
       required: ["data"]
     },
     ManualAction: {
-      $schema: "http://json-schema.org/draft-04/schema#",
       type: "object",
       properties: {
         success: {

@@ -49,13 +49,13 @@ const determineEventType = (driverType, constants) => {
 };
 
 const getListOfEventsForDeviceType = (deviceType, schemas, constants) => {
-  const allowed = Object.values(schemas.deviceTypes[deviceType].events);
-  return Object.keys(constants.events)
-    .filter(key => allowed.includes(key))
-    .reduce((obj, key) => {
-      obj[key] = constants.events[key]; // eslint-disable-line no-param-reassign
-      return obj;
-    }, {});
+  const events = {};
+  Object.values(schemas.deviceTypes[deviceType].events.properties).forEach(
+    event => {
+      events[event.constant] = constants.events[event.constant];
+    }
+  );
+  return events;
 };
 
 const load = async (

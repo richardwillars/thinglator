@@ -4,7 +4,6 @@ exports[`schemas/authentication should export the schemas 1`] = `
 Object {
   "requested": Object {
     "ManualAction": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
       "properties": Object {
         "message": Object {
           "type": "string",
@@ -20,7 +19,6 @@ Object {
       "type": "object",
     },
     "RequestData": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
       "properties": Object {
         "button": Object {
           "properties": Object {
@@ -57,7 +55,6 @@ Object {
   },
   "returned": Object {
     "ManualAction": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
       "properties": Object {
         "message": Object {
           "type": "string",
@@ -72,7 +69,6 @@ Object {
       "type": "object",
     },
     "RequestData": Object {
-      "$schema": "http://json-schema.org/draft-04/schema#",
       "properties": Object {
         "data": Object {
           "type": "string",

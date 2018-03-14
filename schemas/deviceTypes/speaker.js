@@ -227,6 +227,6 @@ module.exports = (events, constants) => {
 
   return {
     commands: deviceCommands,
-    events: deviceEvents
+    events: eventSchema
   };
 };

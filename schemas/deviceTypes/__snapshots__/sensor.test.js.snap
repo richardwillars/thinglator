@@ -3,16 +3,191 @@
 exports[`models/sensor should export the commands 1`] = `Object {}`;
 
 exports[`models/sensor should export the events 1`] = `
-Array [
-  "CONTACT",
-  "TEMPERATURE",
-  "HUMIDITY",
-  "LIGHT",
-  "UV",
-  "BATTERY_LEVEL",
-  "MOTION",
-  "NAME",
-  "VIBRATION",
-  "TAMPER",
-]
+Object {
+  "properties": Object {
+    "BATTERY_LEVEL": Object {
+      "constant": "BATTERY_LEVEL",
+      "description": "The current battery level of the device",
+      "friendly": "Battery level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "CONTACT": Object {
+      "constant": "CONTACT",
+      "description": "Whether the contact sensor is closed or open",
+      "friendly": "Contact",
+      "responseSchema": Object {
+        "properties": Object {
+          "contact": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "contact",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "HUMIDITY": Object {
+      "constant": "HUMIDITY",
+      "description": "The current humidity level",
+      "friendly": "Humidity",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "LIGHT": Object {
+      "constant": "LIGHT",
+      "description": "The current light level in lux",
+      "friendly": "Light level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 30000,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "MOTION": Object {
+      "constant": "MOTION",
+      "description": "Represents if motion is detected or not",
+      "friendly": "Motion",
+      "responseSchema": Object {
+        "properties": Object {
+          "detected": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "detected",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "NAME": Object {
+      "constant": "NAME",
+      "description": "The current name of the device",
+      "friendly": "Name",
+      "responseSchema": Object {
+        "properties": Object {
+          "name": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "name",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "TAMPER": Object {
+      "constant": "TAMPER",
+      "description": "If the device is being tampered with or not",
+      "friendly": "Tamper",
+      "responseSchema": Object {
+        "properties": Object {
+          "detected": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "detected",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "TEMPERATURE": Object {
+      "constant": "TEMPERATURE",
+      "description": "The current temperature in degrees celcius",
+      "friendly": "Temperature",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": -50,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "UV": Object {
+      "constant": "UV",
+      "description": "The current UV level",
+      "friendly": "UV level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 15,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "VIBRATION": Object {
+      "constant": "VIBRATION",
+      "description": "The current vibration level",
+      "friendly": "Vibration level",
+      "responseSchema": Object {
+        "properties": Object {
+          "level": Object {
+            "maxiumum": 100,
+            "minimum": 0,
+            "type": "double",
+          },
+        },
+        "required": Array [
+          "level",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
 `;
