@@ -3,8 +3,11 @@ const config = require("config");
 const express = require("express");
 const chalk = require("chalk");
 const bodyParser = require("body-parser");
-const npm = require("npm-programmatic");
+const yarn = require("yarn-api");
 const pm2 = require("pm2");
+const util = require("util");
+
+const yarnPromise = util.promisify(yarn);
 
 const jsonParser = bodyParser.json();
 
@@ -41,10 +44,7 @@ const pm2GetInfo = packageId =>
   });
 
 const installDriver = async driverId => {
-  await npm.install([`thinglator-driver-${driverId}`], {
-    cwd: "./",
-    save: true
-  });
+  await yarnPromise(["add", `thinglator-driver-${driverId}`]);
   await pm2Restart(config.get("pm2.thinglatorId"));
   await delay(3000);
   const info = await pm2GetInfo(config.get("pm2.thinglatorId"));
@@ -55,10 +55,7 @@ const installDriver = async driverId => {
 };
 
 const uninstallDriver = async driverId => {
-  await npm.uninstall([`thinglator-driver-${driverId}`], {
-    cwd: "./",
-    save: true
-  });
+  await yarnPromise(["remove", `thinglator-driver-${driverId}`]);
   await pm2Restart(config.get("pm2.thinglatorId"));
   await delay(3000);
   const info = await pm2GetInfo(config.get("pm2.thinglatorId"));
