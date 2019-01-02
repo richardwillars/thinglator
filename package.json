@@ -3,7 +3,7 @@
   "license": "MIT",
   "description":
     "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "maintainers": [
     {
       "name": "Richard Willars",
