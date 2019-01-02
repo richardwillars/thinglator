@@ -89,6 +89,31 @@ module.exports = (
     }
   });
 
+  app.get("/driver/:driverId/pairingInstructions", async (req, res, next) => {
+    try {
+      const result = await driverCtrl.getDriverPairingInstructions(
+        req.params.driverId
+      );
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get(
+    "/device/:deviceId/failedRemovalInstructions",
+    async (req, res, next) => {
+      try {
+        const result = await driverCtrl.getDeviceFailedRemovalInstructions(
+          req.params.deviceId
+        );
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
   app.post("/device/:deviceId/:command", jsonParser, async (req, res, next) => {
     try {
       await driverCtrl.runCommand(
@@ -97,6 +122,15 @@ module.exports = (
         req.body,
         drivers
       );
+      res.send();
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.post("/removeDevice/:deviceId", jsonParser, async (req, res, next) => {
+    try {
+      await driverCtrl.removeDevice(req.params.deviceId);
       res.send();
     } catch (err) {
       next(err);

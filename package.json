@@ -54,7 +54,7 @@
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=8.10.0"
   },
   "main": "app.js",
   "jest": {

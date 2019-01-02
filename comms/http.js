@@ -1,6 +1,5 @@
 module.exports = async (interfaceObj, interfaceConfig /* eventEmitter */) => {
-  const initialisedInterface = interfaceObj.initialise(interfaceConfig);
-
+  const initialisedInterface = await interfaceObj.initialise(interfaceConfig);
   return {
     getType: () => "http",
 
@@ -9,7 +8,7 @@ module.exports = async (interfaceObj, interfaceConfig /* eventEmitter */) => {
     },
 
     pairingMode: () => Promise.resolve(0),
-
+    removeDevice: deviceId => initialisedInterface.removeDevice(deviceId),
     methodsAvailableToDriver: {
       execute: params => initialisedInterface.execute(params)
     }
