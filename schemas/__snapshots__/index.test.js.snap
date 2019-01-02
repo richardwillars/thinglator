@@ -126,6 +126,48 @@ Object {
     },
   },
   "deviceTypes": Object {
+    "doorbell": Object {
+      "commands": Object {},
+      "events": Object {
+        "properties": Object {
+          "BUTTON": Object {
+            "constant": "BUTTON",
+            "description": "Represents if button is pressed or not",
+            "friendly": "Button",
+            "responseSchema": Object {
+              "properties": Object {
+                "pressed": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "pressed",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+          "MOTION": Object {
+            "constant": "MOTION",
+            "description": "Represents if motion is detected or not",
+            "friendly": "Motion",
+            "responseSchema": Object {
+              "properties": Object {
+                "detected": Object {
+                  "type": "boolean",
+                },
+              },
+              "required": Array [
+                "detected",
+              ],
+              "type": "object",
+            },
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
+    },
     "light": Object {
       "commands": Object {
         "properties": Object {
@@ -1354,6 +1396,23 @@ Object {
         },
         "required": Array [
           "breatheEffect",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "BUTTON": Object {
+      "constant": "BUTTON",
+      "description": "Represents if button is pressed or not",
+      "friendly": "Button",
+      "responseSchema": Object {
+        "properties": Object {
+          "pressed": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "pressed",
         ],
         "type": "object",
       },

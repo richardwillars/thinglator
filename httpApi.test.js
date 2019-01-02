@@ -1,5 +1,29 @@
 const httpApiModule = require("./httpApi");
 
+const callbackGetIndexes = {
+  home: 0,
+  getAuthenticationProcess: 1,
+  discoverDevices: 2,
+  getDevices: 3,
+  getDevicesByType: 4,
+  getDevicesByDriver: 5,
+  getDeviceById: 6,
+  getDriverPairingInstructions: 7,
+  getDeviceFailedRemovalInstructions: 8,
+  getDrivers: 9,
+  getCommands: 10,
+  getEventDescriptions: 11,
+  getLatestCommandEvents: 12,
+  getEventsByType: 13,
+  pairingMode: 14
+};
+
+const callbackPostIndexes = {
+  authenticationStep: 0,
+  runCommand: 1,
+  removeDevice: 2
+};
+
 describe("httpApi", () => {
   it("should return the app object", () => {
     const bodyParser = {
@@ -395,8 +419,8 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[0][0]).toEqual("/");
-        const callback = app.get.mock.calls[0][1];
+        expect(app.get.mock.calls[callbackGetIndexes.home][0]).toEqual("/");
+        const callback = app.get.mock.calls[callbackGetIndexes.home][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -435,8 +459,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[1][0]).toEqual("/authenticate/:driver");
-        const callback = app.get.mock.calls[1][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getAuthenticationProcess][0]
+        ).toEqual("/authenticate/:driver");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getAuthenticationProcess][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -483,8 +510,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[1][0]).toEqual("/authenticate/:driver");
-        const callback = app.get.mock.calls[1][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getAuthenticationProcess][0]
+        ).toEqual("/authenticate/:driver");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getAuthenticationProcess][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -530,10 +560,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.post.mock.calls[0][0]).toEqual(
-          "/authenticate/:driver/:stepId"
-        );
-        const callback = app.post.mock.calls[0][2];
+        expect(
+          app.post.mock.calls[callbackPostIndexes.authenticationStep][0]
+        ).toEqual("/authenticate/:driver/:stepId");
+        const callback =
+          app.post.mock.calls[callbackPostIndexes.authenticationStep][2];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -583,10 +614,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.post.mock.calls[0][0]).toEqual(
-          "/authenticate/:driver/:stepId"
-        );
-        const callback = app.post.mock.calls[0][2];
+        expect(
+          app.post.mock.calls[callbackPostIndexes.authenticationStep][0]
+        ).toEqual("/authenticate/:driver/:stepId");
+        const callback =
+          app.post.mock.calls[callbackPostIndexes.authenticationStep][2];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -632,8 +664,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[2][0]).toEqual("/discover/:driver");
-        const callback = app.get.mock.calls[2][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.discoverDevices][0]
+        ).toEqual("/discover/:driver");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.discoverDevices][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -678,8 +713,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[2][0]).toEqual("/discover/:driver");
-        const callback = app.get.mock.calls[2][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.discoverDevices][0]
+        ).toEqual("/discover/:driver");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.discoverDevices][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -725,8 +763,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[3][0]).toEqual("/devices");
-        const callback = app.get.mock.calls[3][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getDevices][0]).toEqual(
+          "/devices"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.getDevices][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -766,8 +806,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[3][0]).toEqual("/devices");
-        const callback = app.get.mock.calls[3][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getDevices][0]).toEqual(
+          "/devices"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.getDevices][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -809,8 +851,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[4][0]).toEqual("/devices/type/:type");
-        const callback = app.get.mock.calls[4][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getDevicesByType][0]
+        ).toEqual("/devices/type/:type");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getDevicesByType][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -854,8 +899,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[4][0]).toEqual("/devices/type/:type");
-        const callback = app.get.mock.calls[4][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getDevicesByType][0]
+        ).toEqual("/devices/type/:type");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getDevicesByType][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -901,8 +949,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[5][0]).toEqual("/devices/driver/:driver");
-        const callback = app.get.mock.calls[5][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getDevicesByDriver][0]
+        ).toEqual("/devices/driver/:driver");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getDevicesByDriver][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -946,8 +997,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[5][0]).toEqual("/devices/driver/:driver");
-        const callback = app.get.mock.calls[5][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getDevicesByDriver][0]
+        ).toEqual("/devices/driver/:driver");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getDevicesByDriver][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -993,8 +1047,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[6][0]).toEqual("/device/:deviceId");
-        const callback = app.get.mock.calls[6][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getDeviceById][0]).toEqual(
+          "/device/:deviceId"
+        );
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getDeviceById][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -1038,12 +1095,226 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[6][0]).toEqual("/device/:deviceId");
-        const callback = app.get.mock.calls[6][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getDeviceById][0]).toEqual(
+          "/device/:deviceId"
+        );
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getDeviceById][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
             deviceId: "deviceId"
+          }
+        };
+        const res = {
+          json: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(res.json).toHaveBeenCalledTimes(0);
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
+      });
+    });
+
+    describe("/driver/:driverId/pairingInstructions", () => {
+      it("should return json from driverCtrl.getDriverPairingInstructions", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const authenticateCtrl = {};
+        const driverCtrl = {
+          getDriverPairingInstructions: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getDriverPairingInstructions][0]
+        ).toEqual("/driver/:driverId/pairingInstructions");
+        const callback =
+          app.get.mock.calls[
+            callbackGetIndexes.getDriverPairingInstructions
+          ][1];
+        expect(typeof callback).toEqual("function");
+        const req = {
+          params: {
+            driverId: "driverId"
+          }
+        };
+        const res = {
+          json: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(driverCtrl.getDriverPairingInstructions).toHaveBeenCalledWith(
+          "driverId"
+        );
+        expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
+        expect(next).toHaveBeenCalledTimes(0);
+      });
+
+      describe("/device/:deviceId/failedRemovalInstructions", () => {
+        it("should return json from driverCtrl.getDeviceFailedRemovalInstructions", async () => {
+          const bodyParser = {
+            json: jest.fn()
+          };
+          const authenticateCtrl = {};
+          const driverCtrl = {
+            getDeviceFailedRemovalInstructions: jest
+              .fn()
+              .mockReturnValue(Promise.resolve({ foo: "bar" }))
+          };
+          const interfaceCtrl = {};
+          const eventCtrl = {};
+          const app = {
+            get: jest.fn(),
+            post: jest.fn(),
+            use: jest.fn()
+          };
+          const drivers = {};
+          httpApiModule(
+            bodyParser,
+            authenticateCtrl,
+            eventCtrl,
+            driverCtrl,
+            interfaceCtrl,
+            app,
+            drivers
+          );
+          expect(
+            app.get.mock.calls[
+              callbackGetIndexes.getDeviceFailedRemovalInstructions
+            ][0]
+          ).toEqual("/device/:deviceId/failedRemovalInstructions");
+          const callback =
+            app.get.mock.calls[
+              callbackGetIndexes.getDeviceFailedRemovalInstructions
+            ][1];
+          expect(typeof callback).toEqual("function");
+          const req = {
+            params: {
+              deviceId: "deviceId"
+            }
+          };
+          const res = {
+            json: jest.fn()
+          };
+          const next = jest.fn();
+          await callback(req, res, next);
+          expect(
+            driverCtrl.getDeviceFailedRemovalInstructions
+          ).toHaveBeenCalledWith("deviceId");
+          expect(res.json).toHaveBeenCalledWith({ foo: "bar" });
+          expect(next).toHaveBeenCalledTimes(0);
+        });
+
+        it("should catch any errors and pass them to the next callback", async () => {
+          const bodyParser = {
+            json: jest.fn()
+          };
+          const driverCtrl = {
+            getDeviceFailedRemovalInstructions: jest
+              .fn()
+              .mockReturnValue(Promise.reject({ foo: "bar" }))
+          };
+          const interfaceCtrl = {};
+          const eventCtrl = {};
+          const authenticateCtrl = {};
+          const app = {
+            get: jest.fn(),
+            post: jest.fn(),
+            use: jest.fn()
+          };
+          const drivers = {};
+          httpApiModule(
+            bodyParser,
+            authenticateCtrl,
+            eventCtrl,
+            driverCtrl,
+            interfaceCtrl,
+            app,
+            drivers
+          );
+          expect(
+            app.get.mock.calls[
+              callbackGetIndexes.getDeviceFailedRemovalInstructions
+            ][0]
+          ).toEqual("/device/:deviceId/failedRemovalInstructions");
+          const callback =
+            app.get.mock.calls[
+              callbackGetIndexes.getDeviceFailedRemovalInstructions
+            ][1];
+          expect(typeof callback).toEqual("function");
+          const req = {
+            params: {
+              deviceId: "deviceId"
+            }
+          };
+          const res = {
+            json: jest.fn()
+          };
+          const next = jest.fn();
+          await callback(req, res, next);
+          expect(res.json).toHaveBeenCalledTimes(0);
+          expect(next).toHaveBeenCalledTimes(1);
+          expect(next).toHaveBeenCalledWith({ foo: "bar" });
+        });
+      });
+      it("should catch any errors and pass them to the next callback", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const driverCtrl = {
+          getDriverPairingInstructions: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getDriverPairingInstructions][0]
+        ).toEqual("/driver/:driverId/pairingInstructions");
+        const callback =
+          app.get.mock.calls[
+            callbackGetIndexes.getDriverPairingInstructions
+          ][1];
+        expect(typeof callback).toEqual("function");
+        const req = {
+          params: {
+            driverId: "driverId"
           }
         };
         const res = {
@@ -1083,8 +1354,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.post.mock.calls[1][0]).toEqual("/device/:deviceId/:command");
-        const callback = app.post.mock.calls[1][2];
+        expect(app.post.mock.calls[callbackPostIndexes.runCommand][0]).toEqual(
+          "/device/:deviceId/:command"
+        );
+        const callback = app.post.mock.calls[callbackPostIndexes.runCommand][2];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -1133,8 +1406,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.post.mock.calls[1][0]).toEqual("/device/:deviceId/:command");
-        const callback = app.post.mock.calls[1][2];
+        expect(app.post.mock.calls[callbackPostIndexes.runCommand][0]).toEqual(
+          "/device/:deviceId/:command"
+        );
+        const callback = app.post.mock.calls[callbackPostIndexes.runCommand][2];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -1142,6 +1417,106 @@ describe("httpApi", () => {
             command: "command"
           },
           body: "body"
+        };
+        const res = {
+          send: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(res.send).toHaveBeenCalledTimes(0);
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenCalledWith({ foo: "bar" });
+      });
+    });
+
+    describe("/removeDevice/:deviceId", () => {
+      it("should return json from driverCtrl.removeDevice", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const authenticateCtrl = {};
+        const driverCtrl = {
+          removeDevice: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(
+          app.post.mock.calls[callbackPostIndexes.removeDevice][0]
+        ).toEqual("/removeDevice/:deviceId");
+        const callback =
+          app.post.mock.calls[callbackPostIndexes.removeDevice][2];
+        expect(typeof callback).toEqual("function");
+        const req = {
+          params: {
+            deviceId: "deviceId"
+          }
+        };
+        const res = {
+          send: jest.fn()
+        };
+        const next = jest.fn();
+        await callback(req, res, next);
+        expect(driverCtrl.removeDevice).toHaveBeenCalledWith(
+          req.params.deviceId
+        );
+        expect(res.send).toHaveBeenCalledWith();
+        expect(next).toHaveBeenCalledTimes(0);
+      });
+
+      it("should catch any errors and pass them to the next callback", async () => {
+        const bodyParser = {
+          json: jest.fn()
+        };
+        const driverCtrl = {
+          removeDevice: jest
+            .fn()
+            .mockReturnValue(Promise.reject({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const app = {
+          get: jest.fn(),
+          post: jest.fn(),
+          use: jest.fn()
+        };
+        const drivers = {};
+        httpApiModule(
+          bodyParser,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          app,
+          drivers
+        );
+        expect(
+          app.post.mock.calls[callbackPostIndexes.removeDevice][0]
+        ).toEqual("/removeDevice/:deviceId");
+        const callback =
+          app.post.mock.calls[callbackPostIndexes.removeDevice][2];
+        expect(typeof callback).toEqual("function");
+        const req = {
+          params: {
+            deviceId: "deviceId"
+          }
         };
         const res = {
           send: jest.fn()
@@ -1182,8 +1557,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[7][0]).toEqual("/drivers");
-        const callback = app.get.mock.calls[7][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getDrivers][0]).toEqual(
+          "/drivers"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.getDrivers][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1223,8 +1600,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[7][0]).toEqual("/drivers");
-        const callback = app.get.mock.calls[7][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getDrivers][0]).toEqual(
+          "/drivers"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.getDrivers][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1266,8 +1645,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[8][0]).toEqual("/drivers/commands");
-        const callback = app.get.mock.calls[8][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getCommands][0]).toEqual(
+          "/drivers/commands"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.getCommands][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1305,8 +1686,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[8][0]).toEqual("/drivers/commands");
-        const callback = app.get.mock.calls[8][1];
+        expect(app.get.mock.calls[callbackGetIndexes.getCommands][0]).toEqual(
+          "/drivers/commands"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.getCommands][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1348,8 +1731,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[9][0]).toEqual("/drivers/events");
-        const callback = app.get.mock.calls[9][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getEventDescriptions][0]
+        ).toEqual("/drivers/events");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getEventDescriptions][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1389,8 +1775,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[9][0]).toEqual("/drivers/events");
-        const callback = app.get.mock.calls[9][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getEventDescriptions][0]
+        ).toEqual("/drivers/events");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getEventDescriptions][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1432,8 +1821,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[10][0]).toEqual("/event/latestCommands");
-        const callback = app.get.mock.calls[10][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getLatestCommandEvents][0]
+        ).toEqual("/event/latestCommands");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getLatestCommandEvents][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1473,8 +1865,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[10][0]).toEqual("/event/latestCommands");
-        const callback = app.get.mock.calls[10][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getLatestCommandEvents][0]
+        ).toEqual("/event/latestCommands");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getLatestCommandEvents][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1516,8 +1911,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[11][0]).toEqual("/event/:eventType");
-        const callback = app.get.mock.calls[11][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getEventsByType][0]
+        ).toEqual("/event/:eventType");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getEventsByType][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -1567,8 +1965,11 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[11][0]).toEqual("/event/:eventType");
-        const callback = app.get.mock.calls[11][1];
+        expect(
+          app.get.mock.calls[callbackGetIndexes.getEventsByType][0]
+        ).toEqual("/event/:eventType");
+        const callback =
+          app.get.mock.calls[callbackGetIndexes.getEventsByType][1];
         expect(typeof callback).toEqual("function");
         const req = {
           params: {
@@ -1615,8 +2016,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[12][0]).toEqual("/pairingMode");
-        const callback = app.get.mock.calls[12][1];
+        expect(app.get.mock.calls[callbackGetIndexes.pairingMode][0]).toEqual(
+          "/pairingMode"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.pairingMode][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {
@@ -1654,8 +2057,10 @@ describe("httpApi", () => {
           app,
           drivers
         );
-        expect(app.get.mock.calls[12][0]).toEqual("/pairingMode");
-        const callback = app.get.mock.calls[12][1];
+        expect(app.get.mock.calls[callbackGetIndexes.pairingMode][0]).toEqual(
+          "/pairingMode"
+        );
+        const callback = app.get.mock.calls[callbackGetIndexes.pairingMode][1];
         expect(typeof callback).toEqual("function");
         const req = {};
         const res = {

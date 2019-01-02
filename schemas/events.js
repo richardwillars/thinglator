@@ -436,5 +436,19 @@ module.exports = constants => ({
       },
       required: ["volume"]
     }
+  },
+  [constants.events.BUTTON]: {
+    type: "boolean",
+    description: "Represents if button is pressed or not",
+    friendly: "Button",
+    responseSchema: {
+      type: "object",
+      properties: {
+        pressed: {
+          type: "boolean"
+        }
+      },
+      required: ["pressed"]
+    }
   }
 });

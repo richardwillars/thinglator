@@ -41,7 +41,7 @@ module.exports = (
     processDeviceEvent(
       schemas.deviceTypes.light,
       payload,
-      constants.LIGHT_EVENT,
+      constants.DEVICE_LIGHT_EVENT,
       eventsCollection,
       jsonValidator,
       eventEmitter,
@@ -53,7 +53,7 @@ module.exports = (
     processDeviceEvent(
       schemas.deviceTypes.speaker,
       payload,
-      constants.SPEAKER_EVENT,
+      constants.DEVICE_SPEAKER_EVENT,
       eventsCollection,
       jsonValidator,
       eventEmitter,
@@ -65,7 +65,7 @@ module.exports = (
     processDeviceEvent(
       schemas.deviceTypes.socket,
       payload,
-      constants.SOCKET_EVENT,
+      constants.DEVICE_SOCKET_EVENT,
       eventsCollection,
       jsonValidator,
       eventEmitter,
@@ -77,7 +77,19 @@ module.exports = (
     processDeviceEvent(
       schemas.deviceTypes.sensor,
       payload,
-      constants.SENSOR_EVENT,
+      constants.DEVICE_SENSOR_EVENT,
+      eventsCollection,
+      jsonValidator,
+      eventEmitter,
+      constants
+    );
+  });
+
+  eventEmitter.on(constants.DEVICE_DOORBELL_EVENT, payload => {
+    processDeviceEvent(
+      schemas.deviceTypes.doorbell,
+      payload,
+      constants.DEVICE_DOORBELL_EVENT,
       eventsCollection,
       jsonValidator,
       eventEmitter,

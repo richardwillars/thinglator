@@ -92,6 +92,22 @@ Object {
     },
     "type": "boolean",
   },
+  "BUTTON": Object {
+    "description": "Represents if button is pressed or not",
+    "friendly": "Button",
+    "responseSchema": Object {
+      "properties": Object {
+        "pressed": Object {
+          "type": "boolean",
+        },
+      },
+      "required": Array [
+        "pressed",
+      ],
+      "type": "object",
+    },
+    "type": "boolean",
+  },
   "CONTACT": Object {
     "description": "Whether the contact sensor is closed or open",
     "friendly": "Contact",

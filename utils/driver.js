@@ -43,6 +43,8 @@ const determineEventType = (driverType, constants) => {
       return constants.DEVICE_SOCKET_EVENT;
     case "sensor":
       return constants.DEVICE_SENSOR_EVENT;
+    case "doorbell":
+      return constants.DEVICE_DOORBELL_EVENT;
     default:
       return null;
   }
