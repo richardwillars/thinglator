@@ -1,5 +1,24 @@
 const socketApiModule = require("./socketApi");
 
+const callbackIndexes = {
+  getAuthenticationProcess: 0,
+  authenticationStep: 1,
+  discoverDevices: 2,
+  getDevices: 3,
+  getDevicesByType: 4,
+  getDevicesByDriver: 5,
+  getDeviceById: 6,
+  getDriverPairingInstructions: 7,
+  getDeviceFailedRemovalInstructions: 8,
+  runCommand: 9,
+  removeDevice: 10,
+  getDrivers: 11,
+  getEventsByType: 12,
+  getLatestCommandEvents: 13,
+  getCommands: 14,
+  getEventDescriptions: 15,
+  getDeviceTypes: 16
+};
 describe("socketApi", () => {
   it("should return the instance of the socket", async () => {
     const socket = {
@@ -212,8 +231,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[0][0]).toEqual("getAuthenticationProcess");
-        const callback = socket.on.mock.calls[0][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getAuthenticationProcess][0]
+        ).toEqual("getAuthenticationProcess");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getAuthenticationProcess][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -263,8 +285,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[0][0]).toEqual("getAuthenticationProcess");
-        const callback = socket.on.mock.calls[0][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getAuthenticationProcess][0]
+        ).toEqual("getAuthenticationProcess");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getAuthenticationProcess][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -318,8 +343,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[1][0]).toEqual("authenticationStep");
-        const callback = socket.on.mock.calls[1][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.authenticationStep][0]
+        ).toEqual("authenticationStep");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.authenticationStep][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -367,8 +395,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[1][0]).toEqual("authenticationStep");
-        const callback = socket.on.mock.calls[1][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.authenticationStep][0]
+        ).toEqual("authenticationStep");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.authenticationStep][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -420,8 +451,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[2][0]).toEqual("discoverDevices");
-        const callback = socket.on.mock.calls[2][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.discoverDevices][0]
+        ).toEqual("discoverDevices");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.discoverDevices][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -469,8 +503,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[2][0]).toEqual("discoverDevices");
-        const callback = socket.on.mock.calls[2][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.discoverDevices][0]
+        ).toEqual("discoverDevices");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.discoverDevices][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -524,8 +561,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[3][0]).toEqual("getDevices");
-        const callback = socket.on.mock.calls[3][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDevices][0]).toEqual(
+          "getDevices"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getDevices][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -573,8 +612,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[3][0]).toEqual("getDevices");
-        const callback = socket.on.mock.calls[3][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDevices][0]).toEqual(
+          "getDevices"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getDevices][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -628,8 +669,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[4][0]).toEqual("getDevicesByType");
-        const callback = socket.on.mock.calls[4][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getDevicesByType][0]
+        ).toEqual("getDevicesByType");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDevicesByType][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -678,8 +722,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[4][0]).toEqual("getDevicesByType");
-        const callback = socket.on.mock.calls[4][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getDevicesByType][0]
+        ).toEqual("getDevicesByType");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDevicesByType][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -733,8 +780,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[5][0]).toEqual("getDevicesByDriver");
-        const callback = socket.on.mock.calls[5][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getDevicesByDriver][0]
+        ).toEqual("getDevicesByDriver");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDevicesByDriver][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -782,8 +832,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[5][0]).toEqual("getDevicesByDriver");
-        const callback = socket.on.mock.calls[5][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getDevicesByDriver][0]
+        ).toEqual("getDevicesByDriver");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDevicesByDriver][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -837,8 +890,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[6][0]).toEqual("getDeviceById");
-        const callback = socket.on.mock.calls[6][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDeviceById][0]).toEqual(
+          "getDeviceById"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getDeviceById][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -886,8 +941,242 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[6][0]).toEqual("getDeviceById");
-        const callback = socket.on.mock.calls[6][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDeviceById][0]).toEqual(
+          "getDeviceById"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getDeviceById][1];
+        expect(typeof callback).toEqual("function");
+
+        const cb = jest.fn();
+        await callback("deviceId", cb);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(cb).toHaveBeenCalledWith({
+          code: 500,
+          driver: "Driver id",
+          message: "the error",
+          type: "Driver"
+        });
+      });
+    });
+
+    describe("getDriverPairingInstructions", () => {
+      it("should call driverCtrl.getDriverPairingInstructions and return the result", async () => {
+        const socket = {
+          on: jest.fn()
+        };
+        const io = {
+          emit: jest.fn(),
+          on: jest.fn().mockReturnValue(socket)
+        };
+        const ioLib = jest.fn().mockReturnValue(io);
+        const driverCtrl = {
+          getDriverPairingInstructions: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const eventUtils = {
+          eventEmitter: {
+            on: jest.fn()
+          }
+        };
+        const httpServer = {};
+        const drivers = {};
+        const constants = {};
+        socketApiModule.initialise(
+          ioLib,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          eventUtils,
+          httpServer,
+          drivers,
+          constants
+        );
+        const ioCallback = io.on.mock.calls[0][1];
+        ioCallback(socket);
+        expect(
+          socket.on.mock.calls[callbackIndexes.getDriverPairingInstructions][0]
+        ).toEqual("getDriverPairingInstructions");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDriverPairingInstructions][1];
+        expect(typeof callback).toEqual("function");
+
+        const cb = jest.fn();
+        await callback("driverId", cb);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(cb).toHaveBeenCalledWith({ foo: "bar" });
+      });
+
+      it("should catch any errors and return them", async () => {
+        const socket = {
+          on: jest.fn()
+        };
+        const io = {
+          emit: jest.fn(),
+          on: jest.fn().mockReturnValue(socket)
+        };
+        const ioLib = jest.fn().mockReturnValue(io);
+        const err = new Error("the error");
+        err.type = "Driver";
+        err.driver = "Driver id";
+        const driverCtrl = {
+          getDriverPairingInstructions: jest
+            .fn()
+            .mockReturnValue(Promise.reject(err))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const eventUtils = {
+          eventEmitter: {
+            on: jest.fn()
+          }
+        };
+        const httpServer = {};
+        const drivers = {};
+        const constants = {};
+        socketApiModule.initialise(
+          ioLib,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          eventUtils,
+          httpServer,
+          drivers,
+          constants
+        );
+        const ioCallback = io.on.mock.calls[0][1];
+        ioCallback(socket);
+        expect(
+          socket.on.mock.calls[callbackIndexes.getDriverPairingInstructions][0]
+        ).toEqual("getDriverPairingInstructions");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDriverPairingInstructions][1];
+        expect(typeof callback).toEqual("function");
+
+        const cb = jest.fn();
+        await callback("driverId", cb);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(cb).toHaveBeenCalledWith({
+          code: 500,
+          driver: "Driver id",
+          message: "the error",
+          type: "Driver"
+        });
+      });
+    });
+
+    describe("getDeviceFailedRemovalInstructions", () => {
+      it("should call driverCtrl.getDeviceFailedRemovalInstructions and return the result", async () => {
+        const socket = {
+          on: jest.fn()
+        };
+        const io = {
+          emit: jest.fn(),
+          on: jest.fn().mockReturnValue(socket)
+        };
+        const ioLib = jest.fn().mockReturnValue(io);
+        const driverCtrl = {
+          getDeviceFailedRemovalInstructions: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const eventUtils = {
+          eventEmitter: {
+            on: jest.fn()
+          }
+        };
+        const httpServer = {};
+        const drivers = {};
+        const constants = {};
+        socketApiModule.initialise(
+          ioLib,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          eventUtils,
+          httpServer,
+          drivers,
+          constants
+        );
+        const ioCallback = io.on.mock.calls[0][1];
+        ioCallback(socket);
+        expect(
+          socket.on.mock.calls[
+            callbackIndexes.getDeviceFailedRemovalInstructions
+          ][0]
+        ).toEqual("getDeviceFailedRemovalInstructions");
+        const callback =
+          socket.on.mock.calls[
+            callbackIndexes.getDeviceFailedRemovalInstructions
+          ][1];
+        expect(typeof callback).toEqual("function");
+
+        const cb = jest.fn();
+        await callback("deviceId", cb);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(cb).toHaveBeenCalledWith({ foo: "bar" });
+      });
+
+      it("should catch any errors and return them", async () => {
+        const socket = {
+          on: jest.fn()
+        };
+        const io = {
+          emit: jest.fn(),
+          on: jest.fn().mockReturnValue(socket)
+        };
+        const ioLib = jest.fn().mockReturnValue(io);
+        const err = new Error("the error");
+        err.type = "Driver";
+        err.driver = "Driver id";
+        const driverCtrl = {
+          getDeviceFailedRemovalInstructions: jest
+            .fn()
+            .mockReturnValue(Promise.reject(err))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const eventUtils = {
+          eventEmitter: {
+            on: jest.fn()
+          }
+        };
+        const httpServer = {};
+        const drivers = {};
+        const constants = {};
+        socketApiModule.initialise(
+          ioLib,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          eventUtils,
+          httpServer,
+          drivers,
+          constants
+        );
+        const ioCallback = io.on.mock.calls[0][1];
+        ioCallback(socket);
+        expect(
+          socket.on.mock.calls[
+            callbackIndexes.getDeviceFailedRemovalInstructions
+          ][0]
+        ).toEqual("getDeviceFailedRemovalInstructions");
+        const callback =
+          socket.on.mock.calls[
+            callbackIndexes.getDeviceFailedRemovalInstructions
+          ][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -939,8 +1228,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[7][0]).toEqual("runCommand");
-        const callback = socket.on.mock.calls[7][1];
+        expect(socket.on.mock.calls[callbackIndexes.runCommand][0]).toEqual(
+          "runCommand"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.runCommand][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -988,12 +1279,122 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[7][0]).toEqual("runCommand");
-        const callback = socket.on.mock.calls[7][1];
+        expect(socket.on.mock.calls[callbackIndexes.runCommand][0]).toEqual(
+          "runCommand"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.runCommand][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
         await callback("deviceId", "command", "body", cb);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(cb).toHaveBeenCalledWith({
+          code: 500,
+          driver: "Driver id",
+          message: "the error",
+          type: "Driver"
+        });
+      });
+    });
+
+    describe("removeDevice", () => {
+      it("should call driverCtrl.removeDevice and return the result", async () => {
+        const socket = {
+          on: jest.fn()
+        };
+        const io = {
+          emit: jest.fn(),
+          on: jest.fn().mockReturnValue(socket)
+        };
+        const ioLib = jest.fn().mockReturnValue(io);
+        const driverCtrl = {
+          removeDevice: jest
+            .fn()
+            .mockReturnValue(Promise.resolve({ foo: "bar" }))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const eventUtils = {
+          eventEmitter: {
+            on: jest.fn()
+          }
+        };
+        const httpServer = {};
+        const drivers = {};
+        const constants = {};
+        socketApiModule.initialise(
+          ioLib,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          eventUtils,
+          httpServer,
+          drivers,
+          constants
+        );
+        const ioCallback = io.on.mock.calls[0][1];
+        ioCallback(socket);
+        expect(socket.on.mock.calls[callbackIndexes.removeDevice][0]).toEqual(
+          "removeDevice"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.removeDevice][1];
+        expect(typeof callback).toEqual("function");
+
+        const cb = jest.fn();
+        await callback("deviceId", cb);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(cb).toHaveBeenCalledWith();
+      });
+
+      it("should catch any errors and return them", async () => {
+        const socket = {
+          on: jest.fn()
+        };
+        const io = {
+          emit: jest.fn(),
+          on: jest.fn().mockReturnValue(socket)
+        };
+        const ioLib = jest.fn().mockReturnValue(io);
+        const err = new Error("the error");
+        err.type = "Driver";
+        err.driver = "Driver id";
+        const driverCtrl = {
+          removeDevice: jest.fn().mockReturnValue(Promise.reject(err))
+        };
+        const interfaceCtrl = {};
+        const eventCtrl = {};
+        const authenticateCtrl = {};
+        const eventUtils = {
+          eventEmitter: {
+            on: jest.fn()
+          }
+        };
+        const httpServer = {};
+        const drivers = {};
+        const constants = {};
+        socketApiModule.initialise(
+          ioLib,
+          authenticateCtrl,
+          eventCtrl,
+          driverCtrl,
+          interfaceCtrl,
+          eventUtils,
+          httpServer,
+          drivers,
+          constants
+        );
+        const ioCallback = io.on.mock.calls[0][1];
+        ioCallback(socket);
+        expect(socket.on.mock.calls[callbackIndexes.removeDevice][0]).toEqual(
+          "removeDevice"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.removeDevice][1];
+        expect(typeof callback).toEqual("function");
+
+        const cb = jest.fn();
+        await callback("deviceId", cb);
         expect(cb).toHaveBeenCalledTimes(1);
         expect(cb).toHaveBeenCalledWith({
           code: 500,
@@ -1043,8 +1444,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[8][0]).toEqual("getDrivers");
-        const callback = socket.on.mock.calls[8][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDrivers][0]).toEqual(
+          "getDrivers"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getDrivers][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1092,8 +1495,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[8][0]).toEqual("getDrivers");
-        const callback = socket.on.mock.calls[8][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDrivers][0]).toEqual(
+          "getDrivers"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getDrivers][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1147,8 +1552,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[9][0]).toEqual("getEventsByType");
-        const callback = socket.on.mock.calls[9][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getEventsByType][0]
+        ).toEqual("getEventsByType");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getEventsByType][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1196,8 +1604,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[9][0]).toEqual("getEventsByType");
-        const callback = socket.on.mock.calls[9][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getEventsByType][0]
+        ).toEqual("getEventsByType");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getEventsByType][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1251,8 +1662,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[10][0]).toEqual("getLatestCommandEvents");
-        const callback = socket.on.mock.calls[10][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getLatestCommandEvents][0]
+        ).toEqual("getLatestCommandEvents");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getLatestCommandEvents][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1300,8 +1714,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[10][0]).toEqual("getLatestCommandEvents");
-        const callback = socket.on.mock.calls[10][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getLatestCommandEvents][0]
+        ).toEqual("getLatestCommandEvents");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getLatestCommandEvents][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1355,8 +1772,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[11][0]).toEqual("getCommands");
-        const callback = socket.on.mock.calls[11][1];
+        expect(socket.on.mock.calls[callbackIndexes.getCommands][0]).toEqual(
+          "getCommands"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getCommands][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1404,8 +1823,10 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[11][0]).toEqual("getCommands");
-        const callback = socket.on.mock.calls[11][1];
+        expect(socket.on.mock.calls[callbackIndexes.getCommands][0]).toEqual(
+          "getCommands"
+        );
+        const callback = socket.on.mock.calls[callbackIndexes.getCommands][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1459,8 +1880,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[12][0]).toEqual("getEventDescriptions");
-        const callback = socket.on.mock.calls[12][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getEventDescriptions][0]
+        ).toEqual("getEventDescriptions");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getEventDescriptions][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1508,8 +1932,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[12][0]).toEqual("getEventDescriptions");
-        const callback = socket.on.mock.calls[12][1];
+        expect(
+          socket.on.mock.calls[callbackIndexes.getEventDescriptions][0]
+        ).toEqual("getEventDescriptions");
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getEventDescriptions][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1563,8 +1990,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[13][0]).toEqual("getDeviceTypes");
-        const callback = socket.on.mock.calls[13][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDeviceTypes][0]).toEqual(
+          "getDeviceTypes"
+        );
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDeviceTypes][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();
@@ -1612,8 +2042,11 @@ describe("socketApi", () => {
         );
         const ioCallback = io.on.mock.calls[0][1];
         ioCallback(socket);
-        expect(socket.on.mock.calls[13][0]).toEqual("getDeviceTypes");
-        const callback = socket.on.mock.calls[13][1];
+        expect(socket.on.mock.calls[callbackIndexes.getDeviceTypes][0]).toEqual(
+          "getDeviceTypes"
+        );
+        const callback =
+          socket.on.mock.calls[callbackIndexes.getDeviceTypes][1];
         expect(typeof callback).toEqual("function");
 
         const cb = jest.fn();

@@ -98,6 +98,11 @@ const claimNode = async (driverId, nodeId) => {
   // console.log("claimed", nodes[nodeId]);
 };
 
+const removeDevice = async (removeDeviceFn, nodeId) => {
+  await removeDeviceFn(nodeId);
+  delete nodes[nodeId];
+};
+
 module.exports = async (interfaceObj, interfaceConfig, eventEmitter) => {
   nodes = {};
   const onValueChanged = (driverId, nodeId, comClass, index, value) => {
@@ -125,6 +130,8 @@ module.exports = async (interfaceObj, interfaceConfig, eventEmitter) => {
     getType: () => "zwave",
     disconnect: async () => initialisedInterface.disconnect(),
     pairingMode: async () => initialisedInterface.pairingMode(),
+    removeDevice: async nodeId =>
+      removeDevice(initialisedInterface.removeDevice, nodeId),
     methodsAvailableToDriver: {
       getAllNodes: async () => getAllNodes(),
       getNodesClaimedByDriver: async driverId =>

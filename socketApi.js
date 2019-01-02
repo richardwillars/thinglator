@@ -134,9 +134,38 @@ const initialise = (
       }
     });
 
+    socket.on("getDriverPairingInstructions", async (driverId, cb) => {
+      try {
+        const result = await driverCtrl.getDriverPairingInstructions(driverId);
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on("getDeviceFailedRemovalInstructions", async (deviceId, cb) => {
+      try {
+        const result = await driverCtrl.getDeviceFailedRemovalInstructions(
+          deviceId
+        );
+        cb(result);
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
     socket.on("runCommand", async (deviceId, command, body, cb) => {
       try {
         await driverCtrl.runCommand(deviceId, command, body, drivers);
+        cb();
+      } catch (err) {
+        cb(errorHandler(err));
+      }
+    });
+
+    socket.on("removeDevice", async (deviceId, cb) => {
+      try {
+        await driverCtrl.removeDevice(deviceId);
         cb();
       } catch (err) {
         cb(errorHandler(err));

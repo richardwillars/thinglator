@@ -156,20 +156,7 @@ const getDeviceById = async (deviceId, devicesCollection) => {
   return device;
 };
 
-const getDeviceTypes = async models => {
-  const types = {};
-  Object.keys(models)
-    .filter(
-      modelId =>
-        models[modelId].schema &&
-        models[modelId].schema.commands !== undefined &&
-        models[modelId].schema.events !== undefined
-    )
-    .forEach(modelId => {
-      types[modelId] = models[modelId].schema;
-    });
-  return types;
-};
+const getDeviceTypes = async schemas => schemas.deviceTypes;
 
 const runCommand = async (
   deviceId,
@@ -183,7 +170,6 @@ const runCommand = async (
   const device = devicesCollection.findOne({
     deviceId
   });
-
   if (!device) {
     const e = new Error("device not found");
     e.type = "NotFound";
@@ -218,6 +204,62 @@ const runCommand = async (
   return driverObj.api[fnName](device, body);
 };
 
+const removeDevice = async (deviceId, devicesCollection, driverList, comms) => {
+  const device = await getDeviceById(deviceId, devicesCollection);
+  // call the driver if there is a removeDevice method
+  const driverObj = driverList[device.driverId];
+  if (driverObj.api.removeDevice) {
+    await driverObj.api.removeDevice();
+  }
+
+  // call the interface's removeDevice method
+  const commsInterface = comms.getActiveCommsById(driverObj.comms);
+  await commsInterface.removeDevice(device.originalId);
+
+  // remove the device from the database
+  devicesCollection.remove(device);
+};
+
+const getDriverPairingInstructions = async (driverId, driverList) => {
+  if (!driverList[driverId]) {
+    const e = new Error("driver not found");
+    e.type = "NotFound";
+    throw e;
+  }
+  if (driverList[driverId].api.pairingInstructions) {
+    return {
+      markdown: await driverList[driverId].api.pairingInstructions()
+    };
+  }
+  return {};
+};
+
+const getDeviceFailedRemovalInstructions = async (
+  deviceId,
+  devicesCollection,
+  driverList
+) => {
+  const device = await getDeviceById(deviceId, devicesCollection);
+  if (!device) {
+    const e = new Error("device not found");
+    e.type = "NotFound";
+    throw e;
+  }
+  if (!driverList[device.driverId]) {
+    const e = new Error("driver not found");
+    e.type = "NotFound";
+    throw e;
+  }
+  if (driverList[device.driverId].api.failedRemovalInstructions) {
+    return {
+      markdown: await driverList[device.driverId].api.failedRemovalInstructions(
+        deviceId
+      )
+    };
+  }
+  return {};
+};
+
 module.exports = (
   devicesCollection,
   eventsCollection,
@@ -226,7 +268,8 @@ module.exports = (
   deviceUtils,
   driverList,
   jsonValidator,
-  schemas
+  schemas,
+  comms
 ) => ({
   getDriversWithStats: () => getDriversWithStats(devicesCollection, driverList),
   discover: driverId =>
@@ -246,7 +289,7 @@ module.exports = (
   getDevicesByDriver: driverId =>
     getDevicesByDriver(driverId, devicesCollection),
   getDeviceById: deviceId => getDeviceById(deviceId, devicesCollection),
-  getDeviceTypes: () => getDeviceTypes(devicesCollection),
+  getDeviceTypes: () => getDeviceTypes(schemas),
   runCommand: (deviceId, command, body) =>
     runCommand(
       deviceId,
@@ -256,5 +299,11 @@ module.exports = (
       devicesCollection,
       schemas,
       jsonValidator
-    )
+    ),
+  removeDevice: deviceId =>
+    removeDevice(deviceId, devicesCollection, driverList, comms),
+  getDriverPairingInstructions: driverId =>
+    getDriverPairingInstructions(driverId, driverList),
+  getDeviceFailedRemovalInstructions: deviceId =>
+    getDeviceFailedRemovalInstructions(deviceId, devicesCollection, driverList)
 });

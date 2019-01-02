@@ -3,7 +3,7 @@
   "license": "MIT",
   "description":
     "An API that provides a uniform interface for interacting with IOT and home automation devices",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "maintainers": [
     {
       "name": "Richard Willars",
@@ -25,9 +25,9 @@
     "lokijs": "^1.5.3",
     "md5": "^2.2.1",
     "node-cron": "^1.2.1",
-    "npm-programmatic": "^0.0.10",
     "pm2": "^2.10.1",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "yarn-api": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "^4.18.2",
@@ -54,7 +54,7 @@
     "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=8.10.0"
   },
   "main": "app.js",
   "jest": {

@@ -25,11 +25,12 @@ describe("utils/event", () => {
       );
 
       expect(events instanceof EventEmitter);
-      expect(onMock).toHaveBeenCalledTimes(4);
+      expect(onMock).toHaveBeenCalledTimes(5);
       expect(onMock).toHaveBeenCalledWith(constants.DEVICE_LIGHT_EVENT);
       expect(onMock).toHaveBeenCalledWith(constants.DEVICE_SPEAKER_EVENT);
       expect(onMock).toHaveBeenCalledWith(constants.DEVICE_SOCKET_EVENT);
       expect(onMock).toHaveBeenCalledWith(constants.DEVICE_SENSOR_EVENT);
+      expect(onMock).toHaveBeenCalledWith(constants.DEVICE_DOORBELL_EVENT);
     });
 
     it("should save the event into the database when the event emitter receives an event", () => {

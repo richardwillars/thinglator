@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`models/doorbell should export the commands 1`] = `Object {}`;
+
+exports[`models/doorbell should export the events 1`] = `
+Object {
+  "properties": Object {
+    "BUTTON": Object {
+      "constant": "BUTTON",
+      "description": "Represents if button is pressed or not",
+      "friendly": "Button",
+      "responseSchema": Object {
+        "properties": Object {
+          "pressed": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "pressed",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "MOTION": Object {
+      "constant": "MOTION",
+      "description": "Represents if motion is detected or not",
+      "friendly": "Motion",
+      "responseSchema": Object {
+        "properties": Object {
+          "detected": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "detected",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+  },
+  "type": "object",
+}
+`;

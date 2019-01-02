@@ -136,7 +136,8 @@ const launch = async () => {
     deviceUtils,
     driverList,
     jsonValidator,
-    schemas
+    schemas,
+    comms
   );
   const authenticateCtrl = authenticateCtrlModule(
     jsonValidator,
