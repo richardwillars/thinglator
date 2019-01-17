@@ -75,6 +75,34 @@ module.exports = (events, constants) => {
           required: ["uri"]
         }
       },
+      playUrl: {
+        type: "boolean",
+        description: "Plays a url",
+        friendly: "Play a url",
+        requestSchema: {
+          type: "object",
+          properties: {
+            uri: {
+              type: "string"
+            }
+          },
+          required: ["uri"]
+        }
+      },
+      playSpotify: {
+        type: "boolean",
+        description: "Plays a spotify track",
+        friendly: "Play a spotify track",
+        requestSchema: {
+          type: "object",
+          properties: {
+            uri: {
+              type: "string"
+            }
+          },
+          required: ["uri"]
+        }
+      },
       addSpotifyToQueueBottom: {
         type: "boolean",
         description: "Adds a spotify track to the bottom of the queue",

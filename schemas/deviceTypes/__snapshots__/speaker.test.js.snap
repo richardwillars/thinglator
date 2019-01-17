@@ -107,6 +107,38 @@ Object {
       "friendly": "Play audio",
       "type": "boolean",
     },
+    "playSpotify": Object {
+      "description": "Plays a spotify track",
+      "friendly": "Play a spotify track",
+      "requestSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "uri",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
+    "playUrl": Object {
+      "description": "Plays a url",
+      "friendly": "Play a url",
+      "requestSchema": Object {
+        "properties": Object {
+          "uri": Object {
+            "type": "string",
+          },
+        },
+        "required": Array [
+          "uri",
+        ],
+        "type": "object",
+      },
+      "type": "boolean",
+    },
     "previous": Object {
       "description": "Plays the previous track in the queue",
       "friendly": "Play previous track",
