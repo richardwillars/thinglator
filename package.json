@@ -26,7 +26,7 @@
     "md5": "^2.2.1",
     "node-cron": "^1.2.1",
     "pm2": "^2.10.1",
-    "socket.io": "^2.0.4",
+    "socket.io": "^2.4.0",
     "yarn-api": "^1.1.0"
   },
   "devDependencies": {
