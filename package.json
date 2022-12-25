@@ -17,7 +17,7 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "chalk": "^2.3.2",
-    "config": "^1.30.0",
+    "config": "^3.3.1",
     "eventemitter2": "^5.0.1",
     "express": "^4.16.2",
     "jsonschema": "^1.2.2",
